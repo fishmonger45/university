@@ -1,0 +1,210 @@
+model OnlineShop
+
+-- ============= --
+-- C L A S S E S --
+-- ============= --
+
+class Person
+attributes
+	name: String
+	balance: Integer
+		init: 0
+operations
+	work(x: Integer)
+	createAccount(os: OnlineShop)
+	addItemToCart(i: Item)
+	removeItemFromCart(i: Item)
+	checkoutCart()
+	returnItems(items: Sequence(Item))
+end
+
+class Item
+attributes
+	name: String
+	cost: Integer
+	stock: Integer
+end
+
+-- Clock: Tracks the time; representing which day it is. Items take a single day to ship
+class Clock
+attributes
+	time: Integer
+		init: 0
+operations
+	tick()
+end
+
+class OnlineShop
+attributes
+	name: String
+	float: Integer
+		init: 100
+operations
+	addItemForSale(name: String, stock: Integer, cost: Integer): Item
+end
+
+-- ======================= --
+-- A S S O C I A T I O N S --
+-- ======================= --
+
+-- Stocks: An OnlineShop stocks a number of items
+association Stocks between
+	OnlineShop[*] role soldBy
+	Item[*] role items
+end
+
+-- Tracks: An OnlineShop takes track of Time
+association Tracks between
+	OnlineShop[1]
+	Clock[1] role tracks
+end
+
+-- User: An OnlineShop has a series of Users
+associationclass User between
+	OnlineShop[0..1] role shopsAt
+	Person[*] role users 
+attributes
+	cart: Sequence(Item)
+		init: Sequence{}
+	shippingToUser: Sequence(Item)
+		init: Sequence{}
+	shippingToShop: Sequence(Item)
+		init: Sequence{}
+	received: Sequence(Item)
+		init: Sequence{}
+end
+
+-- ===================== --
+-- C O N S T R A I N T S --
+-- ===================== --
+
+constraints
+
+-- ValidItemIdentifiers: OnlineShop uses the names of Items as unique identifiers
+-- ValidFloat: OnlineShop cannot go into debt
+context OnlineShop
+	inv ValidItemIdentifiers: self.items->forAll(i1, i2: Item | i1.name <> i2.name)
+	inv ValidFloat: self.float >= 0
+
+-- ValidTime: time must stay above zero
+context Clock
+	inv ValidTime: self.time >= 0
+
+-- ValidBalance: People cannot go into debt
+context Person
+	inv ValidBalance: self.balance >= 0
+
+-- ValidCost: Items must cost a positive amount of money 
+-- ValidStock: Items cannot have negative stock
+context Item
+	inv ValidCost: self.cost > 0
+	inv ValidStock: self.stock >= 0
+
+-- work(): A Person works to earn money
+-- ValidWorkAmount: A person can only work for a positive amount of money
+-- IncreaseBalance: Persons balance increases by the amount they work
+context Person::work(x: Integer)
+	pre ValidWorkAmount: x > 0
+	post IncreaseBalance: balance = balance@pre + x
+
+-- createAccount(os: OnlineShop): Create an account for a Person at an OnlineShop
+-- UniqueUser: A person cannot create an account at the same OnlineShop twice
+-- AddShop: Sets the shop at which the person uses
+context Person::createAccount(os: OnlineShop)
+	pre UniqueUser: self.shopsAt->excludes(os)
+	post AddShop: self.shopsAt=os
+
+-- addItemToCart() Add an Item to the Users cart
+-- HasAccount: The person has an account at an OnlineShop
+-- ItemIsSold: The item is sold at the OnlineShop
+-- AddItemToCart: Add the selected Item to the Users cart
+context Person::addItemToCart(i: Item)
+	pre HasAccount: not self.shopsAt.oclIsUndefined()
+	pre ItemIsSold: self.shopsAt.items.name->includes(i.name)
+	post AddItemToCart: self.user.cart = self.user.cart@pre->append(i)
+
+-- removeItemFromCart(i: Item): Remove an item from the Users cart
+-- HasAccount: The Person has an account at an OnlineShop
+-- HasItemInCart: The Item the User wishes to remove must be part of their cart
+-- RemoveItemFromCart: Removes the Item from the Users cart
+-- CorrectNumberOfItemsRemoved: Checks that only a single Item from the Users cart is removed
+context Person::removeItemFromCart(i: Item)
+    	pre HasAccount: self.shopsAt->notEmpty()
+   	pre HasItemInCart: self.user.cart->includes(i)
+   	post RemoveItemFromCart: let index: Integer = self.user.cart@pre->indexOf(i) in
+		self.user.cart = 
+			if self.user.cart@pre->size() = 1 then
+				Sequence{}
+			else
+				self.user.cart@pre->subSequence(1,index-1)->union(self.user.cart@pre->subSequence(index+1, self.user.cart@pre->size()))	
+			endif
+   	post CorrectNumberItemsRemoved: self.user.cart->size() = self.user.cart@pre->size() - 1
+
+
+-- checkoutCart(): Pay for and ship a Users cart
+-- HasAccount: The Person has an account at an OnlineShop
+-- HasCart: The Person has a cart with the shop that is not empty
+-- HasMoneyToPurchase: The Person balance is higher than the sum of the values of the Items the Person is purchasing
+-- HasItemsStock: Check the OnlineShop has the stock to cover the users cart
+-- EmptyCart: Empty the users cart when checkout is complete
+-- AddShipping: Add the users cart to the shipping to user sequence
+-- HasMoneyRemoved: Remove the money required to pay for the items in the Users cart
+-- HasShopStockRemoved: Remove the stock of Items from the OnlineShop that the user has purchased
+-- HasShopMoneyAdded: Give the money that the User pays for the Items to the OnlineShop
+context Person::checkoutCart()
+ 	pre HasAccount: not self.shopsAt.oclIsUndefined()
+ 	pre HasCart: (not self.user.oclIsUndefined()) and self.user.cart->notEmpty()
+ 	pre HasMoneyToPurchase: self.balance >= self.user.cart.cost->sum()
+ 	pre HasItemsStock: self.shopsAt.items->forAll(i | self.user.cart.select(i2 | i2.name = i.name)->size() <= i.stock) 
+ 	post EmptyCart: self.user.cart = Sequence{}
+	post AddShipping: self.user.shippingToUser = self.user.shippingToUser@pre->union(self.user.cart@pre)
+ 	post HasUserMoneyRemoved: self.balance = self.balance@pre - self.user.cart@pre.cost->sum()
+ 	post HasShopStockRemoved: self.user.cart->asSet()->forAll(i: Item | i.stock = i@pre.stock - self.user.cart->select(i2: Item | i = i2)->size())
+ 	post HasShopMoneyAdded: self.shopsAt.float = self.shopsAt.float@pre + self.user.cart@pre.cost->sum()
+
+-- returnItems(items: Sequence(Items)): Return Items that the user has purchased back to the OnlineShop
+-- HasAccount: The Person has an account at an OnlineShop
+-- HasItems: Check the Person has purchased items before
+-- HasAllItems: Check that the User owns the Items that they are returning
+-- AddShippingBack: Move items for recieved to shipping back to the OnlineShop
+-- ChangedItems: Remove the Items the User has received but is shipping back to the OnlineShop
+-- RefundCostToUser: Refund the cost of the Items to the User that the User is returning
+-- HasShopMoneyRemoved: Refund the cost of the Items from the OnlineShops float
+context Person::returnItems(items: Sequence(Item))
+ 	pre HasAccount: not self.shopsAt.oclIsUndefined()
+ 	pre HasItems: (not self.user.oclIsUndefined()) and self.user.received->notEmpty()
+	pre HasAllItems: self.user.received->includesAll(items)
+	post AddShippingBack: self.user.shippingToShop = self.user.shippingToShop @pre->union(items)
+	post ChangedItems: self.user.received->size() = self.user.received@pre->size() - items->size()
+	post RefundCostToUser: self.balance = self.balance@pre + items.cost->sum()
+ 	post HasShopMoneyRemoved: self.shopsAt.float = self.shopsAt.float@pre - items.cost->sum()
+
+-- addItemForSale(name: String, stock: Integer, cost: Integer): Item: Add a new Item for sale at the OnlineShop
+-- ValidStock: Valid (>=0) stock of an Item (Item must have positive stock)
+-- ValidCost: Valid (>0) cost of an Item (Item must have positive stock)
+-- UniqueItem: Items with unique names can only be sold by the OnlineShop
+-- NewItem: Create a new Item
+-- CorrectMembers: Set the name, cost and stock of the Item
+-- IncludeItem: Return the item from the function
+context OnlineShop::addItemForSale(name: String, stock: Integer, cost: Integer): Item
+	pre ValidStock: stock >= 0
+	pre ValidCost: cost > 0
+ 	pre UniqueItem: self.items.name->excludes(name)
+	post NewItem: result.oclIsNew()
+	post CorrectMembers: result.name = name and result.stock = stock and result.cost = cost
+ 	post IncludeItem: self.items = self.items@pre->union(Set{result})
+ 
+
+-- tick(): Increase the value of the clock, where the time on the clock indicates what day it is, items take a day to ship and thus tick() processes each of the shipping queues
+-- HasOnlineShop: Check that the Clock relationship with OnlineShop is valid
+-- IncreaseTime: Increase the value on the Clock by one
+-- EmptyShipingToUser: Reset the Users shipping queue to empty
+-- EmptyShipingToStore: Reset the OnlineShops shipping queue to empty
+-- DeliverItemsToUsers: Deliver each of the shipping Items to the Users they are going to
+context Clock::tick()
+	pre HasOnlineShop: not self.onlineShop.oclIsUndefined()
+	post IncreaseTime: self.time = self.time@pre + 1
+	post EmptyShipingToUser: self.onlineShop.users->forAll(p | p.user.shippingToUser = Sequence{})
+	post EmptyShipingToStore: self.onlineShop.users->forAll(p | p.user.shippingToShop = Sequence{})
+	post DeliverItemsToUsers: self.onlineShop.users->forAll(p | p.user.received = p.user.received@pre->union(p.user.shippingToUser@pre))
+	

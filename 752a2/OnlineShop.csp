@@ -1,0 +1,49 @@
+-- OnlineShop
+
+-- Each Item costs one unit of money, this enumeration lists the item types available to the system
+datatype ITEMS = item1 | item2
+
+-- Extenal operations
+channel addItemForSale, purchaseItem, returnItem : ITEMS
+-- Request are internal operations to machiens and (not externally visible)
+channel purchaseRequest, returnRequest: ITEMS
+-- Untyped events
+-- nextDay: Go to the next day, during which the items from the previous day are delivered
+channel createAccount, reset, nextDay
+-- error_item_not_sold: Trace error when item is not sold by the hop
+channel error_item_not_sold
+
+-- X: Represents the state of the money that a user has
+-- Every time a user purchases an item they will have money removed from their account
+USER(X) = let initialBalance = 5 within
+	if 
+	X == 0 then
+	 	reset -> USER(initialBalance) 
+	else 
+		purchaseItem?y -> purchaseRequest!y  -> nextDay ->  USER(X-1) []
+		returnItem?q -> returnRequest!q -> nextDay ->  USER(X+1)
+
+-- SHOP: A shop that has items listed for sale, if the 
+-- XS: The items that the shop has for sale, users can add items for sale at any point
+SHOP(XS) = addItemForSale?q ->  SHOP(union(XS, {q})) |||  
+	(purchaseRequest?x ->  if member(x, XS) then nextDay -> SHOP(XS) else error_item_not_sold -> STOP) |||
+	(returnRequest?x ->  if member(x, XS) then nextDay -> SHOP(XS) else error_item_not_sold -> STOP)
+
+-- KILLABLE_SYSTEM: System is killed (STOPPED) when error occurs
+KILLABLE_SYSTEM = (USER(5) [| {|purchaseRequest, returnRequest, nextDay|} |] SHOP({})) /\ error_item_not_sold -> STOP
+-- 
+MAIN = KILLABLE_SYSTEM \ {| purchaseRequest, returnRequest, error_item_not_sold  |}
+
+
+-- Test cases:
+-- RoundTrip where a user buys and then returns an item
+PROB_TEST_ROUNDTRIP = addItemForSale.item1 -> purchaseItem.item1 -> nextDay -> returnItem.item1 -> nextDay -> STOP
+-- Check that item must be sold in order to buy
+PROB_TEST_FAIL_BUY= purchaseItem.item1  -> STOP
+-- Check that the system handles multiple items
+PROB_TEST_MULTIPLE_ITEMS = addItemForSale.item1 -> purchaseItem.item1 -> nextDay ->addItemForSale.item2 -> purchaseItem.item2 -> nextDay -> STOP
+
+-- Check assertions
+assert MAIN [T= PROB_TEST_ROUNDTRIP
+assert MAIN [T= PROB_TEST_FAIL_BUY
+assert MAIN [T= PROB_TEST_MULTIPLE_ITEMS

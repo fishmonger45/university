@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductController">
+   <children>
+      <ToolBar prefHeight="60.0" prefWidth="1000.0">
+         <items>
+            <Button mnemonicParsing="false" onMouseClicked="#onClickButtonBack" prefHeight="45.0" prefWidth="120.0" text="←">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+         </items>
+      </ToolBar>
+      <VBox alignment="TOP_CENTER" prefHeight="608.0" prefWidth="1000.0">
+         <children>
+            <Label text="Products">
+               <font>
+                  <Font size="69.0" />
+               </font>
+            </Label>
+            <Separator orientation="VERTICAL" prefHeight="50.0" prefWidth="11.0" visible="false" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Flights">
+                     <font>
+                        <Font name="System Bold" size="29.0" />
+                     </font></Label>
+                  <Separator prefHeight="8.0" prefWidth="331.0" visible="false" />
+                  <Label text="Hotel Deals">
+                     <font>
+                        <Font name="System Bold" size="29.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="875.0" prefWidth="1000.0">
+               <children>
+                  <Separator prefHeight="5.0" prefWidth="16.0" />
+                  <VBox alignment="CENTER" prefHeight="438.0" prefWidth="486.0">
+                     <children>
+                        <HBox prefHeight="30.0" prefWidth="900.0">
+                           <children>
+                              <StackPane prefHeight="32.0" prefWidth="157.0">
+                                 <children>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="237.0" style="-fx-background-color: #ebecf0; -fx-border-color: #CDCFD9;" text="Depature" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </StackPane>
+                              <StackPane layoutX="10.0" layoutY="10.0" prefHeight="32.0" prefWidth="155.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: #ebecf0; -fx-border-color: #CDCFD9;" text="Destination" StackPane.alignment="TOP_LEFT">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                              </StackPane>
+                              <StackPane prefHeight="32.0" prefWidth="170.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: #ebecf0; -fx-border-color: #CDCFD9;" text="Price" StackPane.alignment="TOP_LEFT">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                              </StackPane>
+                           </children>
+                        </HBox>
+                        <ScrollPane prefHeight="481.0" prefWidth="459.0">
+                           <content>
+                              <HBox alignment="CENTER" prefHeight="509.0" prefWidth="466.0">
+                                 <children>
+                                    <StackPane prefHeight="545.0" prefWidth="250.0">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" prefHeight="530.0" prefWidth="250.0">
+                                             <children>
+                                                <ListView fx:id="listDepature" prefHeight="500.0" prefWidth="250.0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </StackPane>
+                                    <StackPane layoutX="10.0" layoutY="10.0" prefHeight="402.0" prefWidth="250.0">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" prefWidth="150.0">
+                                             <children>
+                                                <ListView fx:id="listDestination" prefHeight="500.0" prefWidth="250.0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane prefHeight="402.0" prefWidth="250.0">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" prefWidth="125.0">
+                                             <children>
+                                                <ListView fx:id="listPrice" prefHeight="500.0" prefWidth="250.0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                              </HBox>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+                  <Separator prefHeight="5.0" prefWidth="16.0" />
+                  <VBox alignment="CENTER" prefHeight="438.0" prefWidth="486.0">
+                     <children>
+                        <HBox prefHeight="30.0" prefWidth="900.0">
+                           <children>
+                              <StackPane prefHeight="32.0" prefWidth="155.0">
+                                 <children>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="237.0" style="-fx-background-color: #ebecf0; -fx-border-color: #CDCFD9;" text="Hotel" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </StackPane>
+                              <StackPane layoutX="10.0" layoutY="10.0" prefHeight="32.0" prefWidth="157.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: #ebecf0; -fx-border-color: #CDCFD9;" text="Duration" StackPane.alignment="TOP_LEFT">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                              </StackPane>
+                              <StackPane prefHeight="32.0" prefWidth="171.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: #ebecf0; -fx-border-color: #CDCFD9;" text="Price" StackPane.alignment="TOP_LEFT">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                              </StackPane>
+                           </children>
+                        </HBox>
+                        <ScrollPane prefHeight="481.0" prefWidth="830.0">
+                           <content>
+                              <HBox alignment="CENTER" prefHeight="509.0" prefWidth="466.0">
+                                 <children>
+                                    <StackPane prefHeight="545.0" prefWidth="250.0">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" prefHeight="530.0" prefWidth="250.0">
+                                             <children>
+                                                <ListView fx:id="listHotel" prefHeight="500.0" prefWidth="250.0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </StackPane>
+                                    <StackPane layoutX="10.0" layoutY="10.0" prefHeight="402.0" prefWidth="250.0">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" prefWidth="150.0">
+                                             <children>
+                                                <ListView fx:id="listDuration" prefHeight="500.0" prefWidth="250.0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane prefHeight="402.0" prefWidth="250.0">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" prefWidth="150.0">
+                                             <children>
+                                                <ListView fx:id="listPrice2" prefHeight="500.0" prefWidth="250.0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                              </HBox>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+                  <Separator prefHeight="5.0" prefWidth="16.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="buttonFlightNew" mnemonicParsing="false" onMouseClicked="#onClickButtonFlightNew" prefHeight="70.0" prefWidth="195.0" text="New" />
+            <Separator prefHeight="8.0" prefWidth="331.0" visible="false" />
+            <Button fx:id="buttonHotelDealNew" mnemonicParsing="false" onMouseClicked="#onClickButtonHotelDealNew" prefHeight="70.0" prefWidth="195.0" text="New" />
+         </children>
+      </HBox>
+      <Separator orientation="VERTICAL" prefHeight="25.0" prefWidth="11.0" visible="false" />
+   </children>
+</VBox>

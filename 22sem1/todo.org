@@ -1,0 +1,36 @@
+#+TITLE: Todo
+
+* 701
+** DONE <2022-02-28 Mon> 701 two readings and write responses
+** DONE <2022-03-04 Fri> 701 think of a project to do with the team of 20
+** TODO <2022-03-21 Mon> 701 assignment 1 project demo and deliverable
+** TODO <2022-03-28 Mon> 701 assignment 1 peer review
+* P4P
+** DONE <2022-03-04 Fri 08:00> Read introductions to p4p
+** DONE <2022-03-10 Thu 14:00> P4P Make progress on writing before meeting
+** TODO <2022-04-08 Fri> P4P Literature review and statement of research due
+** TODO <2022-05-08 Sun> P4P Seminar on Literature review+project plan
+** TODO <2022-07-08 Fri> P4P Mid year video due
+** TODO <2022-10-08 Sat> P4P Research report due
+** TODO <2022-10-08 Sat> P4P Research compendium
+** TODO <2022-10-08 Sat> P4P Presentation
+* 750
+** Labs
+*** TODO <2022-03-11 Fri> 750 Lab 1
+*** TODO <2022-03-11 Fri> 750 Lab 2
+** Project
+*** TODO <2022-03-07 Mon> 750 Project send email preliminary project
+*** TODO <2022-03-07 Mon> 750 Project flesh out initial proposal
+*** TODO <2022-03-07 Mon 00:00> 750 Project proposal
+*** TODO <2022-05-07 Sat> 750 Project implementation
+*** TODO <2022-05-07 Sat> 750 Project video
+*** TODO <2022-06-07 Tue> 750 Project report
+*** TODO <2022-06-07 Tue> 750 Project peer review
+** Assignment 1
+*** TODO <2022-04-07 Thu> 750 Assignment 1 submission
+*** TODO <2022-05-07 Sat> 750 Assignment 1 peer reviews
+** Assignment 2
+*** TODO <2022-05-07 Sat> 750 Assignment 2 submission
+*** TODO <2022-06-07 Tue> 750 Assignment 2 peer reviews
+** Quiz
+*** TODO <2022-05-07 Sat> 750 Quiz

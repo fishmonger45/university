@@ -1,0 +1,28 @@
+* Questions to answer
+** Machine statistics
+- OS: My machine uses the LTS version of Ubuntu 20 (Ubuntu 20.04.2 LTS x86_64)
+  using a 64bit architecture
+- CPU: Single CPU (AMD Ryzen 5 2600) which has 6 cores (multi-core) and 12
+  threads. Each core is clocked at 3.4GHz (base clock)
+- Memory: 16GB of memory with 2GB of swap
+The Ubuntu OS is running natively (ie: *not* running on a virtual machine)
+
+* Step 0
+Although my machine did not run into memory problems (modified the program to
+call ~free(combined)~ in the ~merge~ step of the mergesort, the sorting of the
+arrays started to take a significant amount of time (2 secs and 622246
+microseconds) using an argument of ~25~ (IE: sorting an array of length 2^25)
+
+#+DOWNLOADED: screenshot @ 2021-03-10 13:45:25
+[[file:../../org/images/Step_0/2021-03-10_13-45-25_screenshot.png]]
+
+Sorting arrays beyond length ~2^25~ would be typically infeasible for any
+reasonable application (for array sorting at least) due to time constraints (*time
+pressure*). Below is the resource monitor on an array of size ~2^26~ (using ~26~
+as an input to the program
+
+#+DOWNLOADED: screenshot @ 2021-03-10 13:44:45
+[[file:../../org/images/Step_0/2021-03-10_13-44-45_screenshot.png]]
+
+* Step 1
+

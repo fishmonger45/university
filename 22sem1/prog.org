@@ -1,0 +1,44 @@
+#+TITLE: Prog
+
+* Rust
+** RefCell<T>
+- Mutable memory location with dynamically checked borrow rules
+- Interior mutability: Wrap a mutable thing in a immutable shell, borrow when needed for mutability (`borrow_mut`)
+  - https://badboi.dev/rust/2020/07/17/cell-refcell.html
+
+- Two mutable borrows at the same time (illegal)
+#+BEGIN_SRC rust
+
+use std::cell::RefCell;
+
+#[derive(Debug)]
+struct XStruct<'a> {
+    x: &'a RefCell<i32>,
+}
+
+fn add_and_print(x_struct: &XStruct) {
+    ,*x_struct.x.borrow_mut() += 1; // Mutably borrow and dereference the underlying data
+
+    println!("The value of x_struct in add_and_print is {:?}.", x_struct);
+}
+
+fn main() {
+    let ref_cell_x = RefCell::new(1); // ref_cell_x is immutable
+    let x_struct = XStruct { x: &ref_cell_x }; // Pass an immutable reference to ref_cell_x
+
+    add_and_print(&x_struct); // Pass an immutable reference to x_struct
+
+    ,*ref_cell_x.borrow_mut() += 1; // Modify ref_cell_x
+
+    println!("Final value of x_struct is {:?}.", x_struct);
+    println!("Final value of x is {:?}.", ref_cell_x);
+}
+
+#+END_SRC
+- You should use `Cell` when you want to use the `Copy`. For example when you call `get` on `Cell` then you get the copy of the wrapped data, whereas the methods associated wth `RefCell` are `borrow` and `borrow_mut` which return references to the underlying data within the wrapper. Copying data back and foth does come at a performance cost.
+- `RefCell`'s references are checked at runtime which comes at a performance cost of verifying reference coutns and possibly being completely wrong about your borrowing logic and causing a panic, while you can't cause a panic with `Cell`
+
+** AsRef<T>
+- With `&str` you can pass in `String` or `&str`, this doesn't take ownership
+- With `String` you can only pass in `String`, this takes ownership
+- With `AsRef<str>` this can take ownership or it can borrow. Most importantly though it can make it so that generic code works. Simply implement AsRef<str> for your struct and then you're good to go in order to use the function, while with the others you would require an awkward `Display` (which has no formal requirements) or a weird binding function (`to_thing_string`)

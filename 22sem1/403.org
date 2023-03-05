@@ -1,0 +1,512 @@
+#+TITLE: 403
+
+- With increasing complexity, cause-effect relationships and value are more difficult to determine
+** Business Case
+A business case is an analysis that provides justification for undertaking a project. It evaluates the benefits, costs and risks of alternative options and provides a relationale for the preferred solution. Intended for key decision makers
+** Problem solving
+1. Define problem
+2. Come up with potential solutions
+3. Pick the best one and implement
+** Methodology
+1. Define and analyse a problem
+2. Identify the users/stakeholders
+3. Figure out the requirements of the users/stakeholders
+4. Select the critical success factors (CSFs) that a solution must meet
+5. Come up with different options that are potential solutions to the problem
+6. Assess those options against the csfs and determine the shortlist
+7. Cary out economic analysis and societal impact of the shortlisted options
+8. Determine which option creates more value and suggest it as the best way forward
+9. Define a plan to implement it
+
+   - Same methodology but in 403 everything gets more complex
+** Complex system
+- It involves large numbers of interacting elemts
+- The interactions are nonlinear, and minor changes can produce disproportionately major consequences
+- The system is dynamic and solution's can't be imposed; rather, they arise from the circumstances. This is frequently referred to as emergence
+- The system has a history and the past is integrated with the present the elements evolve with one another and with the environment; and evoluation is orreversible
+- Though a complex system may, in retrospect, appear to be ordered and predictable, hindsight does not lead to foresight because the external conditions and systems constantly change.
+** Simple of Tame Problems
+*** Tame
+- Sovlable: may be complicated but there is a point where the problem is resolved
+- Definable: there is agreement on what the problem is and what the solution looks like; clear cause and effect
+- Verifiable:  it can be verified taht the problem was solved
+- It is likely to have occurred before
+- Limited degree of uncertainty
+- Appropriate process to solve the problem
+*** Wicked
+- Unsolvable: there is no clear solution or distinct point at which the problem can be resolved; they often morph into or are symptoms of other problems
+- Undefinable: problem is difficult to define and there is no agreed solution; often difficult to sort out cause and effect
+- Unverifiable: difficult to verify if the problem was solved
+- Problem is unique
+- High degree of uncertainty
+- Complex issues involving many stakeholders with conflicting requirements
+** Stakehodlers & Key Success Factors at the Systems level
+*** Stakeholders
+- Someone who has a stake in your project
+- Can be affected by the project (real or perceived) (proistively or negatively)
+- Can impact the project
+- Can influence the project
+- Throughout the phases of a project
+  - Conception/ideation
+  - Design
+  - etc
+**** Identification
+- Upwards: Execs from paretn orgs, lenders, creditors, shareholders, project sponser
+- Downwards: Project team, contractors, suppliers
+- Outwards: Local or national governments, regulatory authority, local iwi, end users
+- Sidewards: Competitors
+**** Stake holders analysis
+- Different: ROLES, INTEREST, INFLUENCES, IMPACTS, NEEDS
+- Need a tailored approach
+
+** Business Case
+- Follows a logical method
+- A business case is an analysis that provides jsutification for undertaking a project. It evaluates the benefits, costs and risks of alternative options and provides a rationale for the preferred solution
+- A business case is intented to convince key decision makers of the merits of a particular course of action
+  1. Define and analyse a problem
+  2. Identify the users/stakeholders
+  3. Figure out the requirements of the users/stakeholders
+  4. Selects the critical success factors (CSFs) that a solution must meet
+  5. Come up with different options that are potential solutions to the problem
+  6. Assess those options against the CSFs and determine the shortlist
+  7. Cary out economic analysis and societial impact of the shortlisted options
+  8. Determine which option creats more value and suggest it as the best way forward
+  9. Define a plan to impolement it
+** Tackling Wicked Problems
+Systems thinking in practice involves three interreelated activities
+1. Stepping back from messy situations of complexity, change and uncertainty, and understanding key interrelationships and perspectives on the situation
+2. Practically engaging with multiple often contrasting perspectives amongst stakeholders involved iwth and affected by the situation
+3. Responsibly directing joined up thinking with action to bring about morally justifiable improvements
+
+** L8: Research and Resources
+*** 303 Market research recap
+- Conduct market research to understand
+  - Total market & target market size
+  - Customer demographics
+  - Early adaptors
+  - Direct/Indirect competitors
+  - TAM: Total available market
+  - SAM: Serviceable Available Market (you won technology/ services)
+  - SOM Serviceable Obtainable Market (your realistic share of that market)
+- Different target audience for your product/service
+  - B2B, B2C, B2G
+- ENGGEN 403, we are focusing on B2G here: "Systems are dynamic and might incorporate social, economic, political, physical and biological components. Systems research is more complicated, more expensive, and usually requires more time to unravel the nature of relationships"
+*** Research
+- A systematic approach to collect data, analyse and interpret information to better understand the probelm and to reach new conclusions
+- When doing research while dealing with complex problems do the following steps:
+  - Identification of problem
+  - Planning for gathering information
+  - Generating rationale for putting plan into action
+  - Analysing data, components inter-relationship
+  - Proposing and explanation/solution
+  - Further research/ any reflection on what was learnt
+*** Systems Research vs Academic Research
+| Academic Research                                           | Systems Research                                               |
+| Hypothesis Oriented                                         | Forecast oriented                                              |
+| Methodology to be validated scientifically                  | Information and analysis must be valid                         |
+| Resource: Published literature (past)                       | Resource: Published literature (past) and projections (future) |
+| Findings leads to advances in the field and future research | Findings used for decision making and setting strategies       |
+| Shared through publications, conference presentations, etc  | Shared internally (within the organisation)                    |
+
+*** Significance of Research
+- Identification of opportunities and threats
+- Reduces the risks and uncertainties
+- Effective planning of financial investments
+- Stay up to date with the market and it trend
+- Reduce costs
+- Leads to making informed decisions
+*** 7 Principles of Systems Research
+- Purposeful
+- Balances depth and breadth
+- Harnesses diversity
+- Clarifies boundaries
+- Builds confidence and momentum for change
+- Communicates in the natural language of the audience
+- Stimulates further learning
+**** Planning: Key questions to be asked in early planning stage of your research
+- What is the purpose of research? Why is it important?
+- What is your motivation
+- Who is your target audience for reporting the findings? Why do they care?
+- What is known about the subject?
+- What is current situation? What is the gap?
+- How do you describe the system, its context, it boundaries?
+- Does the system include human actors? How will they be involved in the study?
+**** Systems Research Design
+- A systemic perspective enriches your reseraches on two levels:
+  - Inner logic => theories, methods and tools
+  - Outer logic => stakeholders and relevant context
+**** Research design tools
+- Radial mind mapping
+- Design thinking tools
+- DSRP (Distinctions, systems, relationships, perspectives)
+- These things just help create relational mapping between information
+*** Initiating research
+- Analyse your research questions
+- Identify key concepts within the topic
+- Think about different ways to describe the topic (different keywords)
+- Look for synonyms to get a better coverage of your topic
+- Complete a concept map
+*** Types of information
+- Company profiles
+- Statistics
+- Government reports
+- News and articles
+- Annual reports and forecasts
+- Ownership structure
+- Case studies involving companies
+- Consumer information and market share
+****  Validating information: Checklist
+- Currency: Is it current? Does it reflect the current state
+- Relevance: Does the information actually relate to what you're trying to conclude?
+- Authority: Who made this information? Does it have a legitimate backing?
+- Accuracy: Is it accurate?
+- Purpose: Do the authors make their intentions clear? Fact or opinion? impartial?
+**** Piecing the information together
+- Often you should build up a big picture by analysing the information from several resources
+- You might not find an instant answer
+*** Take home messages
+- Conducting system research is complex and needs systemic planning
+  - Data should be collected and anysed with great care and in a systematic way
+  - We have to make sensible assumptions to move forwards
+** L9: The living standards Framework
+- How to measure the wellbeing of a society?
+  - Traditional metrics for analysis: NPV, IRR, Financial analysis
+  - Societal impact?
+    - GDP: Value of all goods and services produced in a country
+    - Value: Seaside house example
+- (House example) So...
+  - Considering only economic metrics fails to capture the full picture
+  - Some factors influencing value are hard to measure and change person to person
+  - How do we measure these complex factors at a societal level?
+*** Alternative measures of value
+  - UK National wellbeing
+    - The measuring national wellbeing (MNW) program measure are a combination of subjective (eg: job satisfaction) and objective data (eg: unemployment rate)
+      - 10 domains, 28 measures
+  - German:
+    - Our life, our surroundings, our country are the groups
+    - 12 dimensions, 46 groups
+  - Gross national happiness (GNH)
+    - Benchmark for happiness
+  - OECD Better Life Index
+    - Compares wellbeing across contries based on 11 topics the OECD has identified as essential
+    - Lacks in understanding of how people conntect with one another and their government
+**** Wellbeing
+- GDP is not sufficient to truly capture the wellbeing of a nation
+- This is not a new problem
+- Not a one size fits all, every country is unique
+*** NZ living standards framework
+- 3 Levels
+  - Our indiviual and Collective Wellbeing
+    - 12 domains
+  - Our Institutions and Governance
+    - 6 spheres of institutions
+  - The Wealth of Aotearoa New Zealand
+    - 4 capitals
+**** 4 capitals
+- The four capitals (natural, human, social, and financial and physical) are the assets that generate wellbeing now and into the future
+- Natural capital
+- Social capital
+- Human capital
+- Financial and Physical Capital
+*** He Ara Waiora and the LSF
+- NZ also uses this Maori thing for measuring maori happiness, 4 domains
+  - Spirit
+  - The human domain
+  - Wellbeing
+*** How we use LSF
+- Treasury used the LSF to introduce a wellbeing ppproach to the key pahses of the budget cycle
+  - Use of the LSF indicators informed teh budget priorities
+    - Informs the wellbeing budget
+  - Agencies asked to outline and quanitfy (if possible) how their initiatives impacted on the wellbeing goals
+  - Decision making processes were collaborative with summary information on anticipated wellbeing impacts included in advice
+  - Budget document was produced framed around wellbeing outcomes and the governments budget objectives
+**** Wellbeing Budget Process
+- Cabinet agrees wellbeing budget priorities through an evidence based and collaborative process which anchors budgert 2019
+- Ministers and agencies develop initiatives targeting intergenerational wellbeing outcomes and present expects wellbeing impacts
+- Assissment of initiatives includes consideration of their impacts for the lSF wellbeing domains and capitals
+- Cabinet agrees to budget package that best supports wellbeing outcomes, as advised by cabinet committies
+- Budget documents present the impact of budget decisions for improving the wellbeing of Nzers
+- Impact analysis and evaluation of policies inform evidence based priorities in future budgets
+- Back to 1.
+*** Importance to Engineering
+- Greater understanding of stakeholder needs
+  - Greater consideration for project impacts in the long term
+- This leads to better engineering solutions and more equitable outcomes
+- A lot (if not all projects) carried out moving forward will be intertwined with the principles of the lSF in some way
+** L10: GDP and Government Budgeting
+- GDP is really important for systems level problems
+- Environemnt, society, economy
+*** GDP
+- Gross domestic product
+- Total monetary value of all final goods and services produced within a country during aperiod of time
+- Most commonly used to measure the economy of the country
+*** Formulas
+- Expenditure Approach
+- GDP = C + I + G + (X-M)
+- C = Consumption (Stuff people buy)
+- I = Investment = big stuff businesses buy
+- G = GOvernment Stuff = everything the government buy
+- X-M = Exports - Imports
+*** Why measure this?
+- GDP measure the overall economic production of a country
+- It can be useful to understand and compare countries to each other
+- It can be useful to look at or project the growth rate of GDP from one year to another - keeping in mind inflation or real gains
+- GDP can be compared on a per capita basis to understand difference in productivity between contries
+- GDP PPP can be compared on a per capita basis to give on form of comparison relative to standard of living
+- Used nearly universally worldwide, and by orgs such as World Bank and IMF
+*** Other approaches
+- Production Approach
+  - Sum of value added throughout the value chain
+- Income approach
+  - Sum of incomes generated by production subjects
+*** GDP per capita
+- A basis for comparing strength of different counties economies
+- Population has an inverse relationship with the GDP per capita. Other things being equal, the lower the population the higher the GDP per cpaita
+- Transparency score has a positive correlation with the GDP, the higher the transparency score the higher the GDP per capita
+- Compulsory education years has a positive correlation with GDP/per capita. The higher compulsory education for people the higher the GDP/per capita
+*** GDP PPP/Captia
+- Purchasing power parity
+- Takes into account to cost of living to make it more fair (offsets it)
+*** GDP/Houe
+- Used to measure productivity
+- NZD: 68NZD/hour
+- AUD: 61.5NZD/hour
+  OECD Average: US85/hour
+- Ours is so much lower!!! (almost half!)
+*** NZ Productivity Commision
+- Provide advice to government that is directed to supporting the overall well being of NZers
+*** Productivity
+- A measure of GDP per input (per capita)
+- The GDP/hr metric has served the world well over the past many decades, does it need to change?
+- Wellness?
+- Productivity means doing more with the same amount of input
+*** Gross National Happiness
+- Nine domains of GNH
+  1. Living standard
+  2. Health
+  3. Education
+  4. Time use
+  5. Good Governance
+  6. Ecological Diversity & Resilience
+  7. Psychological Wellbeing
+  8. Community Vitality
+  9. CUlture Diversity a& Resilience
+- NZ stacks up as 9th happiness country in the world
+*** Doughnut Economics
+- inner band means you're having less of something
+- outer band means you're higher consumption than average
+*** NZ: SMEs
+- SME (Small medium enterprise) with less than 20 employees
+- Employ third of kiwi works, generate more than 1/4th of our economic output
+- Do we need more large exportaning companies? More innovation? What are the impacts?
+**** NZ few major firms
+- Most are not NZ owned
+- 49% of our electricity is private
+- F&P is chinese
+- RocketLabs is public american
+
+** L11: CBA and Forecasting
+*** Initial Assessment
+- Be brief
+- Table with Criteria vs columns vs options and levels of completion
+*** Economic Assessment
+- Is this solution economically viable?
+- Are the economic benefits larger than the costs?
+  - Can also be general societal benefits
+- How does it compare to the other options?
+*** Cost Benefit Analysis
+- Determine if an investment is sound
+- Provides a basis for comparing investments NPV & IRR
+- Tangible benefits: Revenue, Time savings
+- Intangible benefits & costs: user experience, brand visibility
+- Costs
+  - Costs of mitigation and risk realisation
+  - Costs of acquisition and implementation
+- Benefits
+  - Context specific benefits
+  - Benefits of process change
+  - Benefits of use of knowledge
+*** Classic CBA
+- Accounts for the time value of money - Net present value
+  b/c [=] PV_benefits/PV_total_cost
+  - Greater than 1: Accept the project
+  - Less than 1: reject the project
+*** Social CBA
+- Brings in the LSF & 4 capitals
+- Survey societal effects: pollution, saftey, travel time, etc
+- Attach a price to as many of those effects as possible and compare benefits with cost
+- In order to do this we
+  - Identify all the potential LSF and 4 capitals via listing
+  - Then we should be quanitfy them all
+  - Then for each of those can we monititze them? This will allow us to bring it into our CBA
+    - If we can't monititze it then we have to use criteria to estimate it
+*** Presenting a CBA
+1. Explain that options in detail
+2. Explain the Key assumptions
+   1. Scope, time frame, space, construction costs, development cost, operating costs, discount & inflation, taxation & financing
+3. Create a **Table of Costs**
+4. Forecast the Tangible Benefits
+   1. Revenues, Forecasted GDP
+5. Social or Intangible Aspects
+   1. What are the relative non-monetary benefits (LSF/4 Capitals),
+   2. What are the risks?
+   - NOTE: This is for all intangible that you couldn't actually monitize
+*** Forecasting
+- Use historical data as inputs to make informed estimates
+- Budgets & plan for expenses/demand
+**** Economic Indicators
+- Peice of economic data user to interpret current or future investments
+- Can be anything the investor chooses
+- Specific pieces of data released by governments or non-profit orgs
+- Key performance indicators (national wide economics)
+  - CPI
+  - GDP
+  - Unemployment
+  - Price of crude oil
+- Others
+  - Home sales
+  - Consumer spending
+  - Construction
+***** Qualitative
+- Via feedback, qualitative feedback
+- Market research: Polling large populations
+- Dilphi method: Polling expoerts for general opinions
+***** Quantitative
+- For longer term impacts
+- Try to remove the human element
+- Indicator Approach: loading & lagging indicators
+  - Eg: spending increases while employment decreases would be bad!
+- Econometric Modeling: Mathematical regression
+- Time Series Methods: Data tarcking of specific intervals
+- Forecases can breakdown due to random events
+***** Forecasting GDP
+- Keynesian Economics
+  - Increasing government spedning
+  - Increasig market demand
+- They Keynesian Multiplier
+  - How much demand generated due to the government spending
+- Multiplier effect
+  - Hihg Multiplier
+    - Change in demand is substantially magnified
+    - Unstable economy
+    - Strong macroeconomic policy
+  - Low multiplier
+    - Less impact on equilibrium level stable economy
+    - Weak macroenconomic policy
+** L12: Value
+- What is value?
+  - Where value comes from
+  - We have a look at the things that we buy every single day
+  - Giving the spotify example: Being able to stream music without ads is valuable to you!
+  - Pizza hut and Sals => sals tastes better and thus we reserve it for special occasions
+*** The Elemeents of Value Pyramid
+- We want to put value into the LSF
+- Products and services deliver fundamnetal elements of value that address four kinds of needs: *functional*, *emotional*, *life changing*, and *social impoact*. In general, the more elements provided, the greater customers' loyalty and the higher the company's sustained revenue growth
+- Social impact
+  - Self indulgance
+- Life Chaning
+  - Provides hope
+  - Self actualization
+  - Motivation
+  - Heirloom
+  - Affiliation/belonging
+- Emotional
+  - Reduces anxiety
+  - Rewards me
+  - Nostalgia
+  - Design/aestetics
+  - Badge value
+  - Wellness
+  - Therapeutic value
+  - Fun/entertain
+  - Attractiveness
+  - Proviedes access
+- Functional
+  - Saves time
+  - Simplifies
+  - Makes money
+  - Reduces risk
+  - Organizes
+  - Integrates
+  - Connects
+  - Reduces effort
+  - Avoids hassles
+  - Reduces cost
+  - Qualtiy
+  - Variety
+  - Sensory appeal
+  - Informs
+  -
+
+     This all builds from the bottom to the top!
+  - What is we look at value from the standpoint of b2b and b2c?
+*** b2b Elements of the value pyramid
+- Producvts and services deliver fundamental elements of value taht address four kinds of needs
+  - Functional
+  - Emotional
+  - Life changing
+  - Social impact
+- In general the more elements provided, the greater customers loyalty and the higher the companies sustained revenue growth
+- Table stakes: Things that YOU HAVE TO DO IN ORDER FOR PEOPLE TO DO BUSINESS WITH YOU
+  - Meets expectations: It has to meet the requirements for the consumer or project
+  - Reasonable pricing: The price has to match the service that you have to provide! B2b this is particularlly important
+*** Jobs to be done
+- Jobs to be done outlines why you are buying a product or the service
+- EG: Buying an airline ticket
+  - Not so that you can ride the plane
+  - It's more that you can get to a destination that is overseas or extremely fast travel from point A to point B
+  - This is that value that an airline provides!
+*** Value proposition
+- Is what the product or sevice offers to your customers and why they would pay money for it
+- Eg: Your bussiness reduces/addresses climate change!
+  - Putting forward a value proposition
+- Viability: Being able to actually get money from customer/government to actually move your product forwards
+- Value proposition: Describes the benefits customers can expect from your products and services
+  - hat benefit do you gain from your smart phone/vechicle/workout shoes?
+- Think about the following
+  - Jobs to be done: What customers need, want, or desire to get done in their work and in their lives
+  - Customer gains: Outcomes and benefits customers must have, expect, desire,, or dream to achieve
+  - Pain Relievers: Describes how products and services alleviate customer pains by eliminating or reducing bad outcomes, risks, and obstacles that prevent customers from getting a job done well.
+**** Value Prop canvas
+- Who are the many different customers/stakeholers that you will be impacting? What are their requriements with the inovation that you're putting forwards
+- Value proposition
+  - Gain Creators
+  - Products & services
+  - Pain Relievers
+- Customoers Segment
+  - Gains
+  - Customer Jobs
+  - Pains
+
+- You SHOULD list all the above out
+***** Value mapping
+- The set of value proposition benefits that you design to attract customers VS
+- The set of customer characteristics that you assume, observe and verify in the market
+- DO THESE TWO BULLET POINTS FIT????
+- When you have to make tradeoffs
+  - Target few jobs, pains, and gains but do so extremely well
+  - Go beyond functional jobs and address emotional and social jobs
+- What to think about
+  - Differentiate from competion on jobs, pains, and gains that customers care about
+  - Outperform competiition substaintially on atleast one dimension
+*** Government
+- WHat is value under a government project?
+- Good quality: A fit of prupose solution that delivers your needs
+  - Effective: Meets objectives
+  - Efficient: Deliever in the right way
+- Good outcomes: Seeks to secure broader outcomes in all your procurrent activies and ensure you have included broader outcomes in targeted constracts
+  - Economic: Market/supplier/skills development
+  - Environemtnal: Fewer negative/ more positiive impacts
+  - Cultural: Alignment with maori values
+  - Social: Benefits to disadvantaged groups
+- Good price: Consider costs across the whole life of the contract
+  - Up front price
+  - On going costs
+*** Value for engineering
+- Sovle problems
+- Differentiate from competition
+- Create economic acticity
+*** Evaluation of Value
+- NZ tenders for goods and servies have begun to include leemtns of value beyond price
+- Each agency determins weight of these factors and evaluates them
+- Various examples of programmes constribute to the 4 capitals

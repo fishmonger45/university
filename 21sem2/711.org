@@ -1,0 +1,1397 @@
+* Lecture 1
+- End goal: achieve speedup of k fold when you have k processors, in the real
+  world this doesn't happen but we want to be as close to this as possible, this
+  is the upperbound limit
+** Elements of a Parallel Computer
+ - Hardware
+   - Multiple processes
+   - Multiple memories
+   - Interconnection network (ICN)
+ - System Software
+   - Parallel operating system
+   - Programming constructs to express/orchestrate concurrency
+ - Application Software
+   - Parallel Algorithms
+    
+** Parallel Computing Platform
+ - Logical Organization
+   - The user's view of the machine as it is being preseent via its system
+     software
+ - Physical Organization
+   - The actual hardware architecture
+ - Physical architecture is to a large extent independent of the logical
+   architecture
+
+** Logical Organization Elements
+- Control Mechanism
+  - SISD/SIMD/MIMID/MISD
+    - Single/Multiple Instruction Stream & Single/Multiple Data sream
+  - SPMD: single program multiple data
+
+#+DOWNLOADED: screenshot @ 2021-07-21 19:04:34
+[[file:images/Lecture_1/2021-07-21_19-04-34_screenshot.png]]
+
+** Logical Organization Elements
+- Communication Model
+  - Shared-address space
+  - Message passing
+  - UMA/NUMA/ccNUMA
+- These are the ways that our processors are communicating (how they are sharing
+  memory)
+  #+DOWNLOADED: screenshot @ 2021-07-21 19:06:09
+  [[file:images/Lecture_1/2021-07-21_19-06-09_screenshot.png]]
+- *A*: where all of the processors are sharing an address space
+- *B*: where all of the processors have their own local address space and are
+  also sharing an address space for all processors
+- *C*: where all processors have their own address space and nothing else,
+  communication is from local address space to local address space only
+
+** Physical Organization
+- Ideal parallel computer architecture is PRAM (parallel random access machine)
+- PRAM models:
+  - EREW/ERCW/CREW/CRCW
+    - Exclusive/Concurrent Read or and write
+    - Basically this is all of the read locks and write locks stuff that you
+      have covered from SQL, where write locks and read locks don't coexist, but
+      multiple read locks can
+  - Concurrent writes are resolved via
+    - Common/arbitrary/priority/sum
+** Physical Organization
+- Interconnection Networks (ICN)
+  - Provide processor-to-processor and processor-to-memory connections
+  - Networks are classified as the following
+*** Static
+- Consistent of a number of point to point links
+  - direct network
+- Historically used to link processor to processor
+  - Distributed memory system
+*** Dynamic
+- The network consisted of switching elements that the various processors attach
+  to
+  - Indirect network
+- Historically used to link processors to memory
+  - shared memory systems
+** Static and Dynamic ICNs
+
+#+DOWNLOADED: screenshot @ 2021-07-21 19:14:24
+[[file:images/Lecture_1/2021-07-21_19-14-24_screenshot.png]]
+
+** Evaluation Metrics for ICNs
+- Diameter
+  - The maximum distance between any two nodes (smaller the better)
+- Connectivity
+  - The minimum number of arcs that must be removed to break it into two
+    disconnected networks (larger the better) (measures the multiplicity of
+    paths)
+- Bisection width
+  - The minimum number of arcs that must be removed to partition the network into
+    two equal halves (larger the better)
+- Bisection bandwidth
+  - Applies to networks with weighted arcs: weights correspond to the link width
+    (how much data it can transfer)
+  - The minimum volume of communication allowed between any two halves of a
+    network (larger the better)
+- Cost
+  - The number of links in the network (smaller is better)
+- Symmetry
+
+#+DOWNLOADED: screenshot @ 2021-07-21 19:19:16
+[[file:images/Lecture_1/2021-07-21_19-19-16_screenshot.png]]
+
+** Network Typologies
+- Bus based networks
+  - Shared medium
+  - information is being broadcasted
+  - Evaluation
+    - Diameter: O(1)
+    - Connectivity: O(1)
+    - Bisection width: O(1)
+    - Cost: O(p)
+
+
+#+DOWNLOADED: screenshot @ 2021-07-21 19:21:03
+[[file:images/Lecture_1/2021-07-21_19-21-03_screenshot.png]]
+
+- Crossbar Networks
+  - Switch-based network
+  - Supports simultaneous connections
+  - Evaluation:
+    - Diameter: O(1)
+    - Connectivity: O(1)
+    - Bisection width: O(p), you can split it in half and still have half the
+      network communicate 
+    - Cost: O(p^2)
+
+#+DOWNLOADED: screenshot @ 2021-07-22 13:57:16
+[[file:images/Lecture_1/2021-07-22_13-57-16_screenshot.png]]
+- Multistage Interconnection Networks
+
+#+DOWNLOADED: screenshot @ 2021-07-22 13:57:38
+[[file:images/Lecture_1/2021-07-22_13-57-38_screenshot.png]]
+- You have to send through multiple stages in order for processors to
+  communicate, the communication time is delayed
+- The cost is much lower
+
+- Multistage Switch Architecture
+
+#+DOWNLOADED: screenshot @ 2021-07-22 13:59:30
+[[file:images/Lecture_1/2021-07-22_13-59-30_screenshot.png]]
+- Far less wires, but your communication from address to address is constrained
+  by ==log(n)==
+- Connecting the Various Stages
+
+#+DOWNLOADED: screenshot @ 2021-07-22 13:59:45
+[[file:images/Lecture_1/2021-07-22_13-59-45_screenshot.png]]
+
+- "The perfect shuffle"
+** Blocking in a Multistage Switch
+- Routing is done by comparing the bit-level representation of source and
+  destination addresses
+- match goes via pass-through
+- Mismatch goes via cross-over
+
+#+DOWNLOADED: screenshot @ 2021-07-22 14:08:16
+[[file:images/Lecture_1/2021-07-22_14-08-16_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-07-22 15:16:44
+[[file:images/Lecture_1/2021-07-22_15-16-44_screenshot.png]]
+- a) is good if there are no master/slaves
+- b) is good for master/slave, there is no need for any of the slaves to
+  communicate
+
+* Lecture 2
+** Network Topologies
+
+#+DOWNLOADED: screenshot @ 2021-07-23 13:45:32
+[[file:images/Lecture_2/2021-07-23_13-45-32_screenshot.png]]
+
+- Here the b) is better for master/slave type layouts while a) is better for a
+  type of network that has no masters/slaves where each processor is equal,
+  completely completed networks are nice but cost prohibitive
+
+#+DOWNLOADED: screenshot @ 2021-07-26 11:26:22
+[[file:images/Lecture_2/2021-07-26_11-26-22_screenshot.png]]
+
+** Hypercubes
+
+#+DOWNLOADED: screenshot @ 2021-07-26 11:26:56
+[[file:images/Lecture_2/2021-07-26_11-26-56_screenshot.png]]
+
+- Hypercubes are quite good for parallel computing because they have some nice
+  properties that are well balanced (check the table of properties to ensure
+  this). Furthermore they have a nice construction heuristic that allows us to
+  easily scale them up into multiple dimensions
+- Look at hamming distance for hypercubes
+** Trees
+ - If you have two neighbouring processing nodes then you don't have to travel
+   very far, for example if you have two neighbouring processors and then you
+   want to get data from one to the other then you would only have to travel two
+   links (four links for a round trip). This is very little.
+ - Each leaf is a processing node and every internal node is a switching node,
+   every switching node combines the links from the children nodes (switches or
+   processing nodes) and combines them for the parent
+** Summary
+- You can tell that a completely connected netowrk is nice but cost prohibitive
+** Hypercubes revisted
+- These can be generated using Cayley Graphs
+** Broadcast (telephone communication)
+- Broadcast network, you call your friend and they call their friend, every step
+  the number of nodes who know about the information doubles
+- Soonest everyone can be informed is thus in log(n) steps (n is the number of nodes)
+- Broadcast vs gossip
+  - gossip is everyone has information while in broadcast there is one souce of
+    information
+** Physical Organization
+- Cache Coherence is when there is a clash in memory because it's stored in two
+  different bits of memory that is different from the main global memory
+- Ensure that a local cache is coherent with the value that is in the main
+  memory
+  - Invalidate and update in order to do this
+** Topology Embeddings
+- You would use some processors in this system in order to create this mapping
+- We want a small dilation????
+- Meshes map easily onto hypercubes and that's why they are famous
+- Mapping between networks
+  - Useful in the early days of parallel computing when tology specific
+    algorithms were being developed
+- Embedding quality metrics
+  - Dilation
+    - Maximum number of lines an edge is mapped to
+  - Congestion
+    - Maximum number of edges mapped on a single link
+* Lecture 3
+Now that we have covered some mappings and topologies we are going to go through
+some algs (sequential)
+** Dense Matrix-Vector Multiplication
+- ==O(n^2)==, two nested for loops
+- hopefully when we are parallelising this then you're going to get a better
+  order than n^2
+
+
+#+DOWNLOADED: screenshot @ 2021-07-26 17:20:39
+[[file:images/Lecture_3/2021-07-26_17-20-39_screenshot.png]]
+
+** Dense Matrix-Matrix Multiplication
+- Two matrices multiplied which is ==O(n^3)==, remember you can makes this
+  better by using divide and conquer
+
+#+DOWNLOADED: screenshot @ 2021-07-26 17:20:49
+[[file:images/Lecture_3/2021-07-26_17-20-49_screenshot.png]]
+
+** Sparse Matrix-Vector Multiplication
+- Hopefully we can do better than n^2 when we have less than n^2 entries in the
+  matrix or vector, in the diagram the black dots are non-zero, obvious if
+  something is zero we can skip that multiplication because it's obviously going
+  to be zero when we are done with it
+
+#+DOWNLOADED: screenshot @ 2021-07-26 17:21:09
+[[file:images/Lecture_3/2021-07-26_17-21-09_screenshot.png]]
+
+** Floyd's All-Pairs Shortest Path
+- The shortest path between all pairs of nodes the in the graph. It's a O(n^3),
+  you're basically bruting for a shortest path, this is going to be bad but
+  there's better ways to do this (like sparse matrix detection)
+
+#+DOWNLOADED: screenshot @ 2021-07-26 17:21:48
+[[file:images/Lecture_3/2021-07-26_17-21-48_screenshot.png]]
+
+** Quicksort
+- Using element q (picked at random) as a pivot, where everything to the left is
+  less than q and everything to the right is greater than q. You then apply this
+  recursively to the subparts
+- Although this algorithm in the lides might be a bit different, don't be too
+  surprised about this
+
+#+DOWNLOADED: screenshot @ 2021-07-26 17:21:57
+[[file:images/Lecture_3/2021-07-26_17-21-57_screenshot.png]]
+
+** Minimum Finding
+Nothing to note, he talked about FP being able to reduce this though
+
+#+DOWNLOADED: screenshot @ 2021-07-26 17:22:08
+[[file:images/Lecture_3/2021-07-26_17-22-08_screenshot.png]]
+
+** 15-Puzzle Problem
+- Final goal state is a sorted magic square
+- You should look this up, i havne't seen this before
+- You want to find the shortest solution (in number of moves) or just a
+ solution
+- You're just shuffling things around until you get an ordering
+
+#+DOWNLOADED: screenshot @ 2021-07-26 17:22:19
+[[file:images/Lecture_3/2021-07-26_17-22-19_screenshot.png]]
+
+** Parallel Algorithm vs Parallel Formulation
+- Parallel Formulation
+  - Refers to a parallelization of a serial algorithm, you're using the serial
+    algorithm and then you're parallelising it
+- Parallel Algorithm
+  - May represent an entirely different algorithm than that one used serially
+- We primarily focus on "Parallel Formulations"
+  - Our goal today is to primarily discuss how to develop such parallel
+    formulations
+  - Of course there will always be examples of "parallel algorithms" that were
+    not derived from serial algorithms
+** Elements of a Parallel Algorithm/Formulation
+- Pieces of work that can be done concurrently
+  - tasks
+- Mapping of the tasks onto multiple processors
+  - Processes vs Processors and how to balance the two
+- Distribution of input/output ^ intermediate data across the different
+  processors
+- Management the access of shared data
+  - Either input or intermediate
+- Synchronization of the processors at various points of the parallel execution
+- The best outcome is k processes decrease the runtime by k-fold
+** Finding Concurrent Pieces of Work
+- Decomposition
+  - The process of dividing the compution into smaller pieces of work, ie *tasks*
+    - Note that if you can identify this then you basically have done yourself a
+      huge favour because this is the hard part of this, usually when you figure
+      out how to do this step then you will have a good idea on how to do the
+      rest
+- Tasks are programmer dfined and are considered to be indivisible (they are the
+  minimum unit), also called the granularity of the  task
+
+** Example: Dense Matrix-Vector Multiplication
+
+#+DOWNLOADED: screenshot @ 2021-07-26 17:22:45
+[[file:images/Lecture_3/2021-07-26_17-22-45_screenshot.png]]
+
+Here we can split the large matrix into tasks of three rows such that the
+processors do this 4 times faster (holy grail case)
+
+** Example: Query Processing
+
+#+DOWNLOADED: screenshot @ 2021-07-26 17:26:52
+[[file:images/Lecture_3/2021-07-26_17-26-52_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-07-26 17:26:59
+[[file:images/Lecture_3/2021-07-26_17-26-59_screenshot.png]]
+
+- The first (left) is better here because the subtasks are not as dependent as
+  the one on the right, precedence directed graph
+
+** Task-Dependency Graph 
+- In most cases, there are dependencies between the different tasks
+  - Certain tasks can only start once some other tasks have finished
+    - Eg: producer consumer relationships
+- These dependencies are represented using a DAG called a *task-dependency graph*
+
+#+DOWNLOADED: screenshot @ 2021-07-26 17:28:25
+[[file:images/Lecture_3/2021-07-26_17-28-25_screenshot.png]]
+
+- Key concepts derived from the task-dependency graph
+  - Degree of Concurrency
+    - The number of tasks that can be concurrently executed
+      - We usually care about the average degree of concurrency
+  - Critical Path
+    - The longest vertex-weighted path in the graph
+      - The weights represent task size, whatever is your longest critical task
+        is going to bound your runtime (weakest link mindset), you are trying to
+        minimize this
+      - Even though they have the same critical path, the first one is
+        preferable because it has better concurrency
+  - Tasks granularity affects both of the above characteristics
+** Task-Interaction Graph
+- Captures the pattern of interaction between tasks
+  - This graph usually contains the task-dependency graph as a subgraph
+    - i.e: there may be interacgtions between tasks even if there are no
+      dependencies
+      - These interactions usually occur due to accesses on shared data
+
+#+DOWNLOADED: screenshot @ 2021-07-26 15:53:20
+[[file:images/Lecture_3/2021-07-26_15-53-20_screenshot.png]]
+- You are inserting an edge if there is some interaction between processors in
+  order to complete or compose tasks together
+
+** Tasks Dependency/Interaction Graphs
+- These graphs are important in developing effectively mapping the tasks onto
+  the different processors
+  - Maximuze concurrency and minimuze overheads
+
+#+DOWNLOADED: screenshot @ 2021-07-26 15:55:45
+[[file:images/Lecture_3/2021-07-26_15-55-45_screenshot.png]]
+
+* Lecture 4
+** Common Decomposition Methods
+- Data decomposition: Decompose the data to various processors
+- Recursive decomposition: Splitting into subproblems
+- Exploratory decomposition
+- Speculative decomposition
+- Hybrid decomposition: Combine decomposition methods to get a better one
+** Recursive Decomposition
+- Suitable for problems that can be solved using the divide and conquer paradigm
+- Each of the /subproblems/ generated by the divide step becomes a task
+*** Example: Quicksort
+
+#+DOWNLOADED: screenshot @ 2021-07-28 14:17:20
+[[file:images/Lecture_4/2021-07-28_14-17-20_screenshot.png]]
+
+- Make subproblems and pivot (highlighted in grey)
+** Example: Finding the Minimum
+- Note that we can obtain divide and conquer algorithms for problems that are
+  traditionally solved using non-divide nad conquer approaches
+- Keep in mind about this the degree of concurrency
+- Find min for first half of array and find min of second half of array
+- Number of levels is log(n) where n is the number of elements
+- You can have all of the level tasks done parallel, unless you run out of
+  processors (which is likely because the levels are doubling this requriement
+  everytime for every level that you're going down
+- 
+
+#+DOWNLOADED: screenshot @ 2021-07-28 14:18:06
+[[file:images/Lecture_4/2021-07-28_14-18-06_screenshot.png]]
+
+** Recursive Decomposition
+- How good are the decompositions that it produces?
+  - Average concurrency?
+  - Critical path?
+- How do the quicksort and min-finding decompositions measure up?
+- Hopefully with recursive routines you're going to have an equal workload which
+  is helpful
+** Data Decomposition
+- Used to derive concurrency for problems that operate on large amounts of data
+- The idea is to derive the tasks by focusing on the multiplicity of data
+- You're dividing the input
+- Data decomposition is often performed in two steps
+  - Step 1: Partition the data
+  - Step 2: Induce a computational partitioning from teh data partitioning
+- Which data should we partition?
+  - Input/Output/Intermediate?
+    - Well... all of the above--leading to different data decomposition methods
+- How do induce a computational partitioning?
+  - Owner-computes rule
+*** Example: Matrix-Matrix Multiplication
+- Partitioning the output data
+
+#+DOWNLOADED: screenshot @ 2021-07-28 14:21:57
+[[file:images/Lecture_4/2021-07-28_14-21-57_screenshot.png]]
+- Here you have partitioned the arrays into independent tasks that can be more
+  quickly processed
+- Assume that this is using shared memory (you can assume this for all of
+  Michaels part)
+
+** Example Matrix-Matrix Multiplication
+
+#+DOWNLOADED: screenshot @ 2021-07-28 16:20:24
+[[file:images/Lecture_4/2021-07-28_16-20-24_screenshot.png]]
+
+- 9, 10 ,11, 12 are blocked until their parent nodes (two parents) are
+  completed.
+- This is fairly parallel
+
+** Data Decomposition
+- Is the most widely used decomposition technique
+  - After all paralllel processing is often applied to problems that have a lot
+    of data
+  - Splitting the work based on this data is the natural way to extract high
+    degree of concurrency
+- It is used by itself or in conjunction with other decomposition methods
+  - Hybrid decomposition
+
+#+DOWNLOADED: screenshot @ 2021-07-28 16:22:49
+[[file:images/Lecture_4/2021-07-28_16-22-49_screenshot.png]]
+
+- Use data decomposition in the first phase and switch to recursive
+  decomposition in the next phases
+
+** Exploratory Decomposition
+- Used to decompose computations that correspond to a search of a space of
+  solutions
+- You're searching the space but as soon as you find an appropriate answer then
+  you're doing to kill to computation. The search space isn't always visited
+  symmetrically and can weight itself
+
+*** Example: 15 Puzzle Problem
+
+#+DOWNLOADED: screenshot @ 2021-07-28 16:26:13
+[[file:images/Lecture_4/2021-07-28_16-26-13_screenshot.png]]
+
+- Do a branch and bound like above / BFS
+
+** Exploratory Decomposition
+- It is not as general purpose, as if you're unlucky you can get a bad runtime =O(n^2)=
+- It can result in speedup anomalies
+  - engineered slow-down or superlinear speedup
+
+#+DOWNLOADED: screenshot @ 2021-07-28 16:27:04
+[[file:images/Lecture_4/2021-07-28_16-27-04_screenshot.png]]
+
+- This is a good image to explain exploratory speedups
+- Second case parallel time = serial time but the energy expended is 4x
+** Speculative Decomposition
+- When you have extra processors doing nothing you don't want them doing
+  nothing, you then make them guess what the answer is (using probabilities)
+  (for example guess english letters you would guess 'e' because it's the most common)
+- Used to extract concurrency in problems in which the /next/ step is one of
+  many possible actions taht can only be determined when the current tasks
+  finished
+- This decomposition assumes a certain /outcome/ of the currently executed task
+  and executes some of the next steps
+  - Just like speculative execution at the microprocessor level
+
+*** Example: Discrete Event Simulation
+
+#+DOWNLOADED: screenshot @ 2021-07-28 16:38:12
+[[file:images/Lecture_4/2021-07-28_16-38-12_screenshot.png]]
+- a e g h i would be the critical path
+- You could instead guess the output of G and use F, then compute H using the
+  guessed value and real value. (Speculative answer). This means there's more
+  ouputs doing (somewhat) useful work
+
+** Speculative Execution
+- If predictions are wrong
+  - Work is wasted
+  - work my need to be undone
+    - state restoring overhead
+      - memory/computations
+- However, it may be the only way to extract concurrency!
+
+** Mapping the Tasks
+- Why do we care about task mapping?
+  - Can I just randomly assign them to the available processors?
+- Proper mapping is critical as it needs to minimize the parallel processing
+  overheads
+  - If T_p is the parallel runtime on /p/ processors and T_s is the serial
+    runtime, then the /total overhead/ T_alpha is p*T_p - T_s
+    - The work done by the parallel system beyond that required by the serial
+      system
+  - Overhead sources:
+
+#+DOWNLOADED: screenshot @ 2021-07-28 16:43:09
+[[file:images/Lecture_4/2021-07-28_16-43-09_screenshot.png]]
+
+** Why Mapping can be Complicated?
+- Proper mapping needs to take into account the task-dependency and interaction
+  graphs
+  - Are the tasks available a priori?
+    - Static vs dynamic task generation
+  - How about their computational requirements?
+    - Are they uniform of non-uniform?
+    - Do we know them a priori?
+  - How much data is associated with each task?
+  - How about the interaction patterns between the tasks?
+    - Are they static or dynamic?
+    - Do we know them beforehand?
+    - Are they data instance dependent?
+    - Are they regular or irregular
+    - Are they read-only or read-write?
+- Depending on the above characteristics different mapping techniques are
+  required of different complexity and cost
+
+*** Example: Simple & Complex Task Interaction
+
+#+DOWNLOADED: screenshot @ 2021-07-28 16:49:38
+[[file:images/Lecture_4/2021-07-28_16-49-38_screenshot.png]]
+
+** TODO Up to Sources
+* Lecture 5
+** Sources of Overhead in Parallel Programs
+- The total time spent by a parallel system is usually higher than that spent by
+  a serial system to solve the same problem
+  - Overheads!
+    - Interprocessorsor communications and interactions
+    - Idling
+      - Load imbalance, synchronization, serial components
+    - Excess Computation
+      - Sub-optimal serial algorithm
+      - More aggregate computations
+- Goal is to minimize these overheads
+
+#+DOWNLOADED: screenshot @ 2021-07-29 15:05:17
+[[file:images/Lecture_5/2021-07-29_15-05-17_screenshot.png]]
+
+** Performance Metrics
+- Parllel Exection Time
+  - Time spent to solve a problem on p processors
+    - T_p
+  - Total Overhead Function
+    - T_o = p*T_p - T_s
+  - Speedup
+    - S = T_s / T_p
+    - Can we ahve superlinear speedup?
+      - Exploratory computations, hardware features
+  - Efficiency
+    - E = S/p
+  - Cost
+    - p * T_p (processor-time product)
+    - Cost optimal formulation
+  - Working example: Adding n elements on n processors
+
+#+DOWNLOADED: screenshot @ 2021-07-29 15:07:59
+[[file:images/Lecture_5/2021-07-29_15-07-59_screenshot.png]]
+** Effect of Granularity on Performance
+- Scaling down the number of processors
+- Achieving cost optimality
+- Naieve emulations vs Integelligent scaling down
+  - Naieve emulation meaning that you're simulating other processors using time
+    slices
+  - Adding n elements on p processors (below)
+** Scaling Down by Emulation
+
+#+DOWNLOADED: screenshot @ 2021-07-29 15:09:12
+[[file:images/Lecture_5/2021-07-29_15-09-12_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-07-29 15:09:23
+[[file:images/Lecture_5/2021-07-29_15-09-23_screenshot.png]]
+
+- Intelligent scaling: More efficient way of utilising processors
+
+** Scalability of a Parallel System
+- The need to predict the performance of a parallel algorithm as p increases
+- Characteristics of the T_o function
+  - Linear on the number of processors
+    - Serial components
+  - Dependence on T_s
+    - Usually sub-linear
+- Efficiency drops as we increase the number of processors and keep the size of
+  the problem fixed
+- Efficiency increases as we increases the size of the problem and keep the
+  number of processors fixed
+- For the above look at graphs closely below
+
+#+DOWNLOADED: screenshot @ 2021-07-29 15:11:47
+[[file:images/Lecture_5/2021-07-29_15-11-47_screenshot.png]]
+
+
+** Scalable Formulations
+- There are two things: input size and number of processors
+- A parallel formulation is called /scalable/ if we can maintain the efficiency
+  constant when increasing p by increasing the size of the problem
+- Scalability and cost-optimality are related
+- Which systems is more scalable?
+
+#+DOWNLOADED: screenshot @ 2021-07-29 15:13:20
+[[file:images/Lecture_5/2021-07-29_15-13-20_screenshot.png]]
+
+- rows is input size and p is the number of processors here
+- entry is the efficiency
+- with one processors you're perfectly efficient (obvious)
+
+** Measuring Scalability
+- What is the /problem size/?
+- Isoefficiency function
+  - Measures the rate by which the problem size has to increase in relation to /p/
+- Algorithms that require the problem size to grow at a lower rate are more
+  scalable
+- Isoefficiency and cost-optimality
+- What is the best w can do in terms of isoefficiency?
+
+* Lecture 6
+** Parallel Programming Models
+- 1. Message Passing Interface Model (MPI)
+  - Older cousin: Parallel Virtual Machine (PVM)
+- 2. Shared Address-Space Programming Model
+- Thread-based programming
+  - POSIX API/Pthreads (alternately Java/.Net threads)
+- Directive-based programming
+  - OpenMP API
+
+** MPI Programming Structure
+- Asynchronous
+  - Hard to reason
+  - Non-deterministic behavior
+- Loosely synchronous
+  - Synchronize to perform interactions
+  - Easier to reason
+- SPMD
+  - Single Program Multiple Data
+
+** Shared Memory Programming
+- Minimum overheads because near the same addresses and also using the same
+  processor clock
+- Communication is implicitly specified
+- Focus on constructors for expressing concurrency and synchronization
+  - Minimize data sharing overheads
+
+** Commonly Used Models
+- Process model
+  - All memory is local unless explicitly  specified/allocated as shared
+  - UNIX processes
+- Light-weight process/thread model
+  - All memory is global and can be asccessed by all the threads
+    - Runtime stack is local but it can be shared
+  - POSiX thread API/Pthreads
+    - Low-level & system-programming flavor to it
+- Directive model
+  - Concurrency is specified in terms of high-level compiler directives
+    - High-level constructs that leave some of the error-pron details to the
+      compiler
+  - OpenMP has emerged as a standard
+
+** POXIS API/Pthreads
+- Has emerged as the de-facto standard supported by most OS vendors
+  - Aids in the portability of threaded applications
+- Provides a good set of functions that allow for the creation, termination and
+  synchronization of threads
+  - However, these functions are low-level and the API is missing some
+    high-level constructs for efficient data sharing
+    - There are no collective communication operations like those provided by
+      MPI
+      - This excludes thinking about mutexes
+
+** Pthreads Overview
+- Thead creation and termination
+- Synchronization primitives
+  - Mutex
+  - Conditional variables
+- Object attributes
+
+*** Thread Creation and Termination
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:13:45
+[[file:images/Lecture_6/2021-08-02_15-13-45_screenshot.png]]
+
+*** Example: Computing the Value of PI
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:14:09
+[[file:images/Lecture_6/2021-08-02_15-14-09_screenshot.png]]
+- Randomly throw a dart, tally up. This is an approximation to pi. Each
+  processor con be throwing darts 
+
+** Synchronization Primitives
+- Access to shared variable need to be controlled to remove race conditions and
+  ensure serial semantics
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:15:14
+[[file:images/Lecture_6/2021-08-02_15-15-14_screenshot.png]]
+
+** Mutual Exlucsion Locks (Mutex)
+- Pthreads provide a special variable called a /mutex/ lock that can be used to
+  guard critical sections of the program
+  - The idea is for a thread to acquire the lock before entering the critical
+    section and release on exit
+  - If the lock is already owned by another thread, the thread blocks until the
+    lock is released
+- Lock represent serialization points, so too many locks can decrease the
+  performance
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:16:45
+[[file:images/Lecture_6/2021-08-02_15-16-45_screenshot.png]]
+
+*** Example: Computing the minimum element of an array
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:17:06
+[[file:images/Lecture_6/2021-08-02_15-17-06_screenshot.png]]
+
+*** Producer Consumer Queues
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:17:22
+[[file:images/Lecture_6/2021-08-02_15-17-22_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:17:35
+[[file:images/Lecture_6/2021-08-02_15-17-35_screenshot.png]]
+
+** OpenMP (Open Multi-Processing)
+- A standard directive-based (you just direct it) shared memory programming API
+- API consists of a set of compiler directive along with a set of API functions
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:18:46
+[[file:images/Lecture_6/2021-08-02_15-18-46_screenshot.png]]
+
+- Series of pragmas (preprocessor) directives 
+  
+** Parallel Region
+- Parallel regions are specified by the parallel directive
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:19:44
+[[file:images/Lecture_6/2021-08-02_15-19-44_screenshot.png]]
+- Means try to parallelize this bit
+- The clause list contains information about
+  - conditional parallelization
+    - =if(scalar expression)=
+  - degree of concurrency
+    - =num_thread (integer expression)=
+  - Data handling:
+      #+DOWNLOADED: screenshot @ 2021-08-02 15:21:16
+      [[file:images/Lecture_6/2021-08-02_15-21-16_screenshot.png]]
+- Your number of threads should be less than the number of cores (untles syou
+  have hyperthreading then it's 2x the number of cores)
+  - But i think you don't have to think about this, the compiler will autodetect
+
+*** Example: Hello World
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:25:04
+[[file:images/Lecture_6/2021-08-02_15-25-04_screenshot.png]]
+- Automarker only has one or two cores, but it wont actualy run the thing, it's
+  just checking syntax
+- the barrier directive
+  - Synchronizes all threads in a team; all threads pause at the barrier, until
+    all threads execute the barrier
+
+- In reality this will happen (synchronization stuff
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:28:30
+[[file:images/Lecture_6/2021-08-02_15-28-30_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:29:20
+[[file:images/Lecture_6/2021-08-02_15-29-20_screenshot.png]]
+
+- Designates one of the thread as the master thread and then that will execute
+  the next block
+** Concrete Example
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:30:43
+[[file:images/Lecture_6/2021-08-02_15-30-43_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:30:53
+[[file:images/Lecture_6/2021-08-02_15-30-53_screenshot.png]]
+- If it has a larger girth then it's better for a gossip message (fewer
+  collisions?)
+  - *Girth*: Is the length of a shortest cycle contained in the graph
+- This is some version of BFS, look up BFS again and figure out how it works
+
+*** To Parallelize this
+- To convert our sequential algorithm to a parallel algorithm
+  - Add directive to parallelize the outer for loop
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:39:11
+[[file:images/Lecture_6/2021-08-02_15-39-11_screenshot.png]]
+- Guard against multiple conflicting writes
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:39:29
+[[file:images/Lecture_6/2021-08-02_15-39-29_screenshot.png]]
+- This means that it has to get a lock to run this
+- You don't need to run this critical section every time that's why the
+  critical section is inside the if block
+
+*** Mutex locks
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:42:48
+[[file:images/Lecture_6/2021-08-02_15-42-48_screenshot.png]]
+
+- You could just use locks instead to indicate a critical routine
+
+** Sequential vs Parallel Benchmarks
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:43:27
+[[file:images/Lecture_6/2021-08-02_15-43-27_screenshot.png]]
+
+- Multiple orders of magnitude faster in parallel (run using 16 threads) (16x
+  speedup)
+- assignments probably run on 48core
+- omp has a nice walltime functionality
+
+** Reduction clause
+
+#+DOWNLOADED: screenshot @ 2021-08-02 15:44:57
+[[file:images/Lecture_6/2021-08-02_15-44-57_screenshot.png]]
+
+- OpenMP has emerged as a standard
+- the reduction clause specifies how multiple local copies of a variable at
+  different threads are combined into a single copy at the master when threads
+  exit
+
+*** Example: Computing the value of pi
+
+#+DOWNLOADED: screenshot @ 2021-08-04 09:37:15
+[[file:images/Lecture_6/2021-08-04_09-37-15_screenshot.png]]
+
+- As you can see, it's like a catamorphism (the reduction clause). It takes the
+  value from each thread and adds it
+
+** Specifying concurrency
+- Concurrent tasks are specified using the =for= and =sections= directives
+  - The =for= directive splits the iterations of a loop across the different
+    threads
+  - The =sections= directive assigns each thread to explicitly identified tasks
+
+*** The =for= directive
+
+#+DOWNLOADED: screenshot @ 2021-08-04 09:39:33
+[[file:images/Lecture_6/2021-08-04_09-39-33_screenshot.png]]
+
+*** Example
+
+#+DOWNLOADED: screenshot @ 2021-08-04 09:39:45
+[[file:images/Lecture_6/2021-08-04_09-39-45_screenshot.png]]
+
+** More one for directive
+- Loop scheduling scheme
+  - =schedule(static[, chunk-size])=
+    - splits the iterations into consecutive chunks of size chunk-size and
+      assigns them in round-robin fashion
+  - =schedule(dynamic [, chunk-size])=
+    - splits the iterations into consecutive chunks of size chunk-size and gives
+      to each thread a chunk as soon as it finished processing its previous
+      chunk
+  - =schedule(guided [, chunk-size])=
+    - like dynamic but the chunk-size is reduced exponentially as each chunk is
+      dispatched to a thread
+  - =schedule(runtime)=
+    - is determined by reading an environmental variable, basically you're doing
+      this manually
+
+** Restrictions on the =for= directive
+- For loops must not have break statements
+- Loop control variables must be integers
+- The initialization expression of the control variable must be an integer
+- The logical expression must be4 one of <, <=, >, >=
+- The increment expression must have integer increments and decrements
+
+** The =sections= directive
+
+#+DOWNLOADED: screenshot @ 2021-08-04 09:44:05
+[[file:images/Lecture_6/2021-08-04_09-44-05_screenshot.png]]
+
+** Synchronization Directives
+- barrier directive
+
+#+DOWNLOADED: screenshot @ 2021-08-04 09:44:38
+[[file:images/Lecture_6/2021-08-04_09-44-38_screenshot.png]]
+
+- single/master directives
+
+#+DOWNLOADED: screenshot @ 2021-08-04 09:44:52
+[[file:images/Lecture_6/2021-08-04_09-44-52_screenshot.png]]
+
+- critical/atomic directives
+
+#+DOWNLOADED: screenshot @ 2021-08-04 09:45:06
+[[file:images/Lecture_6/2021-08-04_09-45-06_screenshot.png]]
+
+- ordered directive
+
+#+DOWNLOADED: screenshot @ 2021-08-04 09:45:15
+[[file:images/Lecture_6/2021-08-04_09-45-15_screenshot.png]]
+
+* Lecture 7
+** Parallel Sorting Examples
+*** Background
+- Input specification
+  - Each processor has n/p elements
+  - An ordering of the processors
+- Output Specification
+  - Each processor will get n/p consecutive elements of the final sorted array
+  - The chunk is determined by the processor ordering
+- Variations
+  - Unequal number of elements on output
+    - In general, this is not a good idea and it may require a shift to obtain
+      the equal size distribution
+
+** Basic Operation: Compare-Split Operation
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:07:16
+[[file:images/Lecture_7/2021-08-04_16-07-16_screenshot.png]]
+
+** Sorting Networks
+- Sorting is one of the fundamental problems in Computer Science
+- For a long time researches have focused on the problem of "how fast can we
+  sort /n/ elements"?
+  - Serial
+    - =nlong(n)= lower-bound for comparision-based sorting
+  - Parallel
+    - O(1), O(long(n)), O(???)
+  - Sorting networks
+    - Custom-made hardware for sorting
+      - Hardware & algorithm
+      - Mostly of theortical interest but fun to study
+
+** Elements of Sorting Networks
+- Key Idea:
+  - Perform many comparisons in parallel
+- Key Elements
+  - Comparators:
+    - Consist of two input, two output wires
+    - Take two elements on the input wires and outputs them in sorted order in
+      the output wires
+  - Network architecture:
+    - The arrangement of the comparators into interconnected comparator columns
+      - Similar to multi-stage networks
+- Many sorting networks have been developed
+  - Bitonic sorting network
+  - =O(log^2(n)) columns of comparators
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:19:59
+[[file:images/Lecture_7/2021-08-04_16-19-59_screenshot.png]]
+
+- Two way comparator
+- Combine multiple of these to extend their functionality
+- Parallel running time will be bounded by the number of gates, the complexity
+  is the longest bottleneck path
+
+** Bitonic Sequence
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:11:46
+[[file:images/Lecture_7/2021-08-04_16-11-46_screenshot.png]]
+
+*** Why Bitonic Sequences
+- A bitonic sequence can "easily" be sorted in increasing/decreasing order
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:24:34
+[[file:images/Lecture_7/2021-08-04_16-24-34_screenshot.png]]
+
+- Every element of S_1 will <= to every element of S_2
+- Bot S_1 and S_2 are bitonic sequences
+- So how can a bitonic sequence be sorted?
+
+**** Example
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:25:23
+[[file:images/Lecture_7/2021-08-04_16-25-23_screenshot.png]]
+
+*** Bitonic Merging Network
+- A comparator network that takes as input a bitonic sequence and performs a
+  sequence of bitonic splits to sort it
+  - +BM[n]
+    - A bitonic merging netowkr for sorting in increasing order an /n/ element
+      bitonic sequence
+  - -BM[n]
+    - A similar sort in decreasing order
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:27:35
+[[file:images/Lecture_7/2021-08-04_16-27-35_screenshot.png]]
+
+*** Are we done?
+- Given a set of elements, how do we re-arrange them into a bitonic sequence?
+- Key Idea:
+  - Use successively larger bitonic networks to transform the set into a bitonic
+    sequence
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:28:29
+[[file:images/Lecture_7/2021-08-04_16-28-29_screenshot.png]]
+
+**** An Example
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:28:49
+[[file:images/Lecture_7/2021-08-04_16-28-49_screenshot.png]]
+
+*** Complexity
+- How many columns of comparators are required to sort n=2^I elements
+  - ie: depth d(n) of the network
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:29:50
+[[file:images/Lecture_7/2021-08-04_16-29-50_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:29:57
+[[file:images/Lecture_7/2021-08-04_16-29-57_screenshot.png]]
+
+** Bitonic Sort on a Hypercube
+- One-element-per-processor case
+  - How do we map the algorithm onto a hypercub?
+    - What is the comparator
+    - How do the wires get mapped?
+
+*** Illustration
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:38:20
+[[file:images/Lecture_7/2021-08-04_16-38-20_screenshot.png]]
+
+*** Communication Pattern
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:38:50
+[[file:images/Lecture_7/2021-08-04_16-38-50_screenshot.png]]
+
+*** Bitonic Sort Algorithm
+
+#+DOWNLOADED: screenshot @ 2021-08-04 16:39:07
+[[file:images/Lecture_7/2021-08-04_16-39-07_screenshot.png]]
+* TODO FINISH writing
+* Lecture 8
+** Parallel Graph Algorithms
+- Graph theory background
+- Minimum spanning tree
+  - Prims algorithm
+- Single-source shortest path
+  - Dijksta's algorithm
+- All Pairs Shortest Path
+  - Dijkstra's algorithm
+  - Floyd's algorithm
+- Maximal independent set
+  - Luby's algorithm
+- Most of these have sequential versions
+- Chapter 10 of textbook
+
+** Background
+- There are several ways to represent graphs
+  - Visually
+  - Adjacency matrix (usually for dense graphs)
+  - Adjacency matrix (usually for sparse graphs)
+
+#+DOWNLOADED: screenshot @ 2021-08-06 09:46:56
+[[file:images/Lecture_8/2021-08-06_09-46-56_screenshot.png]]
+
+** Minimum Spanning Tree
+- Compute the minimum weight spanning tree of an undirected graph
+
+#+DOWNLOADED: screenshot @ 2021-08-06 09:48:30
+[[file:images/Lecture_8/2021-08-06_09-48-30_screenshot.png]]
+
+- If there are n nodes in your original graph there will be n-1 edges in the
+  spanning tree
+- Construct a tree of minimum weight
+
+** Prim's Algorithm
+- =O(n^2) serial complexity for dense graphs
+- How can we parllelize this algorithm?
+- Which steps can be done in parallel?
+
+#+DOWNLOADED: screenshot @ 2021-08-06 09:51:39
+[[file:images/Lecture_8/2021-08-06_09-51-39_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-08-06 09:52:00
+[[file:images/Lecture_8/2021-08-06_09-52-00_screenshot.png]]
+
+- You add the minimum cost edge adjacent to your current node and add that node
+  to the last of visited nodes, only add an edge if it doesn't create a cycle
+  - =O(n^2)= because you have to scan a whole row for a minimum cost edge
+    - You then visit the next minimum cost node and repeat
+    - This is the sequential speed
+- We can parallelize the searching task by dividing the row into a set of tasks
+  such that each processor can do that part of the search and return its minimum
+  found from the subset of the whole task
+  - Each finds their minimum cost weight, there's then a voting process for the
+    minimum of all those results
+  - There's some optimization that can be done here as well, if you have already
+    added nodes into your MST then you know that you don't have to look at those
+    nodes again and thus can exclude them from your row search space when doing
+    the paralllel formula. You can't add a vertex twice!
+
+** Parallel Formulation of Prim's Algorithm
+- Parallelize the inner-most loop of the algorithm
+  - Parallelize the selection of the "minimum weight edge" connecting an edge in
+    =V_T= to a vertex in =V-V_T= (the set of verticies that we have not selected)
+  - Parallelize the updating of the =d[]= array
+    - So because we have updated the graph they might have a new shortest
+      distance in the tree. Then =d[]= has to be updated, we can do this in paralllel
+- What is the maximum concurrency that such an approach can use?
+  - Depends on the number of verticies to be updated and added. This changes
+    (decreases) over the runtime of the algorithm. Concurrency decreases towards
+    the end because there will be more idle processors
+- How do we "implement" it on a distributed-memory architecture?
+  - Shared memory model, they can all share the adjacency matrix, they can also
+    share =d[]=. If you're on a cache based memory model then you have to update
+    =d[]= for each processor
+    - This could be a bit slow if you have a distributed system
+- Now we look into runtime
+  - Decompose the graph A (adjaceny matrix) and vector =d[]= using a 1D block
+    partitioning along columns
+    - Why columns?
+  - Assign each block of size n/p to one of the processors
+  - How will lines 10 & 12-13 be performed?
+  - Complexity?
+
+
+#+DOWNLOADED: screenshot @ 2021-08-06 10:06:19
+[[file:images/Lecture_8/2021-08-06_10-06-19_screenshot.png]]
+
+
+#+DOWNLOADED: screenshot @ 2021-08-06 10:06:27
+[[file:images/Lecture_8/2021-08-06_10-06-27_screenshot.png]]:w
+
+- So you are allocating a particular node in the adjacency matrix to a
+  particular processor, this is why we are using columns
+- n decreases over runtime
+- complexity
+  - improved by n^2/p which is really good, but there's communication time of
+    the results amongst processors
+
+** Single-Source Shortest Path
+- Given a source vertex s find the shortest-paths to all other verticies
+- Dijkstra's algorithm
+- How can it be parallelized for dense graphs?
+
+#+DOWNLOADED: screenshot @ 2021-08-06 10:10:16
+[[file:images/Lecture_8/2021-08-06_10-10-16_screenshot.png]]
+
+- Prims = Dijkstras except you're changing what you're tracking (d) instead of (d[])
+- You can parallelize dijkstras by doing the update step in paralllel
+
+** All-pairs Shortest Paths
+- Compute the shortest paths between all pairs of verticies
+- Algorithms
+  - Dijkstra's algorithm
+    - Execute the single-source algorithm n times
+  - Floyd's algorithm
+    - Based on dynamic programming
+
+*** Dijkstra's algorithm
+- Source-partitioned formulation
+  - Partition the sources along the different processors
+    - Is it a good algorithm?
+      - Computation & memory scalabiliity
+	- Doesn't scale at all with memory. Doesn't work well when p > n
+      - What is the maxmimum number of processors that it can use?
+	- n: how ever many source nodes you have
+      - We only like this algorithm because it is easy the parallize
+
+#+DOWNLOADED: screenshot @ 2021-08-06 10:18:35
+[[file:images/Lecture_8/2021-08-06_10-18-35_screenshot.png]]
+- Source-parallel formulation
+  - Used when p > n
+  - Processors are partitioned into n groups each having p/n processors (these
+    groups are also called teams)
+  - Each group is responsible for one single source SP computation
+  - Complexity? 
+
+#+DOWNLOADED: screenshot @ 2021-08-06 10:19:44
+[[file:images/Lecture_8/2021-08-06_10-19-44_screenshot.png]]
+
+*** Floyd's Algorithm
+- Solves the problem using a dynamic programming algorithm
+  - let d^k_i,j be the shortest path distance between verticies i and j that
+    goes through verticies 1,..., k
+
+#+DOWNLOADED: screenshot @ 2021-08-06 10:31:25
+[[file:images/Lecture_8/2021-08-06_10-31-25_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-08-06 10:31:38
+[[file:images/Lecture_8/2021-08-06_10-31-38_screenshot.png]]
+ 
+- Complexity =O(n^3)= because of triple for loop
+- Note: The algorithm can run in-place
+- How can we parallelize it?
+  - We would parallize the for loop
+    - You would do several rows/columns split amongst processors
+
+** Maximal Independent Sets
+- Find the maximal set of vertices that are not adjacent to each other
+
+#+DOWNLOADED: screenshot @ 2021-08-07 09:19:31
+[[file:images/Lecture_8/2021-08-07_09-19-31_screenshot.png]]
+
+- Independent set: Is the the graph, if v is the independent set then each
+  vertex in v will not have an edge to any other vertex in v
+- Maximum independent set is hard
+  - Maximum is find globally max sized set
+  - Maximal is local greedy: largest set of verticies such that you can't add
+    any more verticies to make a larger set. This is locally optimal, but not
+    necessarily globally optimal
+- {a, d, i, h} actually is a maximal set (but not maximum)
+- generally the algorithm goes like this
+  - You pick a vertex Q, you then add Q to your independent set and then delete
+    Q and all it's neighbours, repeat this process until there are no more
+    verticies in the graph
+    - can we do the above but better? I would assume you would be able to remove
+      verticies from the graph as long as the who sets of verticies that you are
+      picking don't overlap! There would be some communication requirement in
+      this though. It should be similar to quicksort when picking the pivot
+      tree, then they vote and you either win or lose after that voting
+      process.
+    - Parallel:
+      - All processors randomly pick and vertex, if my number is smaller than
+        all of my neighbours then i get to add my vertex
+      - If two processors pick the same number then they go off lowest processor
+        id 
+      - This seems kinda bad though? Processors are picking a number then they
+        have to repick if someone else wins
+
+** Serial Algorithms for MIS
+- Practical MIS algorithms are incremental in nature
+  - Start with an empty set
+  - 1. Add the vertex with the smallest degree
+  - 2. Remove adjacent verticies
+  - 3. Repeat 1--2 until the graph becomes empty
+- These algorithms are impossible to parallelize
+  - Why?
+- Parallel MIS algorithms are based on the ideas initially introduced by Luby
+
+** Luby's MIS Algorithm
+- Randomized algorithm
+  - Starts with an empty set
+  - 1. Assigns random numbers to each vertex
+  - 2. Verticies whose random number are smaller than all of the numbers
+    assigned to their adjacent verticies are included in the MIS
+  - Verticies adjacent to the newly inserted verticies are removed
+  - Repeat steps 1--3 until the graph becomes empty
+- This algorithm will terminate in =O(log(n))= iterations
+- Why is this a good algorithm to parallelize?
+- How will the parallel formulation proceed?
+  - Shared memory 
+  - Distributed memory
+- If you lose a round then you're never going to be included in the independent
+  set and you can be eliminated from consideration!
+
+#+DOWNLOADED: screenshot @ 2021-08-07 09:38:12
+[[file:images/Lecture_8/2021-08-07_09-38-12_screenshot.png]]
+
+- If you want a large maximal independent set then you're going to weigh the
+  random number generation to be lower for verticies with low degree so that
+  they are picked first. There are no guarantees that you get a _maximum_
+  independent set
+  - Pick a random number and multiply it by my degree!
+    
+* TODO Lecture 9
+* Lecture 10
+- A thread is a single, sequential flow of control within a program. Within each
+  thread, there is a single point of execution
+- Threads execute concurrently
+- Most tradition programs consist of a single thread
+- Threads execute within (and share) a single address space
+- Synchronization elements ensure proper memory access
+** Advantages of using Threads
+- Improve performance
+  - Multiple processors: threads may run on seperate processors concurrently
+  - Uniprocessors: threads permit overlapping of slow operations (such as I/O)
+    with computation
+  - Using the natural parallelism in applications
+    - User interaction (slow) can be a thread
+  - Multiple threads allow a server to handle clients' requests in parallel
+    instead of artificially
+** Shared resources
+
+#+DOWNLOADED: screenshot @ 2021-08-23 15:19:04
+[[file:images/Lecture_10/2021-08-23_15-19-04_screenshot.png]]
+
+** Private resources
+
+#+DOWNLOADED: screenshot @ 2021-08-23 15:20:11
+[[file:images/Lecture_10/2021-08-23_15-20-11_screenshot.png]]
+
+* Lecture 11
+- C++ uses its own thread library instead of unix threads. it might use the unix
+  thread library underneath but it's platform independent
+* Misc
+- OpenMP second assignment
+** SIMD
+- Single instruction multiple data stream
+- the same instruction is execute synchronously by all processing units
+** MIMD
+- Each processing element is capable of executing a different program
+  independent of the other processing elements
+- SIMD computers require less hardware the MIMD computers because they have only
+  one global control unit. Furthermore, SIMD computers require less memory
+  because only one copy of the program needs to be stored. In contracts, MIMD
+  computers store the program and operating system at each processor
+** Communication Model of Parallel Platforms
+** Parallel Programs
+*** Task, Data and Synchronisation
+ - Task parallelism: Where you partition tasks carried out in solving the problem
+   among the cores and each core carries out more or less similar operations on
+   its part of the data
+   - Where each marker only marks a single question out of all the questions for
+     the papers, cores in this case are carrying out different operations for
+     each core
+ - Data parallelism: Where you have an amount of data and then you split that
+   data amongst the cores and they do the whole workload for that data
+   - Where each marker marks whole papers but the stack of papers is split
+     between all of the markers, everyone in this context is executing roughly
+     the same operations
+ - The last type is synchronisation where there must be sync point in order for
+   the algorithms to be working together (because each core works at its own pace), therefore if the master core is making data available first then the other cores can't just race off and start computing before the master core has even put up the data, a sync point must be used
+*** Types of Memory
+ - Shared and distributed, where shared each core can share memory while in the
+   distributed setting you have to assume that all memory is private to each core
+   (or to each cluster of cores) (shared memory within a multi CPU environment)
+
+
+ #+DOWNLOADED: screenshot @ 2021-07-20 18:38:25
+ [[file:images/Parallel_Programs/2021-07-20_18-38-25_screenshot.png]]
+
+** Parallel Hardware and Parallel Software
+ - Memory is used to store both program and data instructions
+ - Program instructions are coded data which tell the computer to do something
+ - Data is simply information to be used by the program
+ - A central processing unit (CPU) gets instructions and/or data from memory,
+   decodes the instructions and then *sequentially* performs them
+
+ #+DOWNLOADED: screenshot @ 2021-07-20 19:26:35
+ [[file:images/Parallel_Hardware_and_Parallel_Software/2021-07-20_19-26-35_screenshot.png]]
+
+*** Cache mappings
+ - *fully associative cache*: is one in which a new line can be placed at any
+   location in the cache
+ - *direct mapped*: in which each cache line has a unique location in the cache
+   to which it will be assigned
+ - intermediate solutions are called n-way set associative
+
+** Instruction-level Parallelism
+ - An attempt to improve processor performance by having multiple processor
+   components (*functional units*) simultaneously executing instructions. There
+   are two types, *pipelining* and *multiple issue*
+*** Pipelining
+ - Divide the machinery for the algorithm into different logical blocks, while
+   you are computing the last stage of the algorithm for data x, you can already
+   be phasing in data y at the start of the block, this means that one piece of
+   computation doesn't have to wait until the other is fully done. not k stage ->
+   k fold improvement
+** Misc
+ - *Write back scheme*: where you write to a piece of memory and put a bit on it
+   to indicate that it is dirty, then when it is evicted from memory the bit is
+   then checked and if it's a dirty address then you write it back to disk so
+   that it can be updated
+** Arc Connectivity 
+A graph is k arc connected if k directed disjoint paths between any
+two vertices u and v exist. Below is an example of a two arc connected graph.
+
+#+DOWNLOADED: screenshot @ 2021-07-23 15:06:36
+[[file:images/Misc/2021-07-23_15-06-36_screenshot.png]]
+** Graph Diameter
+The diameter of a graph is the distance of the longest shortest path between any
+two nodes
+** Bisection Width
+When you split the network into two, how many links are you breaking? The
+bisection should be done in such a way that the number of links broken is
+minimised
+** Assignment Concepts
+*** Bitonic sequences
+- a bitonic sequence is a sequence of elements  <a_0, a_1, ..., a_n-1> with the
+  property that either:
+- 1) there exists an index i, 0 <= i <= n-1, such that <a_0, ..., a_i> is
+  monotonically increases and <a_i+1, ..., a_n-1> is monotonically decreasing,
+  or
+- 2) there exists a cyclic shift of indices so that (1) is satisfied
+** Minimal Feedback Vertex Set
+- Is the minimal set of verticies that have to be removed in order to leave a
+  graph without any cycles

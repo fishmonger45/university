@@ -1,0 +1,25 @@
+* 306 :306:
+** DONE Start group project and go to next meeting 
+   DEADLINE: <2021-07-28 Wed>
+** DONE Multiple parents task
+** DONE Implement the GraphStream stuff that you have been assigned
+   DEADLINE: <2021-08-08 Sun>
+** DONE Perhaps look at the 2020 second place (it's a mess)
+   DEADLINE: <2021-08-08 Sun>
+* 325 :325:
+** Lab 2
+   DEADLINE: <2021-08-13 Fri>
+** Lab 3
+   DEADLINE: <2021-08-13 Fri>
+* 711 :711:
+** TODO Assignment 1
+   DEADLINE: <2021-08-18 Wed>
+** TODO Assignment 2
+   DEADLINE: <2021-08-21 Sat>
+** TODO Ask about these questions
+*** How do we go from the end of one phase to the start of another?
+* Misc
+** DONE Pub quiz
+   DEADLINE: <2021-07-28 Wed>
+** DONE Auckland Youth Choir performance
+   DEADLINE: <2021-07-31 Sat>

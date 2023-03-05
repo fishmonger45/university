@@ -1,0 +1,1263 @@
+#+TITLE: 701
+
+* James
+** Lecture 1 <2022-02-28 Mon>
+*** Details
+- Two halves where the first half will be git and technical management for large projects
+- Second half is thinking about good design and how to do it and how to recognise it
+- A whole bunch of assignments (five in total and a bunch of deliverables for each assignment) and two tests. this means that there's a bunch of chunked up work so the biggest part of the course is 20% and the rest is like 10% ish
+- Assignment and other questions go to whoever set/taught the content
+*** Overview
+- Assignment 1 is a team of 20
+- Do the two readings before next monday
+*** Videos
+**** Large teams
+- It's often the soft skills (beyond technical) that are most important for working in a team
+** Lecture 2 <2022-03-02 Wed>
+- Git kahoot cringe
+- Nothing else really
+** Lecture 3 <2022-03-07 Mon>
+- Watch w1_04 and w2_00 videos, and do the /Code Review/ reading
+- All about code comments
+*** Really obvious code (ROC)
+- Consistent and meaningful naming scheme
+- Consistent indentation (for screen readers)
+- Logical empty space (readability)
+- Avoid deep nesting
+- Avoid duplication
+- Avoid magic numbers
+- Limit line length
+- Appropriate comments
+- You don't want to document code that's really obvious, but you do want to document the design process
+*** Documentary comments
+- Filenames
+- Version number
+- Creation date
+- Last modification date
+- Author name
+- Copyright
+- Purpose of program
+- Changlog
+*** Functional comments
+- To do
+- Bug description
+- Note to co-developers
+- Performance/feature improvements
+*** Explanatory comments
+- Startup code
+- Exit code
+- Sub routines and functions
+- Things that are difficult to understand
+- Don't document obvious code
+- Document design decisions
+  - What was left out and why
+  - What was optimized out
+  - What was tried and discarded
+- Document workarounds for bugs
+*** Automated code comments tools
+- Swagger
+- Some jetbrains generate javadocs
+** Lecture 4 <2022-03-09 Wed>
+*** Code review
+- Important proof reading/quality control step
+- Part of the assignment workflow
+- Protect your main repository/branch
+- Many solutions to one problem
+  - Do not enforce your solution
+- Don't make many nitpick comments, just make one (eg indentation)
+- Be constructive and polite
+- Sources of confusion
+  - organization or work
+    - unclear commit messages
+    - unclear status
+    - Change addressing multiple issues
+  - Non functional issues
+    - Poor code readability and performance
+  - Missing rationale
+  - Reviewers lack of familiarity with existing code
+  - Code review stats
+    - Review should be small (<200 LOC)
+    - Take your time (<300 LOC) hour is best
+    - Limit total review time (<60 minutes is ideal)
+    - How many defects? Around 15p/h
+** Personal
+*** Nest
+**** Controllers
+- Responsible for handling incoming requests and returning responses to the client
+  #+DOWNLOADED: screenshot @ 2022-03-04 11:18:08
+  [[file:images/Personal/2022-03-04_11-18-08_screenshot.png]]
+- A controllers prupose is to receive specific requests for the applicaiton. The routing mechanism controls which controller receives which requests. Frequently each controller has more than one route, and different routes can perform different cations
+**** Providers
+- Providers are a fundamental concept in Nest. Many of the basic Nest classes may be treated as a provider (services, repositories, factories, helpers). The main idea of a provides is that it can be injected as a dependency; this means objects can create various relationships with each other, and the function of "wiring up" instances of objects can largely be delegated to the nest runtime system
+  #+DOWNLOADED: screenshot @ 2022-03-04 11:23:10
+  [[file:images/Personal/2022-03-04_11-23-10_screenshot.png]]
+* Ewan
+** Lecture 1 (How to explain and predict what we see) <2022-04-11 Mon>
+- If we claim that one design doesn't have the quality of another, how do we prove this? This is a science question
+- How do we know which design is better? There are clearly differences, but are the differences meaningful? How do we even quantify how good a particular design is?
+- We are focusing on modularity in terms of what a 'better design' is.
+*** Decisions
+- Document three decision you made to improve modularity
+- To describe your decisions you must discuss alternatives you chose from: you only need to discuss the second best alternative
+- You must justify your choice in terms of the criterion of modularity (referring to the defintion)
+*** TODO You should rewatch this lecture and make some more notes
+** Lecture 2 <2022-04-13 Wed>
+- How does object orientated design aid in quality?
+*** Design quality
+- Programming language is just a tool, the client doesn't care about source code and don't want to know anything about it
+- We just have to write code that clients care about when it's running. Only the developers care about the quality of the code
+- Even when you're writing your first lines of source you're having to maintain it
+- In order to talk about the qualities of OOD, we have to define it, which turns out to be a bit of a problem
+- "My cat is object oriented", basically you can't just declare something as OOD to call it good
+*** Alan Kay (Smalltalk)
+1. Everything is an object
+2. Objects communicate by sending and receiving messages (in terms of objects)
+3. Object have their own memory (in terms of objects)
+4. Every object is an instance of a class (which must be an object)
+5. The class holds the shared behavior for its instances (in the form of objects in a program list)
+6. To eval a program list, control is passed to the first object and the remainder is treated as its message
+
+- Kay is a huge asshole, has strong opinions
+*** Strousturp
+- If the term OOL means anything, it must mean a language that has mechanisms that support he object orientated style of programming well
+*** Definition: OOD
+- An object oriented program is one that when it executes creates objects that send messages to each other
+- An object oriented program is one that describes an OOD
+
+** Measurement
+- All the numbers don't have units so what you're adding up makes no sense
+- Our intuitions state that we can't add numbers that have different units
+- This hints that there are rules around measurement, you can't just compare random numbers
+- Measurement for "invisible" things such as software is not easy
+- To do so, we need a good understanding as to what measurement means
+  - "Something that produces a number"?: Measure distance between two points by counting the number of lamp posts massed on a path between the two points?
+    - Clearly lampposts don't have to be equally spaced
+  - "Get measurements of different things and 'average' them together - Measure the importance of a town by adding the year of Establishment, height above sea level, and population
+  - "Create a theory about how thing 'must' work, and develop measurements to support it"  - use the shape of bumps on someone's skull to measure their personality
+- Some of the intuitions that we have acquired might not apply to software
+- It's not enough to create a number
+- One way of creating measurements is creating a model of the thing that you're trying to measure and then you find your metric (which is a way of doing measurement), for example the skull thing (phrenology)
+  - It doesn't exist because the predictions given by those measurements based on that model were not correct (not enough to have measurements based on models)
+** What is measurement
+- Measurement is the process by which *numbers of symbols* are assigned to *attributes* of *entities* in the real world in such a way as to describe them according to clearly defined rules
+- *Metric*: Description of the process to measure an attribute
+- *Measurement*: can also refere to the result of the measurement process (applicaiton of the metric)
+- *Classes of entities*: How tasks are done, things, what is used
+- Types of attributes:
+  - *Internal*: Those that can be measured by examining the entity on its own, separate from its behaviours
+  - *External*: Those whose measurement must take into account both its behaviours and the environment it exists in
+- Numbers or symbols: We can have a measurement that is not a number
+- If we have a metric then we must define it with measurement and entities, these must be well defined
+*** Attribute - Height
+- Height is an internal attribute
+- Reasonable measurements might be reported in cm, hands, stories, or metres
+- cm/m are different *metrics*, but they can be converted to one another
+*** Colour of eyes
+- internal attribute, not a number, green, blue, etc
+***  Weight
+- external attribute, you need to know the external gravity of the environment
+- While mass is an internal attribute
+** Constructs
+- Measurement is about assigning values (in a general sense to attributes of entities -- 'quantification'
+- Some attributes seem measureable or quanitifable in principle, but we do not know how to do so
+  - Measureable => quantifiable but quanitifable !=> measureable
+    - For example Health
+  - A *construct* is a concept that is /quantifiable/ in principle but not directly measureable
+    - For example speaking of measuring Health makes no sense
+  - Since we cannot measure constructs directly, we make estimates from measurements of attributes we can measure, attributes we believe /correlate/ with the construct
+    - For example with Health
+      - Blood pressure, weight, cholesterol
+    - Attributes (or rather the metrics we use to measure them) that are used to estimate measurements for constructs are called *reflective indicators* (reflective indicators are also attributes)
+      - We use the reflective indicators and measure them so that we can measure the construct
+    - *The quality attributes of software that we care about are all constructs*. This makes our job more difficult
+      - Means that there is not defined way to measure things, and anyone claiming objectivity is wrong.
+** Statistical Correlation
+- How do we know if a reflective indication might tell us something useful about a construct: statistical correlation!
+- Two variables correlate if they vary in the same way
+- Typically refers to linear relationships (be not required)
+  - X and Y are *positively correlated* if *usually* when X increases so does Y by a proportional amount *or vice versa*
+  - X and Y are *negatively correlated* if *usually* when X increases then Y decreases by a proportional amount *or vice versa*
+  - "Usually" is demonstrated by statistical tests
+- Correlation does not mean exact linear relationship: there can be some variation
+- Also correlation != causation
+** Example: Maintainability and indicators
+- Maintainability is a construct
+- A comonly mentioned way to "measure" maintainability is "number of lines of code changed"
+- But
+  - Some lines are easier to change than others
+  - "lines changed" usually treats "lines added", "lines deleted" and "lines modified" as being equal
+  - Does not measure maintainability
+- This may be a reasonable indicator, but being only one, is not by itself sufficient to infer maintainability reliably
+- So if we were to make maintainability decisions based on this attribute alone then we would be likely to be making the wrong decisions
+- Rule of thumb is that you need three attributes, but this is arbitrary
+** Why do we measure?
+- *to compare*
+- Measure the weight of come flour to compare whether what you have agrees with what the recipe says is needed
+- We use measurement because direct comparison can be too expensive, measurements are easier to do and likely cheaper
+  - EG: comparing two codebases is hugely expensive (or impractical), but basing which is better based on measurement is cheaper!
+- *but measurement only works if it gives the same answer as direct comparison*
+** Representation Condition
+- When is something a "measurement"
+  - When the value reported is the one that is "supposed to be" reported
+  - When the /definition of what value is "supposed to be" reported "makes sense"/
+- *empirical relationship*: The actual relationship in the real world between the entities based on some attribute
+  - "Mary is taller than tom"
+- *representation condition*: the relationship between the measurements given by the metrics mapping function is *always the same* as the empirical relationship
+  - "Mary is taller than tom" => height(Mary) > height(Tom)
+- Now we something says when "x is a valid measurement" we can always compare it to the empirical relationship
+** Constructs and Representation Condition
+- Reflective indicators for a construct do not /measure/ the construct, so cannot strictly meet the representation condition
+- nevertheless they must meet the representation condition most of the time to be true indicators => correlation
+- Demonstrating that a potential indicator correlates with the construct must be done carefully
+** Representation Condition: Design
+- Suppose someone proposes a metric =design_quality=, how to test whether it meets the representation condition?
+*** The wrong way to do this
+- Get a bunch of designs
+- Measure them according to the metric that is "known" to measure quality: eg: larger LOC means poorer design
+- Confirm that whenever design A is worse than design B according to LOC, the the value for design_quality A is larger than that for B
+- This is wrong because this only tells us the relationship between the two metrics, we still don't' know if the metric actually fulfills the representation condition or measures the design quality
+- Design quality is a construct so it's still the problem of how to measure it
+*** The right(er) way to do this
+- Get a bunch of designs
+- Compare them *empirically* in pairs (get experts to come to a consensus as to which design in each pair is the better design) => *get the "ground truth"*
+- Compare the values provided by =design_quality= and confirm that they have the same relationship
+- It's difficult to measure *empirically*
+- All we need is correlation, it doesn't exactly have a line up
+** Typical SE metrics
+- Size
+  - LOC
+  - Halsteds Software Science
+  - Fucntion Points
+  - WMC, RFC
+- MCCabes Cyclic Complexity number (CCN)
+- Asynptotic complexity
+- Test effectiveness ratio
+- Coupling and Cohesion (eg: CBO, LCOM)
+- Structure (eg for inheritance, GIT, NOC)
+- Cost models
+  - COCOMO
+** Evaluating McCabes CCN
+- Proposed as a measurement for code complexity
+- Measures the number of linearly independent paths through the control flow graph
+- =v(F) = e - n +2=, F is the CFC of the code, n number of nodes, e the number of edges
+- Intuition, the larger the CCN the more complex the code
+- Various sources recommend a CCN of no more than 10-15
+- Counterexample: More complex code gives lower CCN number, this means that it's not a good metric for complexity
+- Only focuses on paths though CFGS and fails to see other things, regularity isn't something that CCN sees, but humans do, so we need more metrics
+** How goo is CCN as a metric?
+- As a meansure to measure the number of linearly independent paths through a method => very good
+- As a means to measure "complexity" => not every much
+  - Complexity is a construct so cannot measure
+  - Some evidence to suggest it is a reasonable *indicator*, but so is 'size'
+** The "meaning" of measurements
+- It's 59 degrees Fahrenheit outside
+- What can we conclude from this statement? Do I need a coat?
+- Do we have enough information to conclude anything useful
+** Entity Population Models
+- These models describe the distribution of the data for a given metric: identify *typical* values
+- Examples
+  - Core body temperature for humans is 37 degress
+- We use our understanding of typically values to make decisions
+  - => *if a "typical" measurement from a metric does not tell us anything usefull, it's not a useful metric*
+** Measurement Scales
+- Characterises what can be done with the measurements, in particular, what kinda of statistical analysis is appropriate
+  - *Nominal*: Measurements are categories with no ordering or other structure
+    - Cannot perform any arithmetic operations, but can compute *mode*, frequency, distributions
+    - colour of eyes, yes/no
+  - *Ordinal*: Measurements are categories with a defined order (rank) but don't know "distance" between each categories
+    -Cannot preform any arithmetic operations, but can compute *median and mode*, and such things as "non parametric analyse of variance"
+    - very cold, cold, cool , warm, hot, very hot
+  - *Interval*: Measurements are an equal distrance apart
+    - Can perform some forms of arithmetic, but not *ratios*, so average, standard deviation, regression, and other parametric techniques
+    - Year, Fahrenheit
+  - *Ratio*: Measurements have a "true zero" (absolute smallest value)
+    - Can perform rations, and any other arithmetic technique
+    - Kelvin temperature, distrance, weight
+  - *Absolute*: measurements are a count
+    - specialized ratio scale
+    - Counts
+** Typical problems with softwar metrics
+- Metric is not fully defined
+- Metric does not meet fundamental rules for measurement (eg what is the unit)
+- Measurements are not used correctly according to their scale
+- Metric is not an indicator of the construct
+** Previously
+- Big classes are bad
+- Questions not answered:
+  - What is "big"
+  - What is "bad"
+** Class size and Modularity
+- If we want to make a relationship between the two we could do something like this
+- Does "bad" mean "poor modularity"?
+- "Explanatory model": We are always making links back the the definition of modularity, some assumptions have been made! These assumptions are belivable, but are they always true? If not always true then our explainatory model has been weakened
+  - The larger the class, the more it will have connections to other classes *assumption* => less independent => poorer modularity *by the definition*
+  - The larger the class, the more likely internal elements will *not* connect to other internal elements *assumption* =.j less interdependent => poorer modularity
+** Measuring Size
+- *Size is a construct* (but not a quality attribute) => no metric can measure it
+- We have entity population models for this so we should know what is large! Eg: 300LOC is easy but 3000LOC is large for our assignment so we have some 'expectations'
+- What is the possible actual size attribute that we should use???
+- Possible indicators
+  - LOC
+  - number of methods
+  - Number of fields
+  - Number of instance methods and or fields
+  - What about public/protected/private?
+  - Number of imports
+  - What about nested classes
+- Are these reasonable indicators? It depends on why you care about how "big" something is
+  - Does "Your implementation of Kalah will only be a few hundred LOC, now a few thousand" convey the amount of work you probably need to do sufficiently accurately?
+** Size and modularity
+- People are producing big classes but they are also not bad? So what about having big classes are bad?
+- Does class size, maximum size, average size, size distributions tell us anything useful about the modularity of the design?
+- What what is important (for modularity at least) is not the size of the class but the relationship with (and between) its elements: the *assumptions* in the explanatory model?
+  - Eg: a huge class does not cause problems associated with poo modularity provided it is fairly independent of the rest of the system
+** Coupling and Cohesion
+- Concepts to characterise the quality of "modules" based on our intuition of how systems can be built more easily
+- *This is based at module level* not at design level
+- Capture notions of independence between modules and relationship of elements within modules
+- If we can measure them, then can improve "design quality" (at least with respect to some notions of quality)
+** Definitions
+- *Module*: a lexically contiguous sequence of program statements bounded by boundary elements, having an aggregate identifier
+- *Relationship* A relationship exists between one module and another if that module cannot function correctly without the presence of the other
+- CPP doesn't follow this, namespaces, modules etc
+- *Coupling*: The edgres of interdependence between modules ... a measure of the /strength/ of interconnection
+  - The *more there are connections between one module and the rest* the harder to understand that module, the harder to re-use that module in another situation, the harder it is to isolate failures causes by faults in the module
+  - => The lower the coupling the better
+  - *Cohesion*: ... the extent to which its individual components are needed to perform the same task... *how tightly bound* or related [a modules] internal elements are to one another
+    - The less tightly bound the internal elements, the more disparate the parts to the module, the harder it is to understand
+    - The higher the cohesion the better
+** Coupling Cohesion and Modularity
+- They seems the same!
+- Often discussions of both that seem unaware that the other exists
+- Does this mean coupling and cohesion metrics can be used as *indicators* of modularity? If so, how should they be combined?
+**  Classic coupling measurement
+- Coupling is a attribute, but this is a metric for coupling! (same with cohesion part below)
+- Physical concept
+- Ordinal categories of relationship between two modules
+- *Content coupling*: Modules can directly refer to the contents of each other (*bad*)
+- *Common coupling* modules communicate via global data
+- *Control coupling* modules communicate by data that allows one module to directly affect the behaviour of the other
+- *Stamp coupling* modules communicate by a heterogeneous set of items, not all of which are used
+- *Data coupling* modules communicate by parameters, where each parameter is a single item or a homogeneous set that incorporate no control element *good*
+- *No coupling*: There is no relationship *good*
+- All of this is *poorly defined so of dubious value as it*
+- Only applies to a single module: how to evaluate the quality of a whole design?
+** Classic Cohesion metric
+- Logical concept
+- Ordinal-ish scale for one module (two values the same)
+- *coincidental* module performs unrelated functions
+- *Logical*: Module performs functions that are related only logically
+- *Temporal* Module performs more than one function, but they all happen within a well defined timespan
+- *procedural*: Module performs more than one function, but they all do fucntions that are related
+- *Communicational*: Module performs more than one function, but they are all on the same body of data
+- *Sequential* Module performs more than one function, but they occur in a well defined (specified) order
+- *Functional*: (good): module performs exactly one easily identifiable function
+- *Informational*: *good*: module performs more then one independent fucntions with single entry and exit points operating on the same body of data
+- *poorly defined so of dubious value as is*
+** CK metrics
+  #+DOWNLOADED: screenshot @ 2022-05-12 10:58:12
+  [[file:images/Ewan/2022-05-12_10-58-12_screenshot.png]]
+** Coupling between objects
+- Multiple versions of these metrics, you must define which definition you are using
+- CBO for a *class* is a count of the number of (OOPSLA non inheritance) related couples with other *classes*
+- Two things are coupled if and only if *at least one* of them 'acts upon' the other
+- "any evidence of a method of one object *using methods of instance variables* of another *object* constitutes coupling"
+- Criticisms
+  - What is acts upon? => Any evidence of one object using methods or instance vars of another object (atleast what it seems to mean)
+  - Defintion is for objects but only mentions classes => Creates a problem for static classes!
+  - CBO doesn't mention strength of the connection => Doesn't follow the definition
+  - Class or object?
+  - Not declarations?
+  - Bidirectional?
+
+    #+DOWNLOADED: screenshot @ 2022-05-12 11:44:49
+    [[file:images/Ewan/2022-05-12_11-44-49_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-12 11:44:55
+[[file:images/Ewan/2022-05-12_11-44-55_screenshot.png]]
+- A => C is true because coupling is like this by the definition
+- They are trying to make a connection between CBO and design attributes
+
+#+DOWNLOADED: screenshot @ 2022-05-12 11:49:21
+[[file:images/Ewan/2022-05-12_11-49-21_screenshot.png]]
+
+- C is coupled to A (and B), but industry states that C is coupled to A
+** Next lecture: Metrics 2
+*** Lack of Cohesion in Methods (LCOM)
+- "consider a class C_1 with methods M_1, M_2, ..., M_n". Let {I_i} = set of instrance variables used by method M_i
+, there are n such sets: I_1, ..., I_n
+- LCOM = The number of disjoint sets formed by the intersections of each pair of the n sets
+- CK metrics are designed so that "higher values measn lower quality": hence "lack" of cohesion
+- *Face validity*: Cohesion is "... how tightly bound or related [a module's] internal element are to one another"
+  - What does it mean for something to be valid? Face validity means we look at the metric and how it's defined and does the metric seem to be doing the right thing, This metric has a certain amount of face validity
+*** LCOM Motivation
+- Looks at a pair of methods, and looks at the fields that the methods use, and if both of the methods use the some fields, but if there are no fields in common between the two methods then there is a lack of cohesion
+#+DOWNLOADED: screenshot @ 2022-05-12 12:41:06
+[[file:images/Ewan/2022-05-12_12-41-06_screenshot.png]]
+*** LCOM Formally
+- Class C with
+- k fields f_1, f_2, ..., f_k
+- I_i = {f_l : f_l is used by m_i}
+- N = number of different possible pairs of methods = n * (n-1)/2
+  - P = |{(m_i, m_j): i < j && I_i n I_j = null}|
+  - Q = |{(m_i, m_j): i < j && I_i n I_j != null}|
+- N = P + Q
+- LCOM_1(OOPSLA) = P
+- LCOM_2(TSE) = max(0, P-Q)
+*** Example simplified
+
+#+DOWNLOADED: screenshot @ 2022-05-12 12:52:45
+[[file:images/Ewan/2022-05-12_12-52-45_screenshot.png]]
+- Then we measure the intersections
+  #+DOWNLOADED: screenshot @ 2022-05-12 12:53:13
+  [[file:images/Ewan/2022-05-12_12-53-13_screenshot.png]]
+- P = number of empty intersections (empty intersections are bad!), out of all the pairs, only one of the intersections are empty
+- Feedback: seems unfair that a class had methods that did share fields which didn't contribute to the cohesion of the class (didn't effect score), so instead they made LCOM_2 which does take this into account
+  LCOM_2 = max(0, P-Q) = max(0, 1-2) = 0;
+*** Example including constructor
+
+#+DOWNLOADED: screenshot @ 2022-05-12 12:58:42
+[[file:images/Ewan/2022-05-12_12-58-42_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-12 12:58:53
+[[file:images/Ewan/2022-05-12_12-58-53_screenshot.png]]
+- This is the basic definition
+- The constructor that is the default constructor was explicity written into the code,. Constructor arguably has an empty set with the fields that it is using, an intersection with this will always be empty! This isn't really capturing what we mean by cohesion, so we can consider leaving these out (this is why we are doing two different sets of measurements), this kinda shows a difficulty with mesurements because not everything is
+  - Can argue that the default constructor uses all of the fields! (setting them!), shows the difficulty
+*** Other Variants
+
+#+DOWNLOADED: screenshot @ 2022-05-12 13:04:53
+[[file:images/Ewan/2022-05-12_13-04-53_screenshot.png]]
+- You're ignoring something, lets create another LCOM metric
+- This is a third LCOM variants
+- Methods are verticies, edges there is an edge for every pair of methods , we then colour edges according to whether the two methods share a field being used
+  - P = number of red edges
+- Now we can start using graph theory to calculate the properties of the graph that we have come up with!
+- Why not look at the number of connected components?
+- Gives a notion of indirect stucture => a and c are connected via b, when the previous metric didn't even consider this!
+- 2 black connected components
+*** Getters and setters
+
+#+DOWNLOADED: screenshot @ 2022-05-12 13:10:58
+[[file:images/Ewan/2022-05-12_13-10-58_screenshot.png]]
+- By definition, getters and setters are independent, by the metric this lacks cohesion
+- Does this class lack cohesion? Not really
+- Other problems
+  - Classes with no fields
+    - (because they have inhertided all of them from a parent class), so do we consider inheritance now?
+    - Static members => what do you do about this??
+    - Self calls
+
+#+DOWNLOADED: screenshot @ 2022-05-12 13:20:00
+[[file:images/Ewan/2022-05-12_13-20-00_screenshot.png]]
+- Don't refer to anything technically for method1/2, these are self calls
+*** Viewpoints
+- Cohesiveness of methods within a class is desirable, since it *promotes encapsulation*
+  - wtf does this mean? what is promoting encapsulation?
+- Lack of cohesion implies classes should probably be split into two or more subclasses
+- Any measure of disparateness of methods helps identify *flaws* in the design of classes
+- Low cohesion *increases complexity* *thereby* increasing the likelihood of errors during the development process
+- => what quality attributes?
+  - We are just trying to measure certain attributes, we don't care about all this? Does it measure what we are trying to measure?
+*** LCOM and Modularity
+- LCOM is define in terms of how element within classes interact: structurally at least
+- Some forms of intra-element dependencies are not structural
+  - Means that we can't properly measure modularity with this metric alone
+*** Response for Class (RFC)
+- Pretty weak, count the methods of the class and the number of methods used in those classes, ends up with a SET of methods, size of that is you score
+- Also how do you handle duplicate method calls between methods? It's a set so you can only add it once, but wouldn't it make it more coupled? Because more usage of the method!
+  - How does the methods within the class measure coupling between classes at all? If you have more methods in a class you would have a higher score which would mean more interdependence even though this makes no sense
+  - Potentially captures more dependencies between modules, but interpretation is unclear
+  - Still the problem of only assessing one module
+*** WMC
+- For class M with methods m_1, m_2, ..., m_n with "static complexity" measurement c_1, c_2,..., c_n:
+  - WMC(M) = sum(c_i)i = 1 to n
+- Choice of static complexity
+  - 1 - number of methods
+  - CCN
+    - Does it makes sense to sum scales? CCN might not be able to be summed!
+    - Which is better, alrge number of methods with small CCN or small number of methods with large CCN
+  - Essentially number of methods (if c_i = 1, forall i)
+  - Viewpoints
+    - The number of methods and the complexity of methods involved is an indicator of how much time and effort is required to develop and maintain the object => buildability, Maintainability
+    - The larger the number of methods in an object, the greater the potential impact on children, since children will inherit all the methods definined in the boect
+    - Object with large number of methods are likely to be more application specific, limiting the possibility of reuse => Reusability
+    - WMC(A) < WMC(B) => A is "better than" B
+    - Ewan
+      - *Make all classes have only one method!* Means that all our classes are simple? But this would be a very complex design!
+        - Might not work for CCN
+        - Problem with the researchers trying to imply some sort of quality on something that they can't
+***  WMC and Modularity
+- May be an indicator for size
+- Says nothing about interdependencies between modules or intradependencies withing modules, so provides no obvious information about modularity
+  - No obvious relationship between size and modularity
+
+    #+DOWNLOADED: screenshot @ 2022-05-12 14:03:26
+    [[file:images/Ewan/2022-05-12_14-03-26_screenshot.png]]
+
+** Measuring Inheritance
+- CK metrics measure individual units (classes) not designs
+- Need to know the entity population model for a metric to interpret its measurements correctly
+  - => need data
+** How much interitance
+- Inheritance is good, therefor good designs must have lots of intertiance (bad argument)
+  - Three fundamental principles of all object -oriented software: encapsulation, *inheritance*, and polymorphism (any number of sources)
+  - "The [second] step in learning OOP is organizing classes into a hierarchical structure based on the the concept of inheritance"
+- But! (negatives)
+  - Gang of Four to exhort us to "Favor object composition over class inheritance"
+  - "As a rule of thumb we tend to build lattices that are balanced that that are generally no deeper than 7+-2 classes and no wider than 7+-2 classes"
+  - "Most good designers avoid implementation inheritance (the extends relationship) like the plague"
+- And! (positives) (these are all quotes)
+  - "three levels of inheritance easier to maintain than zero levels, five levels takes longer than both"
+  - Inheritance has a positive effect on maintenance
+  - Zero levels is easier to maintain then three or five levels
+** Inheritance and Good design
+- Claim: Good designs must have lots of inheritance
+  - There must be some good designs, so some desigins must have lots of inheritance
+  - Some designs must have some inheritance
+  - => *How much  inheritance does a design have?*
+  - => *And has it been used "properly"?*
+** Measuring Amount of Use of Inheritance
+
+#+DOWNLOADED: screenshot @ 2022-05-12 16:01:53
+[[file:images/Ewan/2022-05-12_16-01-53_screenshot.png]]
+
+** Depth of Inheritance Tree (DIT)
+- Part of CK metric suite
+- Depth of inheritance of the class is the DIT metric for the class
+- Multiple inheritance?
+- Viewpoints
+  - "The deeper a class is in the hierarchy, the greater the number of methods it is likely to inherit, making it more complex" => higher is bad
+  - "It is useful to have a measure of how deep a particular class is in the hierarchy so that the class can be designed with ruse of inherited methods" => higher is good
+** DIT entity population model
+
+#+DOWNLOADED: screenshot @ 2022-05-12 17:04:09
+[[file:images/Ewan/2022-05-12_17-04-09_screenshot.png]]
+- Their conclusion is that designs were bad because they were not using inheritance enough, very confusing given the distribution
+** Evaluation
+- How to deal with interfaces
+- How to deal with Object
+- How to deal with inheritance involving external libraries?
+- Measurement for a single class, not the design
+- We dont' know what kinds of measurements we shoud expect (entity popularition model)
+
+** Number of Children
+ - CK metric suite
+ - NOC = number of immediate sub-classes subordinated to a class in the class hierarchy
+
+#+DOWNLOADED: screenshot @ 2022-05-12 20:01:57
+[[file:images/Ewan/2022-05-12_20-01-57_screenshot.png]]
+** NOC evaluation
+- HOw do deal with interfaces?
+- Why only immediate children?
+- Measurement for a single class, not the design
+- We don't know what kinda of measurements we should expect (entity population model)
+** DIT for Java
+
+#+DOWNLOADED: screenshot @ 2022-05-13 13:16:13
+[[file:images/Ewan/2022-05-13_13-16-13_screenshot.png]]
+- multiple inheritance, and third party interfaces, do we need to know the DIT for those interfaces for the third party ?
+  #+DOWNLOADED: screenshot @ 2022-05-13 13:17:10
+  [[file:images/Ewan/2022-05-13_13-17-10_screenshot.png]]
+- shaded is standard library
+- Ewan did a study on DIT and NOC
+  - Look at how to resolve issues with DIT and NOC
+  - Propose design level metrics of "use of inheritance"
+  - Empirical study showing data from real code
+** Measuring Inheritance of Types
+- investigate "DIT" and "NOC" interpretations
+- Develop a model* of inheritance (* not an explanatory model, just a way to represent the inheritance relationships)
+- Construct the *inheritance graph*, verticies are types, edges are extends or implements
+- *Scalar Metric* categories
+  - Depth: (maximum) length of path to root
+  - Height: maximum length of path to descendant without children
+  - Ancestors: Only paths going away
+  - Descendants: Only paths coming towards
+- Variations based on verticies and or edges considered
+** Scalar Metrics: DITCCUD
+
+#+DOWNLOADED: screenshot @ 2022-05-24 09:17:23
+[[file:images/Ewan/2022-05-24_09-17-23_screenshot.png]]
+
+- If this was a real design; the amount of complexity is huge!
+** Scalar Metrics: NOC of interfaces
+
+#+DOWNLOADED: screenshot @ 2022-05-24 09:19:14
+[[file:images/Ewan/2022-05-24_09-19-14_screenshot.png]]
+** Scalar metrics: NOD
+
+#+DOWNLOADED: screenshot @ 2022-05-24 09:19:29
+[[file:images/Ewan/2022-05-24_09-19-29_screenshot.png]]
+** Scalar Metrics Study Population
+- When you want to measure size; classes is the thing to measure; not LOC
+- 96302 classes, 12665 interfaces
+*** Results
+
+#+DOWNLOADED: screenshot @ 2022-05-24 09:20:59
+[[file:images/Ewan/2022-05-24_09-20-59_screenshot.png]]
+- Same kind of shape that everything else was showing!
+- Looks like a power law (explained later)
+- Bottom one has a small curve, might explain a small difference
+- Trying to answer the question of which design is better is not easy to determine by these plots, aggreation to the data doesn't help us.
+*** Scalar metrics evaluation
+- All the variations of the metrics produce distributions similar to one of the above charts,
+- What do these distributions tell use about "how much interitance" there is?
+- What do these distributions tell us about "design quality"?
+  - Not clear how to do that
+** Measuring Amount of Use of Inheritance
+    #+DOWNLOADED: screenshot @ 2022-05-24 09:26:50
+    [[file:images/Ewan/2022-05-24_09-26-50_screenshot.png]]
+- Felt that B has more inheritance because it has more arrows
+- In academic terms this is when a developer has made a decision about inheritance, so the B applciaiton clearly has more thought about inheritance about it
+- Need to translate this intution into a metric (below)
+** Summary Inheritance Metrics
+
+#+DOWNLOADED: screenshot @ 2022-05-24 09:29:53
+[[file:images/Ewan/2022-05-24_09-29-53_screenshot.png]]
+- DUI: is tail end
+- IF: head end
+** Variations
+- Same sort of questions show up? what sort of edges should we follow?
+- Restrict to: interitance of class from classes (CC), interfaces to interfaces (II), CI, IA
+- Restrict to: (DUI Only) inheritance from standard library (SL), third part (TP), or user defined (UD)
+- + combinations
+- Eg: if you're building a swing application then you're forced to use swing classes and you're being forced to use the inherenence; not actually user choice!
+** Summary Inhertiance Metrics study population
+- Same study as before with same application
+  #+DOWNLOADED: screenshot @ 2022-05-24 09:41:37
+  [[file:images/Ewan/2022-05-24_09-41-37_screenshot.png]]
+- IF is the head
+- 17% of classes from 9 designs have atleast one class extending it
+- This is interesting because it's closer to a normal distribution
+
+#+DOWNLOADED: screenshot @ 2022-05-24 09:44:51
+[[file:images/Ewan/2022-05-24_09-44-51_screenshot.png]]
+    - Suprising result. 74% of classes are inheriting from something else?
+    - Maybe it's swing? If we take these classes out maybe it's different (below)
+    - When we have an interface, we expect multiple implemenations from the interface, this is why we have all these variations
+      #+DOWNLOADED: screenshot @ 2022-05-24 09:46:29
+      [[file:images/Ewan/2022-05-24_09-46-29_screenshot.png]]
+- None of these groups explains why the median is 74% here!
+  #+DOWNLOADED: screenshot @ 2022-05-24 09:46:52
+  [[file:images/Ewan/2022-05-24_09-46-52_screenshot.png]]
+- User defined, class to class is highly defined or large!
+- Does this change over time?
+  #+DOWNLOADED: screenshot @ 2022-05-24 09:47:31
+  [[file:images/Ewan/2022-05-24_09-47-31_screenshot.png]]
+- Not really!
+- The design is changing a lot (ant 1.1 has 100 classes), 1.6.5 has around 1000, clearly not due to a lack of change!
+** Summary Metrics Evaluation
+- Are the metrics measuring what we think they are measuring?
+- Is the corpus representative of use of inheritance?
+- Is the use of inheritance observed "proper" use of inheritance?
+  - Could be that they are just using inheritence because they feel it's the right thing to do because they think it's indicative of good design
+** Is inheritance being "used propertly"
+
+#+DOWNLOADED: screenshot @ 2022-05-24 09:51:06
+[[file:images/Ewan/2022-05-24_09-51-06_screenshot.png]]
+** Why use inheritance #1 - Reuse
+- When class C extends class P, C "inherits" everything P has
+- Without inheritance, the person creating C would have to also write all the P bits
+- => inheritance allows cheaper creation of classes through reuse
+  #+DOWNLOADED: screenshot @ 2022-05-24 09:52:09
+  [[file:images/Ewan/2022-05-24_09-52-09_screenshot.png]]
+*** Internal reuse
+
+#+DOWNLOADED: screenshot @ 2022-05-24 09:52:21
+[[file:images/Ewan/2022-05-24_09-52-21_screenshot.png]]
+** Why use inheritance #2 - SubType
+- When types S inherits from (implements or extends) type T, objects of type S can be used whenever objects of type T are expected: LSP
+- Without inheritance the person creating the calling code (context) of T would have to rewrite that code for S
+- => inheritance makes it easier to reused existing code (reusability)
+  #+DOWNLOADED: screenshot @ 2022-05-24 09:53:41
+  [[file:images/Ewan/2022-05-24_09-53-41_screenshot.png]]
+** Composition vs inheritance
+- Reuse- can be replaced by composition and "only a little" programming (forwarding/delegations)
+  #+DOWNLOADED: screenshot @ 2022-05-24 10:01:43
+  [[file:images/Ewan/2022-05-24_10-01-43_screenshot.png]]
+- Takes our relationship with extends parent and remove it, then manually created forwarding methods (for every method!)
+- Tedious because of the bit in green
+- In some cases this is what you should do
+  - In cases where you do NOT want to subsitute child objects with parent objects
+** Inheritance questions
+    - These give us a baseline to see if inheritance is being used properly
+      - Is it being used of subtype
+      - Is it being used for internal and external use?
+        #+DOWNLOADED: screenshot @ 2022-05-24 10:05:09
+        [[file:images/Ewan/2022-05-24_10-05-09_screenshot.png]]
+** Another study on this
+
+#+DOWNLOADED: screenshot @ 2022-05-24 10:05:37
+[[file:images/Ewan/2022-05-24_10-05-37_screenshot.png]]
+- Annotate edges for internal resue, external reuse and subtype
+- How many of those edges were uses for subtype? internal? reuse? external?
+  #+DOWNLOADED: screenshot @ 2022-05-24 10:08:25
+  [[file:images/Ewan/2022-05-24_10-08-25_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-24 10:09:24
+[[file:images/Ewan/2022-05-24_10-09-24_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-24 10:11:09
+[[file:images/Ewan/2022-05-24_10-11-09_screenshot.png]]
+- C used within Swing with F methods, no way of knowing this unless you analyse all of swing as well
+- Can't do this with all thrid party libraries
+- Label it as a framework edge instead because we just don't really know how it's being used
+  #+DOWNLOADED: screenshot @ 2022-05-24 10:14:51
+  [[file:images/Ewan/2022-05-24_10-14-51_screenshot.png]]
+
+  #+DOWNLOADED: screenshot @ 2022-05-24 10:16:33
+  [[file:images/Ewan/2022-05-24_10-16-33_screenshot.png]]
+- So in order to answer if people are using inheritance correctly, any relationships that don't have the subtype, external or internal edges relatinoships means that they relationship isn't actually needed!
+- Fair conclusion that there is an ok use of inheritance
+  #+DOWNLOADED: screenshot @ 2022-05-24 10:19:53
+  [[file:images/Ewan/2022-05-24_10-19-53_screenshot.png]]
+- internal reuse is the easiest to get rid of, you could remove this quite easily
+  #+DOWNLOADED: screenshot @ 2022-05-24 10:21:42
+  [[file:images/Ewan/2022-05-24_10-21-42_screenshot.png]]
+- class interface stuff
+  #+DOWNLOADED: screenshot @ 2022-05-24 10:22:23
+  [[file:images/Ewan/2022-05-24_10-22-23_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-24 10:23:00
+[[file:images/Ewan/2022-05-24_10-23-00_screenshot.png]]
+** Downcalls
+
+#+DOWNLOADED: screenshot @ 2022-05-24 10:23:40
+[[file:images/Ewan/2022-05-24_10-23-40_screenshot.png]]
+- Only occurs with internal reuse
+  calling a2 in a1, which calls c.a2()
+  #+DOWNLOADED: screenshot @ 2022-05-24 10:27:54
+  [[file:images/Ewan/2022-05-24_10-27-54_screenshot.png]]
+
+
+* Powerlaws
+- More detail in how those charts are not useful
+- You can't really understand metrics without understanding the entity population model => need lots of data (measurements)
+- Many different notions of "coupling"
+- Measuring individual classes does not seem to help understand the quality of a design
+- *or does it? Perhaps we can learn something by looking at the distribution?*
+
+- Need to know the entity population model and its distribution, if it's close to the average then it's fine, it its far away then it's not good, earthquakes are power law
+  #+DOWNLOADED: screenshot @ 2022-05-24 10:49:13
+  [[file:images/Powerlaws/2022-05-24_10-49-13_screenshot.png]]
+- second is a powerlaw
+- Very large number of small values, small number of large values
+- This isnt' something new, city size, word frequency, hits on web servers, what about software?
+- formally below
+  #+DOWNLOADED: screenshot @ 2022-05-24 10:52:38
+  [[file:images/Powerlaws/2022-05-24_10-52-38_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-24 11:12:22
+[[file:images/Powerlaws/2022-05-24_11-12-22_screenshot.png]]
+
+* How to improve design
+- If big classes are bad
+  Does bad mean poor modularit
+- Explainatory model
+  - The larger the class, the more it will have connections to other classes (assumption) => less independent => poorer modularity by the definition
+  - The larger the class, the more likely internal elements will not connect to other internal elements (asuumption) => less interdependent -> poorer modularity
+** Review
+- OOD is about objects sending meassages to each other
+  - More objects => better OO design ?
+    - No: objects have to be "good"
+    - But having a small number of objects seems a questionable OOD
+  - What makes a good object? number of methods? number of fields? number of other objects it sends messages to?
+    - Objects must provide value to the system in terms of the context schema
+  - How to find objects
+    - Many can be identified by looking at the context schema, some will come from the design schema
+** Design patterns
+- Design pattern: a *general* soution to a *commonly* occuring problem within a *given context* in software design
+- Examples
+  - Command: Encapsulte a request as an object, thereby letting you parameterise clients iwth different requuests
+  - Adapter: Convert the interface of a class into another interface clients expect
+  - Singleton: Ensure a class has only one insteance, and provide a global point of access to it
+  - Collecting parameter: To collect results over several methods, add a parameter to the method and pass the results object (*not a GoF pattern*)
+  - Pluggable Selector: store the "selector" (in java, name of the method, including types of parameters) somewhere so that it can be used later (*not a GoF pattern*)
+    #+DOWNLOADED: screenshot @ 2022-05-24 14:51:17
+    [[file:images/How_to_improve_design/2022-05-24_14-51-17_screenshot.png]]
+*** Composite
+
+#+DOWNLOADED: screenshot @ 2022-05-24 14:59:12
+[[file:images/How_to_improve_design/2022-05-24_14-59-12_screenshot.png]]
+- Intent "Composite objects into tree structures to represent part-whole hierarchies. Composite lets clients treat individual objects and compoisitions of objects uniformly"
+- Does use of composite pattern improve modularity?
+- Uniformity
+  - At the risk of loss of type saftey
+- Other on less uniform but you cannot invoke a method and that object doesn't understand that method
+- Clients have become less dependent on knowing whether they are dealing with a leaf or a composite and because of that reduced dependence that's the increase in modularity
+- Modularity - "treat individual objects and compositions of objects uniformly" => less dependence on whether dealing with objects or compositions => more modular??
+- When you are evaluating a change to a design always go back towards the definition of modularity
+*** Template method
+- Intent: "Define the skeleton of an algorithm in an operation, deferring some steps to sublasses. Tempalte method lets subclasses redefine certani steps of an algorithm without changing the algorithms structure" (GoF)
+- Tempalte methods mead to an inverted control structure that's sometimes referred to the the "Hollywood principle"
+  -
+  #+DOWNLOADED: screenshot @ 2022-05-24 15:22:44
+  [[file:images/How_to_improve_design/2022-05-24_15-22-44_screenshot.png]]
+- Does it increase modularity??
+
+  #+DOWNLOADED: screenshot @ 2022-05-24 15:25:10
+  [[file:images/How_to_improve_design/2022-05-24_15-25-10_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-24 15:26:11
+[[file:images/How_to_improve_design/2022-05-24_15-26-11_screenshot.png]]
+** Design patterns and "Good design"
+- Can we determine design quality using the concept of "design pattern"? The (wrong argument)
+  - Design patterns are good designs
+  - => Good desins use design patterns
+  - => More design patterns = better design!
+- If the problem solved by the design pattern is not what needs to be solved, or the context of the problem being solves does not match that of the design patter, then how can use of the design pattern be considered "good design"?
+- But, many Design Patterns support modularity as I have defined it by adding classes (and interfaces) that increase independence between parts of the design
+- *Thought: What about interdependence within classes?*
+** Design patterns and modularity
+- Design pattern play a certain role within a design, only communicate with the minimal amoutn of modules that they need to
+- A module in a design pattern only communicates with other modules that it really needs to => increases Independence between modules
+- A module is a design pattern only has the responsibilities that it needs to participate in the design pattern => its components are likely to be closely related => interdependent
+  - Everything within this module works together to support this role therefore its interdependent (increases)
+** Code Smells
+- Code smell: characteristic of design that indicate potential design quality problems
+- Design patterns about good design, code smells about bad design => still guide how you should design things
+- /Heuristics:/ not hard and fast rules but just an indication that there may be a problem and so requires a closer look
+  #+DOWNLOADED: screenshot @ 2022-05-25 09:25:20
+  [[file:images/How_to_improve_design/2022-05-25_09-25-20_screenshot.png]]
+** Duplicate code and modularity
+- What do these different smells say about modularity?
+- eg duplicate code
+- Duplicate code can ("clones") be a cause of fauls and it presence often indicates a potential design problem (or atleast an opportunity for improving the design)
+- If two code fragments are the "same" and one has to chagne, then the other problem has to change as well. Not doing so may indtroduce a fault => *dependency* => removing duplication removes dependencies => increases independence
+- also known as DRY = don't repeat yourself
+***  Example
+
+#+DOWNLOADED: screenshot @ 2022-05-25 09:28:58
+[[file:images/How_to_improve_design/2022-05-25_09-28-58_screenshot.png]]
+- Any chagne to formatString almost certainly has to be done in both classes => dependency between NewzealandMoney and AussieMoney
+- Introduce AbstractMoney as parent to both classes ato reduce duplication`
+- Now NewZealandMoney and AussueMoney are more independent => Modularity has improved
+** Duplicate Code?
+
+#+DOWNLOADED: screenshot @ 2022-05-25 09:30:14
+[[file:images/How_to_improve_design/2022-05-25_09-30-14_screenshot.png]]
+** Speculative Generality and Modularity
+- Adding parameters or other ways to generalise a class/method/design without the actual need for the generality
+- Also known as YAGNI "you aren't going to need it" (XP)
+- Example: Lets add support for Pounds, Shillings, and Pence because we might need it some day
+- Do we /know/ we need the generality from the context schema or do we only speculate we might need it in some unknown futur
+  - If we guess right and we do need it then benefit
+  - If we guess wrong and we don't need it then cost
+- Increased generality => make things less dependent on the specifics! => more independent => better modularity
+- Increasing generality decreases some other attribute (in this case cost), makes code harder to understand (understandability)
+- Increasing generality *probably increases modularity* => this advice argues *against* increasing modularity!
+** Questions
+- To what degree do code smells exist in code
+- How to detect code smells
+- What is the impact of the existence of code smells?
+*** answers
+
+#+DOWNLOADED: screenshot @ 2022-05-25 09:43:59
+[[file:images/How_to_improve_design/2022-05-25_09-43-59_screenshot.png]]
+- one associated with reduced effort!!!
+** Refactoring
+- Your code is smelly. What to do? *refactor*
+*** Examples
+
+#+DOWNLOADED: screenshot @ 2022-05-25 09:51:46
+[[file:images/How_to_improve_design/2022-05-25_09-51-46_screenshot.png]]
+** Purpose of Encapsultion
+- Objects (and the classes they belong to) represent /abstractions/ that appear in the context schema
+- Fields describe the /representation/ of the /state/ of objects
+- Direct access to representation details of abstractions from outside the abstractions is a bad idea: *thou shalt not expose one's implementation details*
+  - If the implementer changes the internal representation then everything that directly uses it must change to: a maintence nightmare
+  - What a change in module A affects module B, there must be a dependency between A and B => reduced independence => reduced moularity
+- But sometimes it 'makes sense' to do what looks like getting at teh values of fields: what is it "good design" to do so?
+- Is the way this object can be used always consistent with the abstraction that it's supposed to represent? If it is then you can make it public? If the abstraction can't be broken by the public field, then do so
+** getters (and Setters) and Encapsulation
+
+#+DOWNLOADED: screenshot @ 2022-05-25 10:18:21
+[[file:images/How_to_improve_design/2022-05-25_10-18-21_screenshot.png]]
+- Providing asccess to fields through getters (and setters) does not guarantee "proper encapsulation"
+- A getter that provides information about the choice of representation but otherwise does not support the abstraction the class is supposed to represent "breaks encapsulation"
+- The design question should never be "Should getters and/or setters be provided?". It should be "What methods are needed to support the abstraction (and if they are getters or setters then so be it)"
+- If the getters and setters change when the representation changes then *higher dependency* => reduced modularity
+** Encapsulate collection
+- A class has a field that is a collection of something. Making that field private and returning a reference to it vai a getter "breaks encapsulation" because it allows any client of the gger to cahgne the contents of the collection
+  #+DOWNLOADED: screenshot @ 2022-05-25 10:24:17
+  [[file:images/How_to_improve_design/2022-05-25_10-24-17_screenshot.png]]
+- "Encapsulate Collection" refactoring just says make the list unable to be cahnged except though the enclosing class interface
+  #+DOWNLOADED: screenshot @ 2022-05-25 10:25:14
+a  [[file:images/How_to_improve_design/2022-05-25_10-25-14_screenshot.png]]
+
+
+
+#+DOWNLOADED: screenshot @ 2022-05-25 11:00:17
+[[file:images/How_to_improve_design/2022-05-25_11-00-17_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-25 11:00:26
+[[file:images/How_to_improve_design/2022-05-25_11-00-26_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-25 11:00:36
+[[file:images/How_to_improve_design/2022-05-25_11-00-36_screenshot.png]]
+above has some stuff skipped out
+* Counting Objects to evaluate OOD
+
+#+DOWNLOADED: screenshot @ 2022-05-25 11:25:27
+[[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_11-25-27_screenshot.png]]
+- Which is the better design? We need to figure this out but can't take days to find out
+** OOD
+- An object-oritented program is one that *when it executes* creates *objects* that *send messages* to each other
+ - "the most important aspect of OOP is the creation of a universe of *largely autonomous interacting agents*"
+- An OO *design* is one that describes an OO program
+** EG1: Data analysis
+
+#+DOWNLOADED: screenshot @ 2022-05-25 11:28:39
+[[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_11-28-39_screenshot.png]]
+- We are going to be counting objects! Why does this give a reasonable understanding of how good a design is? Well is OOD is about objects sending messages to each other then surely something about the objects that are created tells us something about the design
+- CE is fan out
+** Goals
+- A *metric* for "design quality" is not possible because
+  - Given design is likely to have different values for different quality attributes
+  - Quality is a *construct*
+- There are so many details about the desing that are only visible in the code, so avoiding code seems untenable 9until our understanding is very much improved from what it is now
+- But looking at all code is infeasilbe
+- => Looking for something that
+  - Is objective (some form of measurement)
+  - Indicates possible design decisions made by the developer
+  - Reduces what code we have to look at
+- We are trying to understand the decisions that the writer has made!z
+** Candidates
+
+#+DOWNLOADED: screenshot @ 2022-05-25 11:37:06
+[[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_11-37-06_screenshot.png]]
+
+
+#+DOWNLOADED: screenshot @ 2022-05-25 11:38:41
+[[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_11-38-41_screenshot.png]]
+- lean towards design a because it clearly has a representation for an important concept in the context schema in the problem domain
+- The genral advice is your objects should match your problem domain or the context schema as much as possible
+- Design a has this representation and design b does not (93 records, object record)
+
+
+#+DOWNLOADED: screenshot @ 2022-05-25 11:44:32
+[[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_11-44-32_screenshot.png]]
+- We are getting a different boject created or object from a differetn class for each different query
+  #+DOWNLOADED: screenshot @ 2022-05-25 11:45:56
+  [[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_11-45-56_screenshot.png]]
+
+
+#+DOWNLOADED: screenshot @ 2022-05-25 11:53:06
+[[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_11-53-06_screenshot.png]]
+ - It's all fine to have a class NAMED house, but does it actually represent what is being said in the context schema?
+ - If it's truely representing a house inthe context schema, then we should see 12 of them
+ - This is why counts are useful!!! If we don't then we know this class is at best misnamed and at worst a bad fit for the design
+ - This criteria of evaluating the desing comes directly out of the definition of what it means to be a OOD and what i t means to be a good OOD, and that's the best kind of metric that we could possbile hope for when it fully comes from an explanatory model that we might have about what's going on
+ - We have only talked about number of objects, not messages. OOD is objects sending messages to each other. But the way of evaluating messages is really expensive! Class specifisies what messages are sent/created a given object will understand, it's enough for ewan to look at the classes
+   #+DOWNLOADED: screenshot @ 2022-05-25 11:59:47
+   [[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_11-59-47_screenshot.png]]
+- if we don't have 93 recordds then clearly an important concept in this context schema is not being represented! if they don't do this then they get marks deduced
+** Classes with 93 objects
+
+#+DOWNLOADED: screenshot @ 2022-05-25 12:02:25
+[[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_12-02-25_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-25 12:13:03
+[[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_12-13-03_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-25 12:13:18
+[[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_12-13-18_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-25 12:14:01
+[[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_12-14-01_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-25 12:14:06
+[[file:images/Counting_Objects_to_evaluate_OOD/2022-05-25_12-14-06_screenshot.png]]
+
+* Week 11: SOLID design principles
+- How do these effect modularity?
+** SOLID principles
+- Set of principles for good OOD
+- Most have existed in some form for some time, at year 2000
+- Seems to now be associate with Agile Development
+  #+DOWNLOADED: screenshot @ 2022-05-25 16:42:53
+  [[file:images/Week_11:_SOLID_design_principles/2022-05-25_16-42-53_screenshot.png]]
+
+** Single Responsibility Principle
+- "every module or class should have responsilbiltiy over a single part of the functionality provided by the software, and that responsibility should be entirely encapsulated by the class"
+- That is, a class should have high *cohesion*
+- Or should be a good *abstraction*
+- Theory
+  - Harder to understand if more than one responsibilities
+  - Implementation is likely to be tangled (highly *coupled*), meaning changing one may require changing the other unnecessarily - ewan doesn't like this one
+                                                   - Harder to reuse just one of the responsibilitie
+                                                   #+DOWNLOADED: screenshot @ 2022-05-25 16:52:10
+                                                   [[file:images/Week_11:_SOLID_design_principles/2022-05-25_16-52-10_screenshot.png]]
+- What's wrong with it? Several people have claimed that this actually follows SRP. What's wrong depends on how you're going to use this class, if you're really going to use this class with everything together always throughout the application then it follows SRP, but if you have a single case where you want to use only one part then you are no longer following SRP.
+** Responsibility Drive Design
+- Responsibility = an obligation to perform a task or know information
+  - Tasks or information that is relevent
+- Responsibility Driven design
+  1. What responsibilities does the /system/ have?
+  2. What /roles/ should have those responsibilities?
+  3. Which /objects/ or /actors/ should play a given role?
+- Not single "responsibility" per class (atleast by this definition or responsibility)
+- Objects will have different responsabilities (multiple responsabilities)
+** SRP and Modularity
+- The arguments for why SRP leads to good designs are typically expressed in terms of /change/: What is the relationship between ease of change (modifability) and modularity?
+- More than one responsibility => probably not so many dependencies between elements for different responsibilities => less interdependence of elements within the module => lower modularity
+- The more responsibilities a module has, the more dependants it will have => less independence between modules => lower modularity
+** SRP conclusion
+- Not *actionable* - does not provide objective actions to demonstrate how to follow the principle, or even identify when the principle is not being followed
+- Essentially means "high cohesion", so let's just use that interpretation
+** Open closed principle
+- "Software entities (classes, modules, functions, etc) should be open for extension but closed for modification"
+- Meyer discussed it in terms of "abstract parents classes" (interfaces) and their children: You can "extend the behavious" of the part class by having children inherit from the parent without changing the parent
+  - But really this is not changing the behaviour of the parent
+  - RCM report re-interpreted it
+  - Martin's examples demonstrate that the real power comes from judicious use of *polymorphism*, that is identifying the method to execute via dynamic dispatch
+  - Typically leads to more abstract entities that are made concrete either through extension or through supplying the concrete implementations as parameters (eg: with dependency injection)
+    #+DOWNLOADED: screenshot @ 2022-05-26 09:05:06
+    [[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-05-06_screenshot.png]]
+- Top design is not good because everytime we want to change the design or add a new type of unit we have to add the the process method, this makes them highly coupled
+- On the other hand if you create a unit Inferface with doStuff, our process method becomes really simple, because the doStuff method will be reimplemented in each of the child classes, if you want to add a new character you just create a new aclass. So this code looks to be behaving differently depending on which actual unit implementation gets passed into it, even though it's not changed (the process method). This code has not changed but it is behaving differently, this is where the benifit of open closed principle really comes in
+
+  #+DOWNLOADED: screenshot @ 2022-05-26 09:12:30
+  [[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-12-30_screenshot.png]]
+- template method; you use the abstract method which is called in the child class
+- This abstact class appears to behave differently because I can override getCurrentcyCode
+- From the outside it looks like abstract money is behaving differently
+** OCP and modularity
+- Again presented in terms of changes
+- For OCP to work, what dependings on the thing that is closed *(the context)* cannot depending on speicfic behaviour of that thing
+  - =process(Unit)= cannot depending on behavious of a specific unit such as =Civilian=
+  - Whatever calls =AbstractMoney#formalString()= cannot dependind on a specific currecy code being produced
+- Back to example!
+  - u.doStuff does not depend on the specific concrete class that's passed into it. Not dependent on the specific implementation (we are only depending on the Unit class)
+  - While the other one does! (depends on the specific implementations) (and all of them!)
+  - We haven't reduced dependency, we have changed it a less specific dependency, more independent => more modular
+
+    #+DOWNLOADED: screenshot @ 2022-05-26 09:19:12
+    [[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-19-12_screenshot.png]]
+** Liskov Substituation Principle
+- Child classes must be substitutable for their Parent classes
+- In omst OOL, most of the time, and object of any child class can be sensibly used where an object of a parent was requried
+  - ... provided any overrideen methods "make sense"
+- "the objects of the subtype ought to behave the same as those of the supertype as far as anyone or any program using supertype objects can tell"
+- Provides *context reuse*: the context can remain unchanged but program behaviour changes
+- A *semantic* notion that is simulated by a type (or runtime) system
+  - => necessarily provides only a partial check
+- Basically what this principle is
+  - When we try to envoke a parent method on an object that gets passed to the method, and it's alway a valid class, then it's a valid substitution
+    - For dynamicly typed languages this becomes tricky because only find out at runtime, for statically typed languages this is quite easy
+
+      #+DOWNLOADED: screenshot @ 2022-05-26 09:28:51
+      [[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-28-51_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 09:29:00
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-29-00_screenshot.png]]
+- this code wont compile!
+  #+DOWNLOADED: screenshot @ 2022-05-26 09:32:27
+  [[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-32-27_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 09:33:50
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-33-50_screenshot.png]]
+- So the language allows for subsitiution, but if i never actually do it, then i'm not benefiting from this inheritance relationship
+
+#+DOWNLOADED: screenshot @ 2022-05-26 09:35:26
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-35-26_screenshot.png]]
+- removing duplication is reducing dependencies which is good for modularity!
+  #+DOWNLOADED: screenshot @ 2022-05-26 09:37:33
+  [[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-37-33_screenshot.png]]
+** LSP and Modularity
+- What dependencies does use of LSP allow us to avoid in our designs?
+- We can not subsitute things in our code, the code doesn't need to change whenever one of the subclasses changes
+
+#+DOWNLOADED: screenshot @ 2022-05-26 09:39:30
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-39-30_screenshot.png]]
+
+** Interface Segregation Principle
+- Make fine-grained interfaces that are client specific
+- Or clients should not be forced to depend on methods that they do not use
+  - If those methods change, the clients may need to changed unnecessarily
+- Generally SRP should result in classes whose clients need (in principle) all methods provided, but sometimes that's not possible
+  - Legacy code
+  - Implementation requirements mean different responsibilities in the same implementation (class)
+    #+DOWNLOADED: screenshot @ 2022-05-26 09:42:55
+    [[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-42-55_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 09:48:28
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-48-28_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 09:48:36
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-48-36_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 09:48:58
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-48-58_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 09:49:04
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_09-49-04_screenshot.png]]
+
+** Dependency Inversion Principle
+- "High level modules should not depend upon low level modules. Both should depende upon abstractions"
+- "Abstractios should not depend upon details. Detailshould should depend upon abstractions"
+- Hollywood principle: "don't call use, we'll call you"
+- Inversion of control
+- Dependency injection - Suports DIP
+** Basic problem
+- Belief is that number of dependencies modules (classes) have is an indication of design quality
+- => improve design quality by reducing dependencies
+- Dependencies can be reduced be introducing abstraction, no longer dependening on concrete dependencies (where you have to change each class if something changes), instead now we can subsitute with multiple different types
+- *but* objects still have to be created somewhere, so indirectly there's still a dependency!
+** Fowlers example
+
+#+DOWNLOADED: screenshot @ 2022-05-26 10:29:56
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_10-29-56_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 10:31:32
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_10-31-32_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 10:32:08
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_10-32-08_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 10:32:40
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_10-32-40_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 10:34:00
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_10-34-00_screenshot.png]]
+- Where is the inversion of control?
+- It's at =_finder.findAll()=,
+- So the client that created this object, is passed some code into this object, then =findAll= is calling that code on that object
+- It's now calling code that came from outside the object!
+- OUr movieLister class still has a dependency on an object, and that dependency must be met at some point, and were we meet it is typlically called dependency injection
+  #+DOWNLOADED: screenshot @ 2022-05-26 10:37:23
+  [[file:images/Week_11:_SOLID_design_principles/2022-05-26_10-37-23_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 10:37:45
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_10-37-45_screenshot.png]]
+- the number of dependencies doesn't tell us everything, it's the nature of the dependencies as well (the number of dependencies has not changed but the nature of them has)
+  #+DOWNLOADED: screenshot @ 2022-05-26 10:40:49
+  [[file:images/Week_11:_SOLID_design_principles/2022-05-26_10-40-49_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 10:45:38
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_10-45-38_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 10:45:45
+[[file:images/Week_11:_SOLID_design_principles/2022-05-26_10-45-45_screenshot.png]]
+
+* Dependencies
+** Arguments
+- If A depends on B (there is a /dependency/ from A to B)
+  - To completely *understand* A, we must examine B
+  - To *reuse* A it must also include B
+  - There is some *change to B* that affects A
+  - A fault in B may result in a *failure* in A
+  - There arguments also apply to /coupling/
+  - two questions (atleast)
+    - 1. What is the difference between coupling and dependencies
+    - 2. What is a /dependency?/
+  - Difficult to find a good definition of dependency
+  - Possible definition: A has a dependency on B if there is some *change* involving B that affects A
+    - Eg see arguments for why duplicate code can be a problem?
+    - Alternativ definition: A requirement that must be met in order for the system to behave correctly
+
+
+#+DOWNLOADED: screenshot @ 2022-05-26 11:24:07
+[[file:images/Dependencies/2022-05-26_11-24-07_screenshot.png]]
+- Clearly more than one like in CBO
+  #+DOWNLOADED: screenshot @ 2022-05-26 11:24:23
+  [[file:images/Dependencies/2022-05-26_11-24-23_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 11:25:19
+[[file:images/Dependencies/2022-05-26_11-25-19_screenshot.png]]
+
+- Now we need to back off a bit, are they really dependency, we have to look at undertingind, faults for dependencies
+- Do we need to understand issuePolicy to understand AdualIssuePolicy, there are some
+- Yeah we need issuepolicy for reuse
+  - Last point: i can't think of faults that might effect this class, but for calander if the clone method returns null then you can cause a failure in this clas
+  #+DOWNLOADED: screenshot @ 2022-05-26 11:28:31
+  [[file:images/Dependencies/2022-05-26_11-28-31_screenshot.png]]
+- I need to understand the calander class to understand the =add= methods parameters and why they are needed!
+
+#+DOWNLOADED: screenshot @ 2022-05-26 11:32:12
+[[file:images/Dependencies/2022-05-26_11-32-12_screenshot.png]]
+- must depend on cloneable
+** Importance of Dependencies
+- Why are dependencies bad?
+- There must be dependencies between the units that make up an implementation
+  - The units must interact in some way in order to function as a complete system and how they interact form dependencies
+- So dependencies must be *necessary*, and some must be *unnecessary*: so we can remove them
+- How to identify unnecessary dependencies?
+  #+DOWNLOADED: screenshot @ 2022-05-26 11:34:08
+  [[file:images/Dependencies/2022-05-26_11-34-08_screenshot.png]]
+- clearly the =type= because it's not actually used in the function, but ti's necessary because of the issuePolicy interface!
+  #+DOWNLOADED: screenshot @ 2022-05-26 11:34:51
+  [[file:images/Dependencies/2022-05-26_11-34-51_screenshot.png]]
+
+  #+DOWNLOADED: screenshot @ 2022-05-26 11:43:46
+  [[file:images/Dependencies/2022-05-26_11-43-46_screenshot.png]]
+- We know modularity is a construct, therefore we can't have a metric
+- But any metric that is going to be a good indicator for this construct aught to tell us something about the dependencies that are involved
+- This is a lot more than what CBO pays attention to, (beyond just a count!,)
+- There's more to a dependency
+  - Is it class or an interface?
+
+** Martin on Measuring Design Quality
+
+#+DOWNLOADED: screenshot @ 2022-05-26 12:03:19
+[[file:images/Dependencies/2022-05-26_12-03-19_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 12:04:16
+[[file:images/Dependencies/2022-05-26_12-04-16_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-26 12:04:58
+[[file:images/Dependencies/2022-05-26_12-04-58_screenshot.png]]
+- stability: if A depends on B and B is stable (not changing), then the dependency is less of a problem
+- but clearly something has to be able to change => we are SOFTware after all
+- this is where OCP comes into play, the behaviour changes without the code changing
+  - One way of supporting OCP is through abstract classes
+- If your problem domain doesn't change then so shouldn't your classes need to change, so this is good design that is consistent with this definition
+
+  #+DOWNLOADED: screenshot @ 2022-05-26 12:11:35
+  [[file:images/Dependencies/2022-05-26_12-11-35_screenshot.png]]
+- c_a: in degree
+- c_c: out degree
+
+#+DOWNLOADED: screenshot @ 2022-05-26 12:16:47
+[[file:images/Dependencies/2022-05-26_12-16-47_screenshot.png]]
+
+* Quiz study
+- Be cautious about people making claims about modularity (big classes are bad), just because they are famous doesn't mean it's true
+- Course definition: Given a software system is described in terms of units called /modules/ that each consist of structural elements, the /modularity of the system design/ is the degree to which elements in /different/ modules are *independent* and elements /within/ a module are *interdependent*
+- *Context Schema*: The objects within your design, what makes sense to create, could be nouns
+- *Design Schema*: How you're going to implement it or approach the design
+- *Constructs*: Some attributes seem measurable or quanitfiable in principle but we do not know how to do so
+  - We must take estimates from measurements of attributes we can measure, attributes we believe /correlate/ with the construct
+  - We use measurements because direct comparison can be too expensive (time, money)
+- *Representation condition*: What is something a measurement
+  - *Empirical relationship*: The actual relationship in the real world between the entities based on some attribute (mary is taller than tom)
+  - *Representation condition*: The relationship between measurements give by the metrics mapping function is always the same is the empirical relationship
+    - Mary is taller than tom => height(Mary) > height(Tom)
+  - Reflective indicators for a construct do not measure the construct so cannot strictly meet the representation condition
+- Entity Population models
+  - These models describe the distribution of the data for a given metric, identify *typical* values
+  - We use our understanding of typical values to make decisions
+    - If a typical measurement from a metric does not tell us anything useful, it's not a useful metric
+** Measurement Scales
+#+DOWNLOADED: screenshot @ 2022-05-30 10:27:07
+[[file:images/Quiz_study/2022-05-30_10-27-07_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-30 10:27:13
+[[file:images/Quiz_study/2022-05-30_10-27-13_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-30 10:27:56
+[[file:images/Quiz_study/2022-05-30_10-27-56_screenshot.png]]
+
+** CBO (Coupling between objects)
+- CBO for a /class/ is the count of the number of related couples with other /classes/
+- Two things are coupled if and only if *at least* one of them acts upon the other
+- any evidence of a method of one object *using methods or instance variables of another object* constitutes coupling
+
+** Inheritance
+- CK metrics measure individual units (classes) not designs
+- Need to know the entity population model for a metric to interpret its measurements correctly
+- /Inheritance is good, therefor good desings must have lots of inheritance/
+*** DIT (Depth of inheritance tree)
+- The deeper a class is in the heirarchy, the greater the number of methods it is likely to inherit, making it more complex => inheritance is bad
+- It is useful to have a measure of how deep a particular class is in the hierarchy so that the class can be designed with reuse of inherited methods => higher is good
+*** NOC (Number of children)

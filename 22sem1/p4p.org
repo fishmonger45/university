@@ -1,0 +1,184 @@
+#+TITLE: p4p
+
+* Ranking projects
+1. https://part4project.foe.auckland.ac.nz/home/project/detail/3912/ air quality
+2. https://part4project.foe.auckland.ac.nz/home/project/detail/3608/ social network
+3. https://part4project.foe.auckland.ac.nz/home/project/detail/3734/ git workflow practice tool
+4. https://part4project.foe.auckland.ac.nz/home/project/detail/3802/ github mining webassembly
+5. https://part4project.foe.auckland.ac.nz/home/project/detail/3914/ visualisation tool for sensor data
+
+** categories
+1. Intelligent Systems & Industrial Informatics (overlaps with only #1)
+2. web tools and applications (overlaps with 1, 2 and 4th)
+
+** https://part4project.foe.auckland.ac.nz/home/project/detail/3912/
+*** info
+- look into existing air quality stuff
+- set up a bunch, pipe data to a centre, process it however we like and present it. ez
+- broad scope. A lot to play around with
+*** no cons that i can see
+** https://part4project.foe.auckland.ac.nz/home/project/detail/3809/
+*** info
+- explore how existing mesh networks work
+- develop your own and weigh in on redundancy and report to homebase functionality
+- storage of bluetooth beacon data in order for quick data analysis
+- probably learn some interesting stuff about bluetooth
+- similar to https://part4project.foe.auckland.ac.nz/home/project/detail/3810/
+  - where the above is doing edge and fog and looks at some libraries and has us compare them
+*** cons
+- i know nothing about freertos and some microcontroller work would be needed
+** https://part4project.foe.auckland.ac.nz/home/project/detail/4044/
+*** info
+- model some users for a set of 5g towers so that people can decide where to put them
+- a lot of detail that you can add to this project in how you want your models of people space and importance. could do a 3d grid with height info, weight of signal importance etc.
+*** cons
+- i know little about radio but easy to learn plus this project is really just modelling
+** https://part4project.foe.auckland.ac.nz/home/project/detail/3608/
+*** info
+- interesting graph theory appilcations
+- could take something open source and federated so that we can crawl the network for memberships and connections using their protocol. I would think to something like mastodon. Either that or scrape twitter and build some sort of model, classify and generify those models to mimic users
+*** cons
+- i know nothing about ml
+** https://part4project.foe.auckland.ac.nz/home/project/detail/3734/
+*** info
+- identify git workflows
+- build some tool around teaching people how to properly use them. something around a state machine of expected git states and revert if learning tool doesn't meet expected state
+*** cons
+- learning tool with probably wack requirements from the supervisor because nasser. could be tight and streamlined though
+- visualisations around this would probably involve a weird parser
+** https://part4project.foe.auckland.ac.nz/home/project/detail/3802/ or https://part4project.foe.auckland.ac.nz/home/project/detail/3805/
+*** info
+- scrape github and run projects
+- find "smells" that are present in programs that not present in wa
+- could be interesting to see how go/rust features port
+  - for example possible undefined behavour using unsafe in rust
+- wa spec is relatively simple afair
+*** cons
+- c#
+- pretty low level. generally have to know what you're doing. although a lot of it looks like static analysis.
+- project spec is kind of loose. i don't really know what they want to extend their existing research past the scraping stuff
+
+* Summary on required reading
+** Purposes of a literature review
+1. Introduce relevant terminology and definitions
+2. *key* Convince the reader that the search area is significant/important/interesting
+3. Convince thereader there is a gap/limitation
+4. *key* Explain and justify your research question hyporhteses/ideas
+5. Explain how the historical context for your research guided what you did
+6. Explain and justify your choice of theoretical framework
+7. Convince the reader that your research methods are sound
+8. Demonstrate how you research and results are linked to/compores with preview research
+** Introduction to lit reviews
+- a lit review can be on any source and does not mean that you are making a personal opinion on the source
+- a literature review can be just a simple summary of the sources, but it usually has an organization pattern and combines both summary and synthesis. A summary is a recap of the important information of the source, but a synthesis is a re-organization or a reshuffling of that information, which might give a new interpretation of old material or combine new with old interpretations. Or it might trace the intellectual progression of the field, including major debates
+- You don't add new arguments in a literature review
+- Literature reviews act as an overview or a guide to people that do not have time to fully research all the papers that you have read, they are useful reports that keep people up to date with what is current in the field. Breadth and depth can indicate the writers competence or effort
+- How to write
+  - Before writing ask yourself
+    - How many sources and what kind of sources
+    - Should you summarize, synthesize or critique your sources by discussing a common theme or issue?
+    - Should you evaluate your sources
+  - Then you should go on to read a bunch of model reviews to get an idea on how to write one
+  - After getting a better idea on what you are writing towards you should narrow your topic and what your lit review scope should focus on
+  - After thinking about what you should write about you should organize how you are gong to write is, what topics of what headings, and what directions does this give your research. Does the list of headings lead your reading in a particular way?
+  - Lit reviews contain that following
+    - *Introduction*: Gives a quick idea of the topic of the literature review such as the central theme or organization pattern
+    - *Body*: Contrains your discussion of sources and is organized either chronologically, thematically, or methodologically
+    - *Conclusions/recommendations*: Discuss what you have drawn from reviewing literature so far. Where might the discussion proceed?
+    - Our lit review is likely to be methodological in nature, we have a set of quotations that we are attempting to answer and we need them answered and must use our literature to back them up
+** Rationale and purpose
+*** Rationale
+- A project rationale is essential, if the project doesn't have a strong rationale, then it will be extremely difficult to justify why the project exists in the first place. The project will therefore have no purpose.
+- The rationale presents the irrefutable reasons as to why the project was conceived in the first place. There must be some convincing and major reasons. A rationale is something that is compelling beyond the client's needs, is rationale is about answering "so what" and "who cares?"
+- Why is it important for the researches to pursue these matters, and why is it important for us to read these articles.
+- We need to have some sense of the reserachers rationale so we know how to approach their articles
+- GapFililng
+  - The gap filling rationale looks at gaps in the growing body of research on the topic in question. Given that the topic is alredy accepted as important to the field, gap-fililng goes on to do just that - fill in gaps of knowledge
+*** Purpose
+- What is our one small contribution going to be? This will form the purpose of the project
+- We begin to appreciate that the prupose is more "doable" than the rationale; is describes an "achievable" goal for us to tackle. The purpose is a concrete implementation of the rationale. It's not a complete implementation that will completely address the rationale (afterall, the rationall is a massively compelling issue). The prupose will nonetheless work towards that bigger goal of the rationale
+- Usually clients will be able to explain to use the purpose of the project.
+- Unlike the raitonale, where the researches address the role of their esearch in relation to the large educational community, the prupose refers to the research directions that the researches have emplyoed to actually conduct this research. In many ways, the prupose is the concreate application of the rationale
+- The prupose alerts you, the reader, as to what general directions the researches will take in their research efforts. These directions should make sense in terms of the larger conversions
+- More often than not, researchers will not explicitly identiy the prupose of the article as such. Instead they will talk about what they are trying to accomplish with the research
+  - Exploration: When we find an exploration prupose, it is usually the case that the researchers are working in an area where things are often sketchy or poorly understood
+  - An extension purpose is found when reserarchers explicitly stae that they are building on earlier work
+  - Expansion: Similar to extension but extending the research into more complex areas
+- Identify a research question: In orer for a research study to exist there needs to be at last one research question to be addressed. Once a research question has been established then it is important to justify that question
+*** Justification
+- Without understanding the project's rationale,k it's difficult to justify the project. If the project has a poor rationale, it will likely have a poor justificaiton; is it really worth anyone's time if that's the case?
+- Even with a vary strong rationale, there still needs to be enough justification for the project. The project justification is the /convincing/  set of points that will make it clear why the project /should go ahead/. The rationale already told use why it's important but that doesn't justify the project going ahead
+- The justification can be thought of as the benefits that will result from achieving the project in order to be convincing, the benefits will need to outweight the costs of the project
+* Meeting notes <2022-03-04 Fri>
+- Draft rationale:
+  - Git is a very useful tool that has quickly taken a large share of being included in developer workflows
+  - Learning git can be difficult and is difficult to visualise
+- git recommended workflows
+  - marks on how many commits made for 206, beacuse they don't want to go over branches and all this because it's time consuming
+  - Assess how they are using it and if they are adhereing to particular workflows
+    - Give them a mark
+    - Detect violations
+    - Wrapper to git, so people run our tool and our tool checks if we are running the workflow correctly and give them advice
+    - Find a list of violations that are common in workflows
+  - Marking
+    - they give a mark and then a random person does a grade then they battle it out
+  - Rationale: Bigger teams, software getting more complex, git has come up and been dominant but there are no sort of hard rules but there are recommended workflows (list them), it's important that they don't mess up this workflow. There is no tool that assesses/guides students through workflows
+    - Justify project and why it's needed
+      - Go from broad reasons and slowly narrow down the scope
+      - What is version control trying to sort? If they don't follow guidelines
+      - There are workflows but there are no ways to prohibit bad workflows
+      - We need a tool to guide or teach people workflows
+      - If we can justify something else through literature and there is a bigger problem that there needs to solve then we can change to that or something tangentially related. You will have to convince our supervisors.
+    - Analysis of popular workflows using our tools, issues in their workflows
+    - Most interesting projects propose a technique that have multiple applications (eg git wrapper guiding students and then analysing marks for students). Basically
+    - Process of flow that you go through is more interesting than the implementation
+    - Approach, methodology, only a few lines about implementation
+    - Share the papers together as well and bounce ideas
+    - Next weekly meeting
+      - From here on the focus is completeting lit review,
+
+* How to lit review
+** Purposes of a literature review
+1. Introduce relevant terminology and definitions
+2. KEY: Convince the reader that the research area is significant/important/interesting
+3. Convince the reader there is a gap/limitation
+4. KEY: Explain and justify your research question hypotheses/ideas
+5. Explain how the historical context for your research guided what you did
+6. Explain and justify your choice of theoretical framework
+7. Convince the reader that your research methods are sound
+8. Demonstrate how your research and results are linked to /compares with previous research
+** What are examiners expecting
+1. Your research demonstrates knowledge of the *literature relevant* to the subject and the field or fields to which the subject belongs, and the ability to exercise critical and analytical judgement of it
+2. Is satisfactory in its methodology, in the quality and coherence of its expression and in its scholary presentation and format
+** Common issues
+1. Exclusion of key studies/authors
+2. Inclusion of irrelevant materials
+3. Out of date material
+4. Poor organisation structure
+5. Lack of synthesis (listing studies, authors, no/too little of own analysis)
+6. Lack of critical appraisal
+
+7. WHAT IS THE POINT THAT YOU'RE TRYING TO DRAW FROM THE LITERATURE? KEEP THIS IN YOUR MIND THE WHOLE TIME
+   #+DOWNLOADED: screenshot @ 2022-03-14 09:09:35
+   [[file:images/How_to_lit_review/2022-03-14_09-09-35_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-03-14 09:10:00
+[[file:images/How_to_lit_review/2022-03-14_09-10-00_screenshot.png]]
+
+* Version control in education
+- Look at how students are using version control and what they are getting out of it
+- Include tools around version control in this section, I think that this is the best section to put this in?
+- A lot of papers are about measuring student contributions; we should look into this as well
+* Lecture 1 <2022-03-05 Sat>
+- Literatiure review and statement of research intent (10%)
+- Seminar on Lit review and statement of research (10%)
+- Mid year deliverable (10%)
+- Display day poster
+- Project report (60%)
+- Display Day (10%)
+- Research compendium
+
+** meeting
+- follwing conventions: show that this is effective
+- Then
+- It's difficult if everyone does things that are different, when people

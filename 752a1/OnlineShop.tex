@@ -1,0 +1,132 @@
+\documentclass[a4paper]{article}
+\usepackage{fuzz}
+
+\begin{document}
+
+% Globally available sets of the system. Users which use the shop and items that are sold by the shop
+\begin{zed}
+	[USER, ITEM] \\
+\end{zed}
+
+% Root schema of the model. Tracking user balances and the state of the online shop
+\begin{schema}{State}
+	balances: USER \pfun \nat\\
+	shop: OnlineShop \\
+\end{schema}
+
+% An online shop tracks which users are signed up and part of the system, stock levels for items, costs of each item and the purchases that users have made
+\begin{schema}{OnlineShop}
+	users: \power USER \\
+	stock: ITEM \fun \nat \\
+	cost: ITEM \fun \nat \\
+	purchases: USER \pfun \seq ITEM \\
+	float: \nat \\
+	\where
+	\dom purchases = users \\
+	\dom cost = \dom stock \\
+\end{schema}
+
+% Initialization as required by Z.
+% Each user starts with an empty balance and the online shop stocks three of every item.
+\begin{schema}{Init}
+	State\\
+	\where
+	\forall u: USER @ balances(u) = 0 \\
+	\forall i: ITEM @ shop.cost(i) = 10 \land shop.stock(i) = 3 \\
+	shop.users = \emptyset \\
+	shop.purchases = \emptyset \\
+	shop.float = 20 \\
+\end{schema}
+
+% A user may work for some money that they can spend at the shop.
+% Each time a user works they gain ten currency.
+\begin{schema}{Work}
+	\Delta State \\
+	user?: USER\\
+	\where
+	 balances' = balances \oplus  \{ user? \mapsto ( balances(user?) + 10 ) \} \\
+	shop'.users = shop.users \\
+	shop'.stock = shop.stock \\
+	shop'.cost = shop.cost \\
+	shop'.purchases = shop.purchases \\
+	shop'.float = shop.float \\
+\end{schema}
+
+% A user can create an account with the shop which enables them to interact with it.
+\begin{schema}{CreateAccount}
+	\Delta State \\
+	user?: USER \\
+	\where
+	user? \notin shop.users \\
+	shop'.users = shop.users \cup \{ user? \} \\
+	shop'.purchases = shop.purchases \oplus \{ user? \mapsto \emptyset \} \\
+	shop'.stock = shop.stock \\
+	shop'.cost = shop.cost \\
+	balances' = balances \\
+	shop'.float = shop.float \\
+\end{schema}
+
+% A user can delete their account which removes them from the online shop.
+\begin{schema}{RemoveAccount}
+	\Delta State \\
+	user?: USER \\
+	\where
+	user? \in shop.users \\
+	shop'.users = shop.users \setminus  \{ user? \} \\
+	shop'.purchases = (USER \setminus \{ user? \}) \dres shop.purchases  \\
+	balances' = balances \\
+	shop'.stock = shop.stock \\
+	shop'.cost = shop.cost \\
+	shop'.float = shop.float \\
+\end{schema} 
+
+% Users buy items from shops.
+% Users can exchange currency for items which they purchase from the online shop.
+\begin{schema}{Buy}
+	\Delta State \\
+	user?: USER \\
+	item?: ITEM \\
+	\where
+	user? \in shop.users \\
+	shop.stock(item?) > 0 \\
+	balances(user?) \geq shop.cost(item?) \\
+	shop'.stock = shop.stock \oplus \{ item? \mapsto (shop.stock(item?) - 1) \} \\
+	balances' = balances \oplus \{ user? \mapsto (balances(user?) - shop.cost(item?)) \} \\
+	shop'.purchases = shop.purchases \oplus \{ user? \mapsto ((\langle item? \rangle) \cat shop.purchases(user?)) \} \\
+	shop'.cost = shop.cost \\
+	shop'.users = shop.users \\
+	shop'.float = shop.float + shop.cost(item?) \\
+\end{schema}
+
+% Users return items to shops.
+% If a user is unsatisfied with their purchase they may return it for the original amount that they purchased the item for
+% Users can only return the last item that they have purchased
+\begin{schema}{Return}
+	\Delta State \\
+	user?: USER \\
+	\where
+	user? \in shop.users \\
+	\#(shop.purchases(user?)) > 0 \\
+	shop.float \geq shop.cost((head (shop.purchases(user?)))) \\
+	shop'.purchases = shop.purchases \oplus ( \{ user? \mapsto (tail (shop.purchases(user?))) \} ) \\
+	balances' = balances \oplus \{ (user? \mapsto (balances(user?) + shop.cost((head (shop.purchases(user?)))))) \} \\
+	shop'.cost = shop.cost \\
+	shop'.stock = shop.stock \\
+	shop'.float = shop.float - shop.cost((head (shop.purchases(user?)))) \\
+\end{schema}
+
+% The shop can spend its money in order to restock the items from the shop.
+\begin{schema}{Restock}
+	\Delta State \\
+	item?: ITEM \\
+	amount?: \nat_1 \\
+	\where
+	shop.float \geq shop.cost(item?) * amount? \\
+	shop'.float = shop.float - shop.cost(item?) * amount? \\
+	shop'.stock = shop.stock \oplus \{ item? \mapsto (shop.stock(item?) + amount?) \} \\
+	shop'.cost = shop.cost \\
+	shop'.users = shop.users \\
+	shop'.purchases = shop.purchases \\
+	balances' = balances \\
+\end{schema}
+\end{document}

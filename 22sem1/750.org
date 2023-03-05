@@ -1,0 +1,764 @@
+#+TITLE: 750
+
+* Lecture 1 <2022-03-02 Wed>
+- Wednesdays are going to be drop in sessions, you don't have to attend these but if you're struggling with the labs then go to them
+- Fridays are 1hours sections which are going to be lab and content demonstrations and then he will go over them as a class
+- There is a group project where you propose something, create a implementation and then creates  video and report
+- There are also two assignments which are going to be like the last assignment
+- Quiz on 11th may which is like a day long project
+* Module 1
+- React is a "declarive", component based javascript library for building user interfaces
+  - Declarative: Allows developers to design simple views/components; React will take care of updating and rendering
+  - Component based: Separation of concerns by building and aggregating encapsulated components which manage their own state
+** Motivation and benefits
+1. Declarative components make for well defined deterministic user interfaces
+2. Component based architecture inherently promotes code reuse and testability
+3. State management prevents malicious or accidental changes to application state
+4. DOM manipulation is slow. React makes fast changes to its own virtual DOM, then application the minimum possible updates to the real DOM
+
+#+DOWNLOADED: screenshot @ 2022-03-03 15:00:31
+[[file:images/Module_1/2022-03-03_15-00-31_screenshot.png]]
+
+- This is a burdon because it's using =React.createElement= a bunch and will get complex quickly
+** JSX
+- The previous code works well
+  - However: Complex interfaces written this way will require extensive use of the =React.createElement()= function
+  - Reduces readability & maintainability when chained together
+- Web devs already know a declarative language for describing user interfaces: HTML!
+- JSX lets us declare our UI from within our Javascript code, using a similar mark-up syntax
+
+  #+DOWNLOADED: screenshot @ 2022-03-03 15:04:07
+  [[file:images/Module_1/2022-03-03_15-04-07_screenshot.png]]
+
+- This is a lot easier to understand, but in order to run JSX we need to transpile it to native html
+** Babel
+- Javascript transpiler (source to source)
+- Customizable via plugins, the react team has created a babel JSX plugin
+- He then went on to do some babel compilation stuff to run the JSX, instead we are going to use toolchains
+** Toolchains
+- A toolchain is a set of tools used to perform a complex software development task or otherwise aid software develops
+- Use of Babel to allows JSX syntax is an example of a simple toolchain to aid React developers
+- Web developers commonly use more complex toolchains to provide additional functionality
+  - Example
+    - Create react app
+    - Next.js
+    - Gatsby
+** Create react app
+- easy way to start writing a new react application
+- Brings together and configurates multiple tools (babel, webpack, jest, ESLint) to enhance the development and user experience
+- Offers runtime hot-reloading/live editing
+- Only concerned with the client side build pipeline
+  - Doesn't restrict users to any specific backend
+** React components
+- React apps are built from reusable components
+- Components may have their own state, properties and style
+- Typically components will be written in their own file for readability
+** Functional components
+- functional components are thus called as they are written as a single function, which may optionally take a single argument for its properties
+  #+DOWNLOADED: screenshot @ 2022-03-03 15:53:07
+  [[file:images/Module_1/2022-03-03_15-53-07_screenshot.png]]
+- You can use components within other components
+- these can also be written using an arrow function which is a shorthand
+** Class components
+- Class components are written as an ES6 classes, they can
+  - Maintain their own state
+  - Hook into the react component lifecycle (mounted/unmounted)
+    #+DOWNLOADED: screenshot @ 2022-03-03 15:55:51
+    [[file:images/Module_1/2022-03-03_15-55-51_screenshot.png]]
+** Conditional rendering
+- We can have control flow such as conditionals and loops within our render logic, but sometimes the syntax may be different that you're used to
+  - We can't use if statements inside JSX, but we can use the ternary operator
+  - This means we can conditionally render some elements based on whether a given property was supplied
+    #+DOWNLOADED: screenshot @ 2022-03-03 16:06:18
+    [[file:images/Module_1/2022-03-03_16-06-18_screenshot.png]]
+  - You can also just use boolean local which is shorter
+    #+DOWNLOADED: screenshot @ 2022-03-03 16:07:45
+    [[file:images/Module_1/2022-03-03_16-07-45_screenshot.png]]
+** Iteration
+- You can map over an array and make them JSX elements
+- You can have react render a array of components by using ={[<p>1</p>, <p>2</p>]}=
+- Each element rendered should have a key property because it helps react to skipping rendering things when they haven't changed
+** Styles
+- Inline
+  - You can have a style property on your JSX
+    #+DOWNLOADED: screenshot @ 2022-03-03 16:13:51
+    [[file:images/Module_1/2022-03-03_16-13-51_screenshot.png]]
+- Standard CSS import
+  - Create a css file and then import it, give your JSX =className= to apply the CSS
+  - The CSS rules are global, they apply to your entire site, thus it's best practice to impor tsuch css files from within index.js to signify this
+    #+DOWNLOADED: screenshot @ 2022-03-03 16:16:20
+    [[file:images/Module_1/2022-03-03_16-16-20_screenshot.png]]
+- CSS modules
+  - Name is *.module.css
+  - import from component JS file
+  - Assign class names to elements =<div className={styles.article}></div=
+  - PostCSS will dynamically modify the CSS class selectors supplied to the browser to avoid naming conflicts
+** React hooks
+- In prior versions, needed to write class components to give components state and to access lifecycle methods
+- Now we can add the same functionality to functional components using hooks
+- We can also write custom hooks to handle more advanced logic and share stateful rendering code
+** State
+- A component properties should be considered immutable
+- Components may maintain local state, which can change
+- For class based components
+  - A variable (this.state) plus a method to update the state (this.setState)
+  - For functional components
+    - We can use the react hook, useState()
+      #+DOWNLOADED: screenshot @ 2022-03-03 16:52:42
+      [[file:images/Module_1/2022-03-03_16-52-42_screenshot.png]]
+** UseEffect
+- Sometimes in a component, we want to do things other than just render the component
+- Examples
+  - Manually update non-react parts of the DOM
+  - Fetch data
+  - Subscriptsions
+  - Timers
+- In class based components we can perform these actions in the lifecycle methods
+- In functional components, we can use the =useEffect()= hook
+- To use =useEffect()=, we can supply a single argument: a function which will be called after the component has finished rendering
+- The below example will update the document title after every render
+  #+DOWNLOADED: screenshot @ 2022-03-03 17:14:16
+  [[file:images/Module_1/2022-03-03_17-14-16_screenshot.png]]
+** Effects with cleanup
+- Sometimes we need to clean up after ourselves
+  - Stopping timers that we've started
+  - Unsubscribing form APIs we've subscribed to
+- To do this we can have the effect function return another function
+  - This second function will be called just before the component unmounts, or before the effect function is called again
+- Sometimes we don't wnt to call the effect function again under certain circumstances
+  - To do this, we can supply an optional second argument. Your function will only be called again if the values supplied in the second argument have changed since the last time it was called
+    #+DOWNLOADED: screenshot @ 2022-03-03 17:19:18
+    [[file:images/Module_1/2022-03-03_17-19-18_screenshot.png]]
+
+* Module 2
+- Single page apps (SPA) and routing
+- React portals
+- Global application state
+- Persistent application state
+- Third party component libraries
+  - Material UI
+** Single Page Applications with React
+- A single page application is a web application that requires only a single page load in a webbrowser
+- Web browsers fully load a SPA only once, when a user first navigates to the site
+- Any required updates to the page after this point are handled by code
+- Resources are loaded once, only data is transmitted back and forth (not resources)
+- Benefits
+  - Fast and responsive: Usually much faster to load and use compared to traditional webapps, as only data is transferred during usage, rather than resources
+  - Caching: As the entire functionality of the website is script based, these webapps can function offline after the initial load. Data received from the server can be cached, and updated when web connectivity resumes
+  - Debugging: Purpose built browser tools such as React Dev tools allow for an experience more like an IDE, which isn't possible for more traditional webapps
+- Drawbacks
+  - SEO: Web crawlers are optimized for traditional web pages: SPA's may not be indexed correctly
+  - Browser history: Careful programming is required to maintain a users history of interaction through a site and to allow correct use of the back button
+  - Security: The more functionality that is handled by the client, the more care needs to be taken not to provide clients with functionality that they're not permitted to use
+** Routing
+- Routing referes to the mapping of a URL entered into the browser to a specific webpage or endpoint
+  - Server side routing: The browser sends a requires to a URL, the server routes that requires to the appropriate endpoint based on the URL path
+  - Client side routing: A URL change does not result in a server requires; the page contents are updated in javascript
+  - SPAs require *both* kinds of routing to be effective
+    - Not page reloads during normal operation: client side routing required
+    - The refresh button requires a page reload; users may with to jump to a specific point via URL: server-side routing required
+  - One approach to this problem:
+    - All server side requires route to: eg: =index.html=
+    - The remaining routing is all handled client side via examining and modifying the URL using the history API
+    - Works well with react, which only necessitates a single HTML template being loaded
+** Global state with reacts context mechanism
+*** Global state
+- We have learned how to give components local state: using =useState= hook
+- What if we have state which we need to share with large parts of our application?
+  - We a list of articles/todo items/calandar events
+  - Would need to be accessed from (at minimum) the view/add/edit pages for those items...
+*** Models for global state
+**** Top level storage
+- also known as moving state up
+  - Store state at a level in the component hierarchy such that all components needing to access that satte are descendants of the stateful component
+  - Pass state "down to child components as props"
+  - Pass mutations"up" to parents as events
+  - Example
+    #+DOWNLOADED: screenshot @ 2022-03-05 12:29:26
+    [[file:images/Module_2/2022-03-05_12-29-26_screenshot.png]]
+    - Pass down the articles as a prop so that all components have access to the list
+    #+DOWNLOADED: screenshot @ 2022-03-05 12:30:09
+    [[file:images/Module_2/2022-03-05_12-30-09_screenshot.png]]
+    - Then when we want to mutate that state we use setArticles which is passed down via props and then that causes s refresh of the components
+**** Centralized storage
+1. State is held in a central "store" accessible from all components
+2. State changes are dispatches to the store, which then notifies all observers to update themselves
+
+#+DOWNLOADED: screenshot @ 2022-03-05 12:33:14
+[[file:images/Module_2/2022-03-05_12-33-14_screenshot.png]]
+- They all get the state and the ability to set state
+- Then one of them updates the state
+#+DOWNLOADED: screenshot @ 2022-03-05 12:33:44
+[[file:images/Module_2/2022-03-05_12-33-44_screenshot.png]]
+- Then all other components update
+***** React Context
+- How is works:
+  1. Create a context object using =React.createContext()=
+  2. Wrap our React components in a =<Context.Provider>= supplying some value for the context
+  3. Any descendants of that Provider will be able to access the context value without having it passed to them as props
+  4. Whenever the Providers value changes, it (and all descendants) will be rerendered, giving them access to the new value
+****** Example
+
+#+DOWNLOADED: screenshot @ 2022-03-06 15:19:13
+[[file:images/Module_2/2022-03-06_15-19-13_screenshot.png]]
+- Here the Context is created, then the userInfoPage can then access that context
+
+#+DOWNLOADED: screenshot @ 2022-03-06 15:20:12
+[[file:images/Module_2/2022-03-06_15-20-12_screenshot.png]]
+- Modifying the value will cause the provider and any descendants to re-render thus obtaining the new value
+- *Question*: What if we want to /modify/ the user from within a descendant component, not just access it?
+  - Answer: We can also put the setUser function into the context which means that any descendant can access that context
+  #+DOWNLOADED: screenshot @ 2022-03-06 15:22:36
+  [[file:images/Module_2/2022-03-06_15-22-36_screenshot.png]]
+- When the suer calling the setter will modify the ancestor's state as expected
+- Which willl then cause the Provider to supply the updated state to all descendants
+-
+****** Clean approach to using context
+- There are many ways we could organize our use of context, state, hooks to provide the functionality we desire
+- It can be good practice (and "clean code") to *encapsulate* the context for an app (bot the stateful values and the functions to modify those values) in a /wrapper/ component (or higher-order component)
+  - Example 16 is a possible way of doing this
+  - AppContextProvider is the component which manages the application state, we also don't provide the setArticles function, instead we make our own function addArticle which exposes our API how we would like
+****** When to use local state vs context
+- Local state: Use when the state doesn't need to be shared with any other component
+  - Eg the state of a textbox in a form
+- Context: Use when the state is required by many disparate components to avaoid passing props everywhere
+  - Eg: User preferences, themes, authentication information
+- For most state: Can use either method, depending on specific requirements & preferences
+****** Other mechanisms for storing state
+- Use a global state management system like Redux
+  - Still very popular
+  - Can do much of the same thing with the Context API
+- Use local browser storage
+  - Provides persistent state across page refreshes/reloads
+  - Ideally need to account for different app versions
+** Utilizing local browser storage
+- All modern browsers have local storage
+  - A set of key value pairs
+  - Storage is local to a particular origin (protocol/hostname/port combination)
+    - Eg: my app running at http://localhost:3000 can't access the local storage of https://google.com
+  - Can be accessed in Javascript through the =window.localStorage= global (or just =localStorage= for short)
+  - There is also =window.sessionStorage=
+    - Works the same, except data stored within is local to a particular /browser tab/, and is cleared when that tab is closed
+*** Local storage usage in React
+- We can access local storage in React, exactly as with the previous slide
+  - Problem: if we update local storage, React won't detect the change and thus will not re-render with any component relying on it
+    - So if you made a change and just pushed that to local storage instead of the provider context then it wouldn't update
+  - We can combine =localStorage= with =useState()= and =useEffect()= to allow React's own state management to hook into local storage
+    #+DOWNLOADED: screenshot @ 2022-03-06 17:16:15
+    [[file:images/Module_2/2022-03-06_17-16-15_screenshot.png]]
+- This all works wellish and makes sense, but there are a few issues with it
+  - Issue: Code on the previous slide won't properly propagate updates to local storage to any component other than the one causing the update
+    - Two components using the same key for localstorage would NOT cause each other to update as we would want
+  - Solutions:
+    - We can store the values returned by =useLocalStorage= in =Context=, or
+    - We can use a third party package which addresses this issue and more
+      - A third party npm package
+      - =use-persisted-state=
+        - Benefits over our own =useLocalStorage()= hook:
+          - Updates to a local storage value with a given key will propagate to all components using that key
+          - This includes components in other browser tabs/windows
+          - If the structure of our data changes (eg: new app version), the package will automatically clear old incompatible data
+        #+DOWNLOADED: screenshot @ 2022-03-06 17:21:30
+        [[file:images/Module_2/2022-03-06_17-21-30_screenshot.png]]
+- Whenever =setUser= is used then it will update the localStorage and then update all other components
+- Example uselocalstorage
+**
+* Module 3
+** Writing a backend with node & express
+- Node: Allows the creation of js apps outside of the browser
+- Express: A package that allows people to easily write backends
+  - server side routes which perform variables actions based on the path/URL/HTTP method and various other parameters
+  - Very pluggable, many packages add on and provide additional functionality
+#+DOWNLOADED: screenshot @ 2022-03-09 13:15:16
+[[file:images/Module_3/2022-03-09_13-15-16_screenshot.png]]
+- Simpliest express server
+*** Serving JSON
+- JSON is the modern data interchange format of the web
+  - JS seamlessly supports JS object <-> JSON conversion
+- To server JSON from Express apps, we simply use the =res.json()= as shown here
+ #+DOWNLOADED: screenshot @ 2022-03-09 13:16:48
+ [[file:images/Module_3/2022-03-09_13-16-48_screenshot.png]]
+*** Serving static files
+- In addition to running our own code when we recieve a request, we may just want to serve static files within our project
+  - For example, all the client-side files that are served by webpack on our dev server...
+- To do this in Express:
+  #+DOWNLOADED: screenshot @ 2022-03-09 13:19:14
+  [[file:images/Module_3/2022-03-09_13-19-14_screenshot.png]]
+
+** Consuming APIs
+*** =fetch()=
+- =fetch()= is the modern js way to send http request and receive responses
+  - Supported in browsers and server environments
+- Sending a GET request is very simple
+  #+DOWNLOADED: screenshot @ 2022-03-09 13:26:50
+  [[file:images/Module_3/2022-03-09_13-26-50_screenshot.png]]
+- You can also use async/await if desired
+- You can also send other things that are not GET and do other things with it
+  #+DOWNLOADED: screenshot @ 2022-03-09 13:31:15
+  [[file:images/Module_3/2022-03-09_13-31-15_screenshot.png]]
+*** Axios
+- A library providing HTTP connectivity
+- More comprehensive suite of functionality compared to =fetch()=
+- But has a similarly simple programming model
+- Consistency when calling axios functions from both frontend and backend js code
+- Also promise based, like =fetch()=
+**** Usage example
+
+#+DOWNLOADED: screenshot @ 2022-03-09 13:34:52
+[[file:images/Module_3/2022-03-09_13-34-52_screenshot.png]]
+- Promises will be rejected if 4XX or 5XX, we can configure this is we like though
+** Creating & consuming APIs
+*** Backends for react webapps
+- React doesn't require the use of any particular backend. Its only requirements:
+  - Can serve static files
+  - Appropriately serves "index.html" on a GET request to any valid application URL (for proper client/server-side routing)
+- Express can certainly do this: but so can any other backend framework you may already know
+  - React-apps created with create-react-app keep React's backend-agnostic approach
+  - React apps created with other toolchains may make assumptions regarding backend (eg: next.js requires a node.js backend)
+- During development, create-react-app runs its own node server to host webpack and other toolchain elements
+- We /can/ plug into this, but it's non trivial
+- For development, instead
+  - Run our own server (Express or any other desired backend) on a separate port (something not 3000)
+  - Configure our react app with a /proxy/ pointing to our other server, so we can make API calls as if they were local
+*** CRA + express: suggested project layout
+
+#+DOWNLOADED: screenshot @ 2022-03-09 14:13:11
+[[file:images/Module_3/2022-03-09_14-13-11_screenshot.png]]
+**** Setting a proxy server
+- We set the proxy in our client app's package.json
+  #+DOWNLOADED: screenshot @ 2022-03-09 14:14:08
+  [[file:images/Module_3/2022-03-09_14-14-08_screenshot.png]]
+- Any requests received by the webpack server hosting our react code will be forwarded to the given proxy server, if they meet the following conditions
+  - 1. The accept request header is not set to =text/html=
+  - 2. The request cannot be handled by the webpack server itself
+**** In a production environment
+- We can create a production ready build of our =create-react-app= apps by using the =npm build= script
+  - This creates a folder called =build= which contains our production code
+- As we no longer need to un webpack etc, we can simply serve the contents of the build directory as static files from within our Express backend (or whatever backend you're using)
+- Adding this code to our express backend will cause it to
+  - Serve all files in the build directory statically
+  - Offer up "index.html" when it receives an unknown GET request (ie makes routing work properly)
+- But only in production!
+  #+DOWNLOADED: screenshot @ 2022-03-09 14:20:03
+  [[file:images/Module_3/2022-03-09_14-20-03_screenshot.png]]
+** Service workers and caching
+*** Service workers
+- Supported by all modern browsers
+- Are installed by your client side JS code
+- Run independently of your webapp
+- Intercept all network requests
+  - By default will forward the requests onto the network
+  - We can interact with the browsers cache to store data there/ service requests from the cache if we like
+- Can be used to enable "offline mode" or "offline first apps"
+  - After a webapp loads for the first time, key files are cached by the service worker
+  - Your app loads when not onlinem using these cached files (some functionality may not be present)
+- Supports more advanced features such as background sync and push notifications
+**** Registering a service worker
+#+DOWNLOADED: screenshot @ 2022-03-09 15:24:33
+[[file:images/Module_3/2022-03-09_15-24-33_screenshot.png]]
+**** Creating a service worker
+- In a service worker there are several events that we can respond to, in order to provide various functionality. eg:
+  - When the SW is first installed, we can pre-cache important files so our website loads fast and works offline
+  - When other network activity occurs, the SW is notified and can override that 1 (for example, going to cache instead of network to serve the request)
+- The following examples would be coded in your service worker file (=service-worker.js=)
+**** Service worker install event
+- Event is raised when the worker is first installed
+- A good place to pre-cache files
+  #+DOWNLOADED: screenshot @ 2022-03-09 15:28:05
+  [[file:images/Module_3/2022-03-09_15-28-05_screenshot.png]]
+**** Service worker install events
+- Event is raised when a network request is made by the app
+- Can serve files from cache if they're there, and possible update the cache too
+   #+DOWNLOADED: screenshot @ 2022-03-09 15:30:20
+   [[file:images/Module_3/2022-03-09_15-30-20_screenshot.png]]
+**** Caching strategies
+- There are several commonly used caching strategies that could be used and coded in your SW
+  - Several strategies could even be used for different requests in the same app
+- *Network first*: Request attempts to be served from the network. If it can't the cached version is used, if any
+- *Cache first*: Request attempts to be served from the cache. If it can't the network version is used, if any
+  - If the network version is used, then the response is usually cached for future use
+- *Stale-while-revalidate*: If the cached version isn't stale, it will be used. If the cached version is stale, it will still be used but a new version will also be fetched from the network for future use
+**** Keeping the cache fresh
+- We can configure our caches with a max number of entries. If new entries need to be added past this number, the oldest entries will be deleted to make room
+- We can configure each cache entry with a max age. It will automatically be deleted when it is older than the configured age
+- For stale-while-revalidate, we can configure a SWR age. If the cached entry is older than this but younger than max-age, then the SWR logic will kick in (ie: it will be considered stale, and will still be served the next time it's requested but then replaced soon afterwards)
+**** Caching example
+#+DOWNLOADED: screenshot @ 2022-03-09 15:40:57
+[[file:images/Module_3/2022-03-09_15-40-57_screenshot.png]]
+
+* Module 4
+** Mongodb (Document databases)
+- Colloquially known as "no-sql" databases
+  - Because you don't write SQL to interact with them
+- Originally designed to simply the mapping between object oriented business logic and the underlying data storage, without requiring ORM middleware
+- Individual documents (objects) are sotred in various collections (similar to RDBMS tables) in a database
+- Nested documents are trivial and don't require separate collections (though sometimes you might want one)
+- Relationships between different collections are easy
+- Document/object properties can be indexed for increase speed / enforcing uniqueness
+*** MongoDB
+- Stores documents in a JSON like structure
+- Can interact with the DB via the terminal using what is essentially javascript
+- MongoDB compass - a DB browser tool
+- Can be local or cloud based
+- Wide community support
+**** How data is stored
+- Each mongoDB database can have an arbitrary number of *collections*
+- Each collection can have any number of *documents*
+- Each document can be represented as *json*
+- Each document has a field called *_id* which is an identifier that's guaranteed to be unique amongst all documents in its collection
+- Documents may have any number of other fields
+- There is *no requirements by default* for documents in a collection to conform to the same /schema/ (ie have the same fields,etc)
+- For example it is valid for a single collection to contain all of these at the same time
+  #+DOWNLOADED: screenshot @ 2022-03-11 11:12:43
+  [[file:images/Module_4/2022-03-11_11-12-43_screenshot.png]]
+**** Schema validation
+- If we would like to enforce particular rules on inserted documents (eg: required fields and data types of those fields, relationships between documents, etc), we can use *schema validation*)
+- This can be done from commandline or from compass
+**** Data types
+- The following are valid datatypes for a field in mongodb documents
+ #+DOWNLOADED: screenshot @ 2022-03-11 11:16:18
+ [[file:images/Module_4/2022-03-11_11-16-18_screenshot.png]]
+- In addition fields can be =null=, =undefined=, or other =objects= (essentially sub documents)
+**** Interaction
+- Through REPL
+- Compass
+- Mongoose package
+
+** Mongoose
+*** Schema definitions
+- Users: firstname, lastname, username, etc
+- Users have any number of pets
+- Pets have stuff
+- Pets have notes made on them, pets can have any number of notes
+  #+DOWNLOADED: screenshot @ 2022-03-11 15:44:01
+  [[file:images/Module_4/2022-03-11_15-44-01_screenshot.png]]
+*** Object model
+- When designing a mongodb database schema, it might help more to thin of our system in terms of *objects* and *classes*: similar to object oriented software desgin
+- The classes might inform the design of our schema, while individual objects may be documents in our database
+  #+DOWNLOADED: screenshot @ 2022-03-11 15:48:33
+  [[file:images/Module_4/2022-03-11_15-48-33_screenshot.png]]
+*** Potential queries
+- When designing a schema, it can be useful to think of the queries one might ask of the database. In this case
+  - Get all users
+  - Get all pets
+  - Get a user with particular username
+  - Get a pet with a particular registration number
+  - Get all pets owned by a particular user
+  - Get the user who owns a particular pet
+- Our users and pets are important entities which need to be queries independently of each other
+  - They can be stored in their own *collections*
+- *Addresses* and *Notes* can't exist independently. They can be *sub-documents*
+*** Schema defintion in mongoose
+- To define the schema for a particular type of document, we create an instance of a Schema object
+- We can then use =mongoose.model()= function to create a class defintion for our document type, which we can then create instances of
+  #+DOWNLOADED: screenshot @ 2022-03-11 16:03:21
+  [[file:images/Module_4/2022-03-11_16-03-21_screenshot.png]]
+ - Then create an individual =User= class
+***** Example schema
+#+DOWNLOADED: screenshot @ 2022-03-11 16:08:31
+[[file:images/Module_4/2022-03-11_16-08-31_screenshot.png]]
+- The little bit at the bottom is additional configuration, we supply the timestamps field which means our schema is extended with createdAt and updatedAt
+- In addition to fields and sub-documents, we can also add extra
+  - Instance methods
+    #+DOWNLOADED: screenshot @ 2022-03-11 16:10:37
+    [[file:images/Module_4/2022-03-11_16-10-37_screenshot.png]]
+- Static methods
+  #+DOWNLOADED: screenshot @ 2022-03-11 16:11:42
+  [[file:images/Module_4/2022-03-11_16-11-42_screenshot.png]]
+- Virtuals
+  #+DOWNLOADED: screenshot @ 2022-03-11 16:12:55
+  [[file:images/Module_4/2022-03-11_16-12-55_screenshot.png]]
+** Mongoose schema validation
+- We can further extend our schema with validation logic which will be run when we try to save an object to the database
+  - Objects failing to validation check will not be saved
+- We can also run the validation logic outselves in an attempt to pre-empt/fix siggues before trying to save
+  #+DOWNLOADED: screenshot @ 2022-03-11 16:24:19
+  [[file:images/Module_4/2022-03-11_16-24-19_screenshot.png]]
+- Use validationSync to pre-empt before you save if there are any errors
+- Here are some things that we can do with schemas so make them more strict
+  #+DOWNLOADED: screenshot @ 2022-03-11 16:27:58
+  [[file:images/Module_4/2022-03-11_16-27-58_screenshot.png]]
+- We can define custom validator functions for arbitrary validation logic
+
+#+DOWNLOADED: screenshot @ 2022-03-11 16:29:10
+[[file:images/Module_4/2022-03-11_16-29-10_screenshot.png]]
+** Working with documents
+- Once we've modelled our schema
+- We can then create instances of the model class which will correspond to MongoDB documents
+  #+DOWNLOADED: screenshot @ 2022-03-11 16:31:22
+  [[file:images/Module_4/2022-03-11_16-31-22_screenshot.png]]
+  #+DOWNLOADED: screenshot @ 2022-03-11 16:31:28
+  [[file:images/Module_4/2022-03-11_16-31-28_screenshot.png]]
+- Each of these functions are async and return promises. We can await them as shown here from within our own async functions, or use any other promise management syntax
+  #+DOWNLOADED: screenshot @ 2022-03-11 16:33:22
+  [[file:images/Module_4/2022-03-11_16-33-22_screenshot.png]]
+
+** Querying in mongoose
+ - We  can conduct queries using the following static methods on our model classes (those generated with =mongoose.model=):
+   - =findById()=: Finds and returns the document with the given =_id=, if any
+   - =findOne()=: Finds and returns the first document match the given predicate, if any
+   - =find()=: finds and returns an array of all documents matching the given criteria
+ - All such methods are async and thus can be awaited *But are not promises*
+   #+DOWNLOADED: screenshot @ 2022-03-12 13:50:12
+   [[file:images/Module_4/2022-03-12_13-50-12_screenshot.png]]
+ - Here are some other queries
+   #+DOWNLOADED: screenshot @ 2022-03-12 13:59:25
+   [[file:images/Module_4/2022-03-12_13-59-25_screenshot.png]]
+- bottom one is a regex
+*** Populating fields referencing other collections
+- When we have a fielsd that's on =ObjectId= or an array of =ObjectId= s referencing another collection, we can populat that field with the data from the other collection using the populate method
+  #+DOWNLOADED: screenshot @ 2022-03-12 14:01:36
+  [[file:images/Module_4/2022-03-12_14-01-36_screenshot.png]]
+** Building REST APIs for MongoDb with Express/react
+- Using mongoose, we can easily integrate mongodb into our node apps
+  - Including express web apps/services
+- Using the expression knowledge we already have from week three, plus the mongoose knowledge from these sliades we can build an api which utilizes mongodb
+- Let's use our running Articles app as an example
+* Module 5
+** Jest
+- Like any other widely used language, we can use various libraries to write /unit test/ which enable us to test small pieces of code in isolation
+- We will be looking at jest
+  - Maintained by facebook
+  - Support for mocking, snapshot testing
+  - Integrates easily with react and other frameworks
+  - Extensive documentation
+  - In order to add jest to a project
+    #+DOWNLOADED: screenshot @ 2022-03-23 14:14:44
+    [[file:images/Module_5/2022-03-23_14-14-44_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-03-23 14:15:04
+[[file:images/Module_5/2022-03-23_14-15-04_screenshot.png]]
+- You only need this stuff if you're adding it to a blank project; this stuff is included in CRA
+*** Running JEST tests
+- Add our tests to files named =*.test.js=, optional in folders named =__tests__=, anywhere in our source tree
+  - JEST will be able to discover and run any so-named files
+- Now everything is set up,we can run tests in several ways
+  #+DOWNLOADED: screenshot @ 2022-03-23 14:16:36
+  [[file:images/Module_5/2022-03-23_14-16-36_screenshot.png]]
+*** Basic tests
+- Suppose we're trying to test a function called =sum()=, which takes any number of argumetns and addres them together
+- Here's a first unit test for this function
+  #+DOWNLOADED: screenshot @ 2022-03-23 14:20:58
+  [[file:images/Module_5/2022-03-23_14-20-58_screenshot.png]]
+*** Commonly uses matchers
+
+#+DOWNLOADED: screenshot @ 2022-03-23 14:21:33
+[[file:images/Module_5/2022-03-23_14-21-33_screenshot.png]]
+*** Scoping
+- By default,tests are grouped accourding to the file they're in; each file is considered a separate "test suite"
+- We can more finely group tests if desired, using the =describe()= function
+- Tests within a group can have their own setup/teardown functions
+  #+DOWNLOADED: screenshot @ 2022-03-23 14:23:14
+  [[file:images/Module_5/2022-03-23_14-23-14_screenshot.png]]
+*** Setup/teardown
+#+DOWNLOADED: screenshot @ 2022-03-23 14:23:53
+[[file:images/Module_5/2022-03-23_14-23-53_screenshot.png]]
+
+
+* Module 6 (Part 2)
+** Introduction to Web Security
+- Security is a implied requirements, it's part of the non functional requirements
+- If the software is not usable then it's obvious (usability), but security is harder to spot
+- Security isn't noticable/visable, if you're noticing a security risk then it's probably too late
+- Why security: we worry about security when we have something of value and there is a risk it could be harmed
+- There are a lot of people (27p/s) that are effected by security
+*** Security mindset
+- Threats: who are the bad actors
+- Vulnerabilities: What can they possibly exploit?
+- Risk: if threats succeed to exploit a vulnerability what is that attack/risk going to be?
+*** Threats
+- Cybercriminals: want to profit from our sensitive data for financial gain
+- Hacktivists: activists who do not like something you are or something you do
+- Nation-states: countries do it for political advantage or for spying
+*** Vulnerability
+- The weak points in software that can lead to security concerns
+- Lax input validation
+- Hardcoded secrets
+- Weak cryptography
+- Attack: when threads uncover the vulnerability, conduct researc habout it, and epxloit it to launch their schemes
+  - Sql injectiosn
+  - XSS
+  - MiM
+- What should we do if there is an attack? We should have a tactic
+- Attack -> security tactics -> detect, resist or recover
+*** CIA triad
+- confidentiality: Only authorized users should access sensitive information, there's also authorization (encryption, authentication, authorization, physical security)
+- availability: Data should be available timely and uninterrupted (physical protection, redundancy)
+- integrity: Data should be protected from unauthorized changes (backup, checksums)
+**** ATM example
+- Condientiality
+  - Encryption fo traffic data, time out for invalid inputs, return invalid card, retain stolen card, use of TAN in net banking
+- Integraity
+  - consistency of data during transmission
+- Availability
+  - diverse network, fair resource sharing
+
+*** Security incidents
+- 90% of security incidents stem from software defects
+- Cost of poor quality software in the US is in the trillion dolar size
+- People that don't want to share passwords can be made to share them because they are not in the context of thinking about it (askingin gin public)
+*** How can we minimize mistakes
+- Software security is a property of software, while secruty software are things for security (firewalls, antivirus, etc)
+- In the end of the day we all make mistakes, so we need methods to mitigate this
+- You're not the only user: If your application is connecting to the internet then anyone can access it
+- You get where you're looking for: Some code that you want might be vulnerable, from stack overflow etc
+*** Software composition analysis
+- Look at what libraries that you're using
+- what libraries are libalities and is your code fragile
+- Software is also not a single goal. it is multifaceted. You need to understand the tools and the libraries that you use. Being easy to set up and use is critical. How do we keep up? First the low hanging fruits
+  - Precommit hooks, this can spot keys that you shouldn't be commiting
+  - IDE plugins
+  - Software composition analysis; it the module managed, or outdated?
+  - Static testing. This may be painful to check because they may be false positives. You need to configure these tools to work for you
+  - Dynamic testing: Dynamic security. You can also tune your static analysis on this!
+
+    #+DOWNLOADED: screenshot @ 2022-04-16 15:47:28
+    [[file:images/Module_6_(Part_2)/2022-04-16_15-47-28_screenshot.png]]
+
+** Fuzzing
+*** Software testing
+- We need software testing because things get attacked and we need to prevent it. It also increases the quality of our code so it's better for our customers
+- Unknown inputs, bad inputs types, you have to do validation on inputs,
+**** Problems with software testing
+- Testing is incomplete because
+  - A finite set of inputs can be checked
+  - The correctness of a result is commonly important
+  - Test results are used to make business decisions for release dates
+  - We cannot be certain that all features of a method are tested
+  - When inputs become complex, it becomes harder to test
+  - Time consuming process
+  - Adversarial mindset is needed to extensively test the target
+- *Definition*: *Fuzzing* is a way of discovering bugs in software by providing randomized/pattern based inputs to programs to find test cases that cause a crash
+- *Goal of fuzzing*:
+  - To ensure certain bad things never occur (crashes, thrown exceptions)
+  - Such bad things can lay the cornerstone for security vulnerabilities (eg can lead to RCE)
+  - However, sometimes such issues are the security vulnerabilities
+  - To complement functional testing
+    #+DOWNLOADED: screenshot @ 2022-05-16 13:36:10
+    [[file:images/Module_6_(Part_2)/2022-05-16_13-36-10_screenshot.png]]
+- We need to perform fuzzing before the attackers can find these vulns
+- This comes after static analysis for dynamic analysis
+  #+DOWNLOADED: screenshot @ 2022-05-16 13:37:23
+  [[file:images/Module_6_(Part_2)/2022-05-16_13-37-23_screenshot.png]]
+- It's in the microsoft dev pipeline
+*** Types of Fuzzing
+- File based: Mutate or generate inputs and see what happens
+- Network based: act as a man in the middle attack and mutate inputs exchanged between parties
+*** Smart of dumb fuzzers
+- These are the type of fuzzers
+- A fuzzer that generates completely random input is known as a "dumb" fuzzer
+- A fuzzer with knowledge of the input domain/format is known as a smart fuzzer
+*** Kinds of fuzzing
+- Black box
+  - The tool knows nothing about the target and its input
+  - Easy to use
+  - Explore only shallow states
+- White box
+  - Generates new inputs by program analysis and constraint solving
+  - Easy to use (relatively)
+  - Computationally expensive
+- Grey Box
+  - Generates new inputs by some knowledge of the program
+  - Easy to use (relatively)
+  - Computationally expensive
+*** Fuzzing inputs can be
+- Mutation: A valid input i smutate randomly to produce malformed input. Dumb fuzzing/ Smart fuzzing
+- Reply: Replaying the captured messages (at different intervals)
+- Generation: Generate input from scratch: Grammar. Only mutates randomly a chunk of an input
+- Evolutionary: Use feedback from each test case to learn the format of the input (Code coverage)
+*** Code coverage
+- In program analysis, code coverage is a standard metric that describes how much of the code is exercised
+- However, high code coverage does not imply more bugs found, but it certainly increases the likelihood of finding one
+- In scientific papares, researchers attempt to prove the efficiency of their proposed fuzzer by either code coverage or bug coverage
+*** Fuzzers skeleton
+- Test case generation: Completely bank, or long strings, null character, max and min values for integers
+- reproducibility: Record test cases and associated information
+- Crash detections: Attach a debugger, process disappears, timeouts
+  #+DOWNLOADED: screenshot @ 2022-05-16 14:13:32
+  [[file:images/Module_6_(Part_2)/2022-05-16_14-13-32_screenshot.png]]
+- Fuzzing papers has increased: increasing used
+*** Example tools
+**** Radamas
+- Radamsa is a mutation based, black box fuzzer
+- Radamsa performs dumb mutation on inputs
+**** Bab
+- Blab generates inputs according to a grammar
+- The grammar can be specified as regexps or CFGs
+**** There were more plus demo but not going to write them down
+*** Problems with mutation based fuzzers
+
+#+DOWNLOADED: screenshot @ 2022-05-16 15:21:10
+[[file:images/Module_6_(Part_2)/2022-05-16_15-21-10_screenshot.png]]
+- they can't actually solve this, these are typically solved with symbolic testing/smt solvers
+*** SMT solvers
+  - SMT or satisfiability Modulo Theories
+  - An SMT formula is a boolean combination of formulas over first order theories
+  - Example of SMT theories include arrarys, integer and real arithmetic, strings...
+  - Outcome ->
+    - SAT + model  -> if F is satifiabile
+    - unsat -> if F is unsatifiabile
+*** Symbolic Execution
+ - Traditional fuzzers fail to exercise all possible behaviors
+ - Execute the program with symbolic valued
+ - Generate new inputs at each branch to cover all parts of code
+   #+DOWNLOADED: screenshot @ 2022-05-16 15:26:59
+   [[file:images/Module_6_(Part_2)/2022-05-16_15-26-59_screenshot.png]]
+**** Symbolic exections drawbacks
+- *Path explosion*: symoblically executing all feasilbe program paths does not scale to large programs
+- *loops and recusions*: infinite execution tree
+- *SMT solver limitations*: Dealing with complex path constraints
+****  Concolic Execution Enginers
+- Concolic = Contrete + symbolic (ie dynamic symbolic execution)
+- A program is executed with concrete (random inputs) and symbolic inputs
+  #+DOWNLOADED: screenshot @ 2022-05-16 15:30:03
+  [[file:images/Module_6_(Part_2)/2022-05-16_15-30-03_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-16 15:30:41
+[[file:images/Module_6_(Part_2)/2022-05-16_15-30-41_screenshot.png]]
+
+
+#+DOWNLOADED: screenshot @ 2022-05-16 15:31:16
+[[file:images/Module_6_(Part_2)/2022-05-16_15-31-16_screenshot.png]]
+
+** Web Attacks
+- DOS: send traffic at a higher rate than what you can handle, can't handle any real requests, your resources go down
+- SQL injection: multiple input channels (wifi name), cookies (someone can forge cookies)
+- XSS
+  #+DOWNLOADED: screenshot @ 2022-05-16 16:12:47
+  [[file:images/Module_6_(Part_2)/2022-05-16_16-12-47_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-16 16:16:53
+[[file:images/Module_6_(Part_2)/2022-05-16_16-16-53_screenshot.png]]
+- above is session hijacking
+** Web cache deception
+- Abuses URL based caching mechanisms
+- Tricks users' browser into requesting URLs that will cause their sensitive information to be cached
+- The attacker can then obtain that sensitive content
+  #+DOWNLOADED: screenshot @ 2022-05-16 16:22:36
+  [[file:images/Module_6_(Part_2)/2022-05-16_16-22-36_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-05-16 16:23:31
+[[file:images/Module_6_(Part_2)/2022-05-16_16-23-31_screenshot.png]]
+
+* Personal
+** Introduction docs
+- React is a declarative, efficient, and flexible javascript library for building user interfaces. It lets you compose complex UIs from small and isolated pieces of code called components
+- when the react component state changes via setState it means that the render of the component will be called again
+- Detecting changes in mutable objects is difficult because they are modified directly. This detection requires the mutable object to be compared to the previous copes of itself and the entire object tree to be traversed
+  - Detecting changes in immutable objects is considerably easier. If the immutable object that is begin referenced is different than the previous one, then the object has changed
+- Components let you split the UI into independent, reusable pieces and think about each piece in isolation. Conceptually, components are like javascript functions. They accept arbitrary inputs called props and return react elements describing what should appear on the screen
+- Props are read only meaning that they must be pure. All react components must act like pure functions with respect to their props
+- Lifecycle methods to a class
+  - In applications with many components, it's very important to free up resources taken by the components when they are destroyed
+  - We want to set up a timer whenever the clock is rendered to the DOM for the first time. This is called "mounting" in React
+  - We also want to clear that timer whenever the DOM produced by the Clock is removed. This is called unmounting in React
+- Things that you should know about using state correctly (setState)
+  - Do not modify state directly. Remember that it's immutable so you have to create a new object in order for it to be picked up to re-render
+  - State updates may be asynchronous. React may batch multiple setState calls into a single update for performance. Because this.props and this.state may be updated asynchronously, you should not rely on their values for calculating the next state
+  - State updates are merged, react merges the object you provide into the current state. You can have a react component with state {a, b} and if you setState({a: 1}) then b will stay in tact
+  - The date flows down: Neither parent nor child components can know if a certain component is stateful or stateless, and they shouldn't care whether it is defined as a function or a class. This is why state is often called local or encapsulated. It is not accessible to any component other than the one that owns and sets it
+  - You can embed a guard on if you want a prop to render by adding a guard:
+    - false && expression = false
+    - true && expression = expression
+      - You can use the above with a component in order to conditionally render it
+      - Or you can use a return null in the render loop in order for it to be not rendered. For example you can use a prop as a conditional if you want it to be rendered

@@ -1,0 +1,2196 @@
+* Lecture 1
+** Distributed Systems
+ #+DOWNLOADED: screenshot @ 2021-07-19 11:29:36
+ [[file:images/Distributed_Systems/2021-07-19_11-29-36_screenshot.png]]
+ - Any kind of system where computation is spread across multiple machines
+   - How do we communicate at a lower and a higher level?
+   - Example is a client/server model where the server processes a request from
+     the client and then the server sends it back
+   - Databases can further split the client/server model as the database is often
+     stored on its own machine (not on the server
+   - These client/server/databases are all communicating at TCP/IP generally
+     (lower level) and then there are higher level protocols that you can use
+
+*** Networking Infrastructure
+ - Networking infrastructure exhibits the following characteristics
+   - Computers and links can fail independently
+   - Switches have finite space for storing packets
+   - Individual links vary in terms of bandwidth capacity
+   - Data can be corrupted during transmission
+   - Switches store routing tables that they dynamically update based on
+     knowledge of congested links and failed switches
+
+*** Network Protocols
+ #+DOWNLOADED: screenshot @ 2021-07-19 11:37:03
+ [[file:images/Distributed_Systems/2021-07-19_11-37-03_screenshot.png]]
+
+ - Network protocols are organised into layers
+   - Application layer protocols address the needs of particular applications
+   - Transport protocols provide for process-to-process communication
+   - The network layer provides a packet delivery service between host machines
+ - Higher-level protocols use the services of the layer directly beneath them
+   - A layer depends on the interface of its underlying layer and not its
+     implementation (meaning that each layer is completely independent of one
+     another, meaning that layers above and below can change)
+ - Generally IP is pretty unreliable but we build on top of that with TCP which
+   has some reliability
+ - UDP generally provides speed without error checking
+
+*** Internet Protocol (IP)
+ #+DOWNLOADED: screenshot @ 2021-07-19 11:43:15
+ [[file:images/Distributed_Systems/2021-07-19_11-43-15_screenshot.png]]
+
+ #+DOWNLOADED: screenshot @ 2021-07-19 11:44:28
+ [[file:images/Distributed_Systems/2021-07-19_11-44-28_screenshot.png]]
+
+ - All of the data is split into packets, these packets are passed into the
+   switches which all have routing information to get to the other
+   destination. This protocol is unreliable because we don't know if each switch
+   has up to date information, we don't know if they are going to fail, we don't
+   know if data is going to be corrupted
+
+*** Transmission Control Protocol (TCP)
+ #+DOWNLOADED: screenshot @ 2021-07-19 11:49:24
+ [[file:images/Distributed_Systems/2021-07-19_11-49-24_screenshot.png]]
+
+ - Because of unreliability of IP we need more reliability for more serious uses,
+   TCP is a stream abstraction which is an illusion that they are sending data
+   directly to the host where the switches are basically just abstracted away
+ - TCP is a transport protocol that establishes a *virtual connection* between a
+   pair of processes: a bi-directional *stream* abstraction that hides several
+   network characteristics:
+   - *Message sizes / boundaries*: The application simply reason and writes data
+     from/to the stream - the TCP layer decides how much data to accumulate in
+     the sender before it creates packets and passes them down to the IP layer
+   - *Message destinations*: Once a stream has been established, the "connected"
+     processes can use the stream without knowledge of pots and IP addresses
+   - Lost messages
+   - Message duplication and ordering
+   - Flow control
+   - Ordering of messages (each message is numbered so that you can order them
+
+*** Java serialization
+ - We can wrap the raw TCP streams with java's InputStream/OutputStream so that
+   we can encode/decode primitives directly to/from the stream (instead of just
+   bytes). We can also do strings
+ - If we want to do more complex objects then we have to write a serialisation
+   routine that can encode/decode the object to/from bytes
+   - We can achieve this by using an ObjectOutputStream and an ObjectInputStream
+
+ #+DOWNLOADED: screenshot @ 2021-07-19 13:05:39
+ [[file:images/Distributed_Systems/2021-07-19_13-05-39_screenshot.png]]
+
+*** Java Serialization
+ - The `implements Serializable` is just a marker class, you don't have to
+   implement any functions
+ - When serializing an object O, the following information is written out in
+   binary form:
+   - O's state: the values of I's instance variables
+   - The state of all objects: once only - that are reachable from O
+   - A description of each class, and its superclasses, of objects begin written
+
+ #+DOWNLOADED: screenshot @ 2021-07-19 13:12:33
+ [[file:images/Distributed_Systems/2021-07-19_13-12-33_screenshot.png]]
+
+ - The first two are forms, which include the name, version of the form, class
+   handle and then the instance variables
+ - Then write out a form of ==ch0== with fields "Tim" etc. These must match in
+   order
+ - == 2 oh1 oh3 == which is the ArrayList of size two with two objects
+
+*** Applications of Serialization
+ - 1) Sending an object structure over a network connection
+ - 2) Persisting an object graph to disk
+ - 3) Making a deep copy of an object graph in memory
+
+ #+DOWNLOADED: screenshot @ 2021-07-19 13:16:38
+ [[file:images/Distributed_Systems/2021-07-19_13-16-38_screenshot.png]]
+
+** CAP theorem
+ - The CAP theorem states that a distributed system cannot simultaneously be
+   consistent, available and tolerant against network partition failures
+
+ #+DOWNLOADED: screenshot @ 2021-07-19 13:28:21
+ [[file:images/CAP_theorem/2021-07-19_13-28-21_screenshot.png]]
+
+*** Partitioning
+ - Consistency: all parts of the system agree on a truth
+ - Available: Means that clients can access each other
+ - Partition failures: if some part of the network between the communicating
+   system goes down then the system will be able to function. To achieve this we
+   need some replication. If the network has a route go down it can go to a
+   replica and keep running in a correct way
+
+*** Availability
+ #+DOWNLOADED: screenshot @ 2021-07-19 18:13:43
+ [[file:images/CAP_theorem/2021-07-19_18-13-43_screenshot.png]]
+
+ - So for availability we are encouraged not to have a single point of
+   failure. Thus in the master/slave model if the master were to fail then the
+   slave would take over, but if the link between the service and the master were
+   to fail then the *whole system* would fail
+ - Instead (to correct this) we would like to use a *master/master* model which
+   means that they are all masters, this means that we have lots of alternative
+   pathways which increases availability
+   - The problem is that with more masters we need a way to keep them consistent
+
+*** Consistency
+ #+DOWNLOADED: screenshot @ 2021-07-19 18:17:07
+ [[file:images/CAP_theorem/2021-07-19_18-17-07_screenshot.png]]
+
+ - In the left we are just saying that if there is no replication then there is
+   no need to worry about consistency, but then your system if fragile in the
+   case that your database goes down
+ - On the right we are saying that the database should be consistent enough that
+   you are able to write to #1 and then read from #2 for the same value and then
+   that request should work
+   - This is generally not achievable without some sort of latency.
+ - In summary we need to be able to make a trade off between the three attributes
+   of CAP for our solution
+
+*** Active replication
+ - Active replication involves clients sending requests to all replicas
+ - Atomic multicast protocols and middleware are used to ensure order and
+   atomicity
+   - *Order:* Given invocations ==op(arg)== and ==op'(arg')== by clientA and
+     clientB,k if replicated servers i and j process the invocations they do so
+     in the same order
+   - *Atomicity:* Given invocation ==op(arg)== by clientA, if one server replica
+     processes the request then every non-crashed replica also processes the
+     request
+
+ #+DOWNLOADED: screenshot @ 2021-07-19 18:23:36
+ [[file:images/CAP_theorem/2021-07-19_18-23-36_screenshot.png]]
+
+ - This shows that the ordering is broken then the consistency fails. This is
+   solved by multicast and TCP with the drawback of latency (which is quite
+   large) and still doesn't 100% guarantee consistency because what if one of the
+   servers crashes? Then we would not be consistent with none of the other
+   servers but at no fault of the software, thus we need even more software in
+   order to get it consistent again
+
+*** Master / Master Replication
+ - In practice, Master / Master replication is used where temporary inconsistency
+   can be tolerated
+ - Replicas "gossip" synchronisation messages to achieve eventual consistency
+
+ #+DOWNLOADED: screenshot @ 2021-07-19 18:32:21
+ [[file:images/CAP_theorem/2021-07-19_18-32-21_screenshot.png]]
+
+ - This is less strict than active replication, we are sharing our state with a
+   gossip protocol
+
+*** DNS
+ - We are looking at this because it's a distributed system
+ - The DNS (Domain Name System) is the internets lookup service that maps domain
+   names to IP addresses
+ - Key non-functional requirements for the DNS include scalability and
+   availability
+   - To meet these requirements, DNS has been designed using replication,
+     partitioning and caching tactics
+
+**** Partitioning
+ - The names are partitioned over a hierarchy of servers each of which hold a
+   subset of mappings
+ - They each know about above on below mappings and how to get to them, if it's
+   something like auckland.ac.nz it would go the .nz, which goes the .ac which
+   would then fill the request
+
+ #+DOWNLOADED: screenshot @ 2021-07-19 19:09:39
+ [[file:images/CAP_theorem/2021-07-19_19-09-39_screenshot.png]]
+
+ - We need replication because if .com goes down then all the .com lookups would
+   fail which would be a huge disaster, with replication the calls to .com can be
+   routed
+
+**** Example lookup
+ #+DOWNLOADED: screenshot @ 2021-07-19 19:12:26
+ [[file:images/CAP_theorem/2021-07-19_19-12-26_screenshot.png]]
+
+ - There are 10 messages that need to be sent, but in reality this is very quick
+   and well optimized, this is also load balanced which helps with scalability
+
+**** Caching
+ - In practice, caching is critical to DNS' performance
+ - DNS servers cache the IP addresses of other DNS servers they discover when
+   processing queries
+ - Cached data may become stale - authoritative servers associate TTL (time to
+   live) values with name to address mappings
+
+ #+DOWNLOADED: screenshot @ 2021-07-19 19:14:37
+ [[file:images/CAP_theorem/2021-07-19_19-14-37_screenshot.png]]
+
+ - There is an obvious tradeoff between long TTL values and short TTL values. The
+   former aids in performance while the latter aids in consistency
+
+** Distributed File Sharing
+ - Peers store content
+ - Indexing servers do not store content, but mappings identifying which peers
+   store which files
+ - Distributed content is immutable and arbitrarily replicated
+ - Indexing servers replicate mappings: but don't guarantee consistency
+
+ #+DOWNLOADED: screenshot @ 2021-07-19 19:17:53
+ [[file:images/Distributed_File_Sharing/2021-07-19_19-17-53_screenshot.png]]
+* Lecture 2
+** Services-Oriented Architecture
+- Service-oriented architectures (SOA) are distributed systems made up of
+  software units (services). With SOA, consumers can discover and interact with
+  services, without regard for the technologies used to implement individual
+  services. SOA applications often cross organisational boundaries.
+- SOA can cross boundaries, meaning one part of the SOA can be in one part of
+  the company while another part can be in another part/different company (distributed)
+- *Service characteristics*
+  - Distributed
+  - Coarse-grained units of reuse (similar to classes, but typically do more
+    than a single class)
+  - Well-defined interfaces, hidden implementations. Publishes a contract which
+    defines how that service can be used
+  - Technology independent, one service can use other services without needing
+    to know about the technology that it's using
+  - Loosely coupled, they know about each other and can be swapped out or drop
+    in and out
+  - Discoverable, there should be some kind of mechanism in which a client can
+    go out and find all the services on that network
+  - Composable: you can compose multiple services
+- *Why use SOA?*
+  - Reduce IT costs: They are available for reuse so you don't have to remake
+    things
+  - Reduce time to market, because you can assemble existing services it means
+    that you are going to be quicker to market
+  - Agility
+  - Leverage legacy systems: If you have legacy code then you can get rid of it
+    by just rebuilding that part and using the shell of the old one
+
+** Interoperability in the presence of heterogeneity
+- Interoperability necessitates use of common communication protocol
+- HTTP is an Open and standardised protocol
+- HTTP is a text-based protocol
+  - The character content of HTTP messages can be encoded in a agreed way, eg:
+    UTF8
+  - Middleware converts UTF-8 encoded data to and from native formats
+- Web services use HTTP
+
+#+DOWNLOADED: screenshot @ 2021-07-26 18:07:01
+[[file:images/Lecture_2/2021-07-26_18-07-01_screenshot.png]]
+
+- So we are using HTTP to keep these services communicating
+
+*** HTTP
+- HTTP defines two messages
+  - Request
+#+DOWNLOADED: screenshot @ 2021-07-26 18:10:53
+[[file:images/Lecture_2/2021-07-26_18-10-53_screenshot.png]]
+
+  - Reply
+#+DOWNLOADED: screenshot @ 2021-07-26 18:10:59
+[[file:images/Lecture_2/2021-07-26_18-10-59_screenshot.png]]
+- URL syntax
+  - http://serverName:port/resoouce?query
+
+** Servlet containers
+- The servlet container specification provides a managed execution environment
+  for servlets
+  - A servlet is a Java component that extends the capabilities of a server
+  - A servlet has a lifecycle that is controlled by the container
+- Servlet containers route requests through to particular servlets
+  - Each incoming request is managed by a separate thread
+  - There is at most one isntance of any servlet class: servlets need to be
+    threadsafe
+- Servlet containers are an example of middleware
+
+#+DOWNLOADED: screenshot @ 2021-07-26 18:19:10
+[[file:images/Lecture_2/2021-07-26_18-19-10_screenshot.png]]
+
+** Servlet Lifecycle
+- The servlet container calls the lifecycle methods
+  - ==init()==
+    - Initialises a servlet instance
+  - ==service()==
+    - Called once per incoming request for the servlet
+    - Supplies request data and a connection to the client
+  - ==destroy()==
+    - Called when the servlet container is shutting down or where resources need
+      to be freed
+    - Typically implemented to save state to persistent storage
+
+#+DOWNLOADED: screenshot @ 2021-07-26 18:22:26
+[[file:images/Lecture_2/2021-07-26_18-22-26_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-07-26 18:27:38
+[[file:images/Lecture_2/2021-07-26_18-27-38_screenshot.png]]
+
+- Overview of methods of servlet, you're going to be extending the HttpServlet
+  which provides additional methods which makes it easier (look at the red
+  boxes)
+
+** Basic Servlet
+#+DOWNLOADED: screenshot @ 2021-07-26 18:29:18
+[[file:images/Lecture_2/2021-07-26_18-29-18_screenshot.png]]
+
+- You're extending ==HttpServlet==
+- request object is everything from the client
+- resp object is the response that you're going to make
+- ==resp.setContentType== is the MIME type
+
+** Web Services
+- HTTP is useful in developing an RMI-like service-invocation mechanism that
+  isn't constrained to Java: but alone it's insufficient
+  - How do we represent service interfaces in a programming language neutral
+    way? (Not just java)
+  - How do we describe service invocations? parameters and output
+  - How do we deal with different datatype systems? ADT across systems, how do
+    we convert between two types from Bool and bool (c and haskell)
+- Remember that servlets it shouldn't matter what programming language it was
+  built in, but how do we represent types?
+  - One method: is SOAP over HTTP, you can also use JSON (covered using web services)
+  - To address the third concern we use schema datatypes (platform neutral)
+
+#+DOWNLOADED: screenshot @ 2021-07-26 18:48:18
+[[file:images/Lecture_2/2021-07-26_18-48-18_screenshot.png]]
+
+** Programming-language-neutral interfaces
+#+DOWNLOADED: screenshot @ 2021-07-26 18:55:30
+[[file:images/Lecture_2/2021-07-26_18-55-30_screenshot.png]]
+
+- WSDL (web services Description Language) is an XML dialect used to describe
+  Web service interfaces
+- A WSDL document includes several elements
+  - *PortType*
+    - A set of named operations (like an interface)
+    - Each operation is described by an input and output message
+  - Message
+    - Typed messages: define data to be sent in requests and responses
+  - Types
+    - Datatype definitions (not in the diagram above)
+  - Binding/Service
+    - Communication endpoints identifying the location of a service
+    - Tells prospective clients where what what endpoints are available in the
+      server
+
+** SOAP over HTTP
+
+#+DOWNLOADED: screenshot @ 2021-07-26 18:59:14
+[[file:images/Lecture_2/2021-07-26_18-59-14_screenshot.png]]
+
+** Soap Web Services
+#+DOWNLOADED: screenshot @ 2021-07-26 19:00:13
+[[file:images/Lecture_2/2021-07-26_19-00-13_screenshot.png]]
+- When the service is published the WSDL will be available to the network
+- You can make generated bindings to these WSDLs so that you don't have to write
+  them yourself
+- UDDI Registry is a register on the network which enumerates of WSDL
+  services. When the client is new to the network it can talk to the registry
+  and then browse a list of services that it might want to consume
+
+** REST Web Services
+- REST (REpresentational State Transfer) more fully leverages the capabilities
+  of the HTTP protocol, kinda a replacement for SOAP
+- In addition to being an open request/reply protocol, HTTP:
+  - Is a stateless protocol
+  - Defines methods for request messages and typed responses
+  - Supports negotiable content
+
+#+DOWNLOADED: screenshot @ 2021-07-26 19:41:02
+[[file:images/Lecture_2/2021-07-26_19-41-02_screenshot.png]]
+
+- These are some of the methods and responses that you will get from and HTTP
+  server, they are pretty self explanatory
+
+** Stateless protocol
+- As a stateless protocol, the server maintains no "session" state between
+  requests
+
+#+DOWNLOADED: screenshot @ 2021-07-26 20:45:35
+[[file:images/Lecture_2/2021-07-26_20-45-35_screenshot.png]]
+- It's often useful for a server to tracker which client it is processing
+  requests for. A cookie allows clients to store a session state and send this
+  with each request
+
+#+DOWNLOADED: screenshot @ 2021-07-26 20:46:50
+[[file:images/Lecture_2/2021-07-26_20-46-50_screenshot.png]]
+
+- So in order to do a shopping cart you're going to have to use a cookie with a
+  ==sessionToken== in order for the server to identify the client and thus what
+  shopping cart they should be shown
+- HTTP is stateless because it simplifies servers because they often don't need
+  it
+
+** Negotiable content
+
+#+DOWNLOADED: screenshot @ 2021-07-26 20:48:54
+[[file:images/Lecture_2/2021-07-26_20-48-54_screenshot.png]]
+
+- Using HTTP, clients can specify preferences for content. This is done using
+  the ==Accept==, the q values are the priority where 1 is the highest and 0 is
+  the lowest
+
+** REST (Representational State Transfer)
+- Fielding proposed a set of architectural principles known as REST
+  - Addressable resources
+  - A uniform, constrained interface
+  - Representation-oriented (html, text, audio, video) where the client and
+    server decide on this
+  - Communicate statelessly, makes scaling easier
+  - Hypermedia as the engine of application state, data formats in REST drive the
+    engine, the responses contain links to aggregate you to other resources (eg
+    page navigation)
+
+** REST Principles
+*** 1: Addressable Resources
+- Every resources is reachable through a unique identifier
+- REST uses URIs to identify resources
+
+#+DOWNLOADED: screenshot @ 2021-07-26 20:54:13
+[[file:images/Lecture_2/2021-07-26_20-54-13_screenshot.png]]
+
+- In this case the response was in JSON and included a link to the product
+  (entries array)
+
+*** 2: Uniform, Constrained Interface
+- Use the HTTP methods as intended, in implementing the service
+
+#+DOWNLOADED: screenshot @ 2021-07-26 20:56:10
+[[file:images/Lecture_2/2021-07-26_20-56-10_screenshot.png]]
+
+- Use of HTTP methods as intended can allow us to perform optimizations
+  - For example where GTE's semantics are respected, GET responses can be
+    cached, contributing to scalability
+
+#+DOWNLOADED: screenshot @ 2021-07-26 21:00:04
+[[file:images/Lecture_2/2021-07-26_21-00-04_screenshot.png]]
+
+*** Stateless Communication
+- The server can be stateful (customer orders), but the communication must be
+  stateless, where in order to identify clients the client must be send their
+  sessionid
+- Requests are made in isolation with no guarantee of ordering
+- The client keeps track of where they are in the request
+
+#+DOWNLOADED: screenshot @ 2021-07-26 21:02:41
+[[file:images/Lecture_2/2021-07-26_21-02-41_screenshot.png]]
+
+- We can fully replicate the service any number of times and because it's
+  stateless they will all respond the exact some way
+
+*** HATEOAS
+- Responses contain links telling the client "where they can go next"
+
+#+DOWNLOADED: screenshot @ 2021-07-26 21:04:15
+[[file:images/Lecture_2/2021-07-26_21-04-15_screenshot.png]]
+
+- Here the client requests products, the server returns the first five entries,
+  but also in the header it includes a next link for the client to request the
+  next 5 is they so need
+
+** SOAP vs REST
+*** SOAP
+- HTTP is used as nothing more than a transport protocol
+- SOAP is based on many standards, eg SOAP and GSDL, and requures associated
+  tools
+- SOAP services have formally defined contracts that specify service interfaces
+*** REST
+- HTTP and its features are leveraged; HTTP provides a service API
+- REST relies only on HTTP; there's no need for other standards and tools
+- REST is ad-hoc; service contracts are not well defined (REST interfaces don't
+  specify the type of data to be exchanged)
+  - REST is used way more in modern times. It's just better because HTTP is the
+    backbone of the internet so it gains all these optimizations
+
+** JAX-RS Specification
+- JAX-RS is an open specification for a framework that simplifies development of
+  RESTful Web services
+- Key features:
+  - Annotation based
+  - Parameter injection
+  - Message body marshallers/unmarshallers
+- We will use the RESTEasy implementation in this course
+
+#+DOWNLOADED: screenshot @ 2021-07-26 21:09:39
+[[file:images/Lecture_2/2021-07-26_21-09-39_screenshot.png]]
+
+
+** JAX-RS Programming Model
+- JAX-RS implementation provide a servlet class, ==HttpServletDispatcher==
+- This loads appilcation services and delegartes processing of HTTP messages to
+  them
+  - You no longer need to implement servlets, instead you supply application
+    services
+- The JAX-RS runtime performs pre and post processing on servie requests and
+  responses
+
+#+DOWNLOADED: screenshot @ 2021-07-26 21:16:08
+[[file:images/Lecture_2/2021-07-26_21-16-08_screenshot.png]]
+
+- We are basically just writing our servlets using the JAX-RS runtime because it
+  makes it way easier to write and handles a lot of the overhead
+- If you want to build a webservices suing JAX-RS:
+  - Create a Resources class iwth methods that process service requests
+  - Create a subclass of Application
+    - Override method getSingletons() to return a set containtin an instance of
+      the Resource class
+  - On startup, JAX-RS finds Application subclasses, instantiates them and calls
+    their getSingletons() methods
+- JAX-RS routes all requests directed at the application service to the
+  registered Resource object
+
+** Parameter Injection
+
+#+DOWNLOADED: screenshot @ 2021-07-27 19:22:01
+[[file:images/Lecture_2/2021-07-27_19-22-01_screenshot.png]]
+
+- These are the params annotations that we can use
+  - PathParam: This is used as a path param, eg ==thing/{id}==
+
+** Automatic Type Conversion
+- Since HTTP is a text-based protocol, all parts of HTTP requests (other than
+  the body) are represented as Strings
+- The JAX-RS run-time automatically converts Strings to data types
+
+#+DOWNLOADED: screenshot @ 2021-07-27 19:25:30
+[[file:images/Lecture_2/2021-07-27_19-25-30_screenshot.png]]
+
+** Default Request Processing and Error Handling
+- Success cases
+  - Resources method with a void type results in a 204 'No content' response
+  - Resource method with a non-void return type results in either a 200 'Ok'
+    response for a non-null response, and a 204 'No Content' response otherwise
+- Error cases
+  - If a client invokes on a mispelt URI, 404
+  - If a client attempts to invoke a HTTP method that's not associated with the
+    given URI, 405 'No method' is returned
+  - If a client requests a content types that's not supported, 406 'Not
+    Acceptable' is returned
+
+** Complex Responses
+
+#+DOWNLOADED: screenshot @ 2021-07-27 19:31:16
+[[file:images/Lecture_2/2021-07-27_19-31-16_screenshot.png]]
+
+- We can use a response builder to help build our responses to the client,
+  there's no constructor so we actually use one of those ReponseBuilder
+  
+** Exception Handling
+
+#+DOWNLOADED: screenshot @ 2021-07-27 19:34:09
+[[file:images/Lecture_2/2021-07-27_19-34-09_screenshot.png]]
+
+- Flowchart for exceptions within JAX-RS
+  
+
+#+DOWNLOADED: screenshot @ 2021-07-27 19:34:53
+[[file:images/Lecture_2/2021-07-27_19-34-53_screenshot.png]]
+
+- A potential runtime for a an exception
+
+** JAX-RS Client
+*** PUT and POST
+
+#+DOWNLOADED: screenshot @ 2021-07-27 19:37:43
+[[file:images/Lecture_2/2021-07-27_19-37-43_screenshot.png]]
+
+*** Client Exception Handling
+
+#+DOWNLOADED: screenshot @ 2021-07-27 19:38:50
+[[file:images/Lecture_2/2021-07-27_19-38-50_screenshot.png]]
+* Lecture 3
+** MessageBodyReader / MessageBodyWriter
+- JAX-RS contains two interfaces:
+  - MessageBodyReader: Handles *unmarshalling* of an HTTP message body in some
+    format to Java objects
+  - MessageBodyWriter: Handles *marshalling* of Java objects to an HTTP message
+    body in some format
+- Typically written in pairs, often with one class implementing both interfaces
+- Custom readers/writers can be implemented and registered with JAX-RS in the
+  Application class
+- Appropriate readers/ writers are chosen at runtime based on MIME types
+  - Specified using @Produces / @Consumes annotations within your Resource
+    classes and your reader/writer classes
+
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:19:52
+[[file:images/Tutorial_1/2021-08-01_15-19-52_screenshot.png]]
+
+- Converts the messages to/from java objects
+- Consumes/Produces means it can serialize/deserialize objects of this type
+
+*** From the JAX-RS Client
+- Use the =register()= method of ClientBuilder to register your custom
+  readers/writers
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:31:34
+[[file:images/Tutorial_1/2021-08-01_15-31-34_screenshot.png]]
+
+- Use the =accept()= method to state your allowed response types
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:31:54
+[[file:images/Tutorial_1/2021-08-01_15-31-54_screenshot.png]]
+
+- Use the =Entity.entity()= method to specify a custom MIME type for your
+  request
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:32:20
+[[file:images/Tutorial_1/2021-08-01_15-32-20_screenshot.png]]
+
+** JSON representation
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:33:37
+[[file:images/Tutorial_1/2021-08-01_15-33-37_screenshot.png]]
+
+- fairly simple, just including this so that i can search
+
+** Jackson
+- Jackson is a specification for working with JSON
+- Jackson enables developers to work with domain objects (basically just java objects)
+  - Jackson handles the conversion of objects to/from JSON
+- JAX-RS integrates with Jackson
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:35:26
+[[file:images/Tutorial_1/2021-08-01_15-35-26_screenshot.png]]
+
+- Jackson can basically act as the marshaller/unmarshaller
+
+*** Simple example
+- Jackson advocates "configuration by exception"
+  - Certain behaviour is provided by default; use annotations to override these
+    defaults
+- By default, Jackson expects classes to conform to JavaBean conventions
+  - Each /property of a bean will be marshalled/unmarshalled
+  - A JavaBean property refers to a getter/setter method pair (eg: the =Book=
+    class has a single property called title
+  - JavaBeans must have default (no-argument) constructor, which will be used to
+    create instances during the unmarshalling process
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:39:01
+[[file:images/Tutorial_1/2021-08-01_15-39-01_screenshot.png]]
+
+- Highlighted is the getter/setter pair that the Jackson stuff will use
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:39:59
+[[file:images/Tutorial_1/2021-08-01_15-39-59_screenshot.png]]
+
+- As you can see Jackson is fairly simple to use to serialize/deserialize
+
+*** Ignoring and Changing properties
+- If you have stupid property names or just ignoring some field of your class
+  you may want to ignore them in your JSON serialization
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:41:42
+[[file:images/Tutorial_1/2021-08-01_15-41-42_screenshot.png]]
+
+- =JSONIgnore= 
+
+*** Lists and Arrays
+- Lists and arrays both marshal to JSON arrays
+- When unmarshalling JSON arrays
+  - If the bean property is a Java array, the JSON array will be unmarhsalled to
+    a Java array
+  - If the bean property is a List, the JSON array will be unmarhsalled to an
+    ArrayList (regardless of the original list type before serialization! (ie,
+    this information is lost when you serialize about the array type)
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:43:30
+[[file:images/Tutorial_1/2021-08-01_15-43-30_screenshot.png]]
+
+- You see it goes from a list to an ArrayList, this may not be what you want but
+  it's something that you have to look out for
+
+*** Maps
+- Maps are marshalled to JSON objects
+  - Each map key is marshalled to a property name equalling the value of the
+    key's =toString= method
+- When unmarshalling a JSON object into a Map
+  - The type of Map created is a LinkedHashMap
+  - JSON object properties are unmarhsalled to String keys
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:47:05
+[[file:images/Tutorial_1/2021-08-01_15-47-05_screenshot.png]]
+
+*** Custom Marshalling / Unmarshalling
+- Java classes which aren't JavaBeans may not be handled appropriately by
+  Jackson
+  - One example includes the classes commonly used to represent dates and time
+    (LocalDate/LocalTime)
+- We can define implementations of =StdSerializer= and =StdDeserializer=, and
+  have Jackson use them where necessary via the =@JsonSerialize= and
+  =@JsonDeserialize= annotations
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:50:18
+[[file:images/Tutorial_1/2021-08-01_15-50-18_screenshot.png]]
+
+- Example of getReleaseDate, you serialize and deserialize using the
+  LocalDate{Serializer,Deserializer}.class (es) which are shown below
+
+#+DOWNLOADED: screenshot @ 2021-08-01 15:56:43
+[[file:images/Tutorial_1/2021-08-01_15-56-43_screenshot.png]]
+
+- Here we are overriding this serialize method so that it will properly parse it
+  to JSON
+
+**** Map Keys
+- Map keys are marshalled to JSON Strings by calling their toString() methods
+- to unmarshall a key back to anything other than a String, we must:
+  - Implement a KeyDeserializer responsible for converting Strings to other
+    object types,
+  - Instruct Jackson to use it with the =@JsonDeserialize attribute=
+
+#+DOWNLOADED: screenshot @ 2021-08-01 16:08:50
+[[file:images/Tutorial_1/2021-08-01_16-08-50_screenshot.png]]
+
+*** Object References
+**** Scenario 1
+- Scenario: Suppose we marshall an object graph containing multiple references
+  to the same object. What will happen?
+  - Going in we have two references to two different bob objects, but when we
+    deserialize we would have a reference to the same object
+
+#+DOWNLOADED: screenshot @ 2021-08-01 16:12:09
+[[file:images/Tutorial_1/2021-08-01_16-12-09_screenshot.png]]
+
+- The one of the left is the one that we want, but the one on the right is bad
+  (same reference)
+
+**** Scenario 2
+- Suppose we marshall an object graph containing cyclic references. What will
+  happen?
+  - Alice and Bob both have the same boss, the boss has boss of Alice and Bob,
+    et al.
+    - Cyclic dependency. You can't serialize this
+
+#+DOWNLOADED: screenshot @ 2021-08-01 16:17:06
+[[file:images/Tutorial_1/2021-08-01_16-17-06_screenshot.png]]
+
+- Throws stackoverflow exception
+
+**** Solutions
+- Solution: We can use the =@JsonIdentityInfo to specify an id property which
+  will be unique in a given object graph
+  - When an object is first marhsalled, it's complete state is written out
+  - If the same object is marshalled again, only its id is written out
+- Jackson can use these ids to reconstitute the exact object graph when
+  unmarshalling
+
+#+DOWNLOADED: screenshot @ 2021-08-01 16:19:09
+[[file:images/Tutorial_1/2021-08-01_16-19-09_screenshot.png]]
+
+- Property=id is how to uniquely identify, then they are different when
+  serialized, but it's the same object
+- When serializing manager, it will use the same id which is correct
+
+*** Polymorphism
+- Consider the following code
+
+#+DOWNLOADED: screenshot @ 2021-08-01 16:23:10
+[[file:images/Tutorial_1/2021-08-01_16-23-10_screenshot.png]]
+
+- You're losing your type data in the JSON structure so you don't know how to deserialize
+  - So to fix you need to include some sort of type information
+
+**** Solution
+- We can ensure that the /type/ information is marshalled along with the object
+  data itself
+  - This information can then be used to select the correct class during the
+    unmarshalling process
+- Two approaches
+  - Supply the Java class names using the =@JsonTypeInfo=
+  - Supply our own type names using =@JsonTypeInfo= and =@JsonSubTypes=
+
+
+#+DOWNLOADED: screenshot @ 2021-08-01 16:26:14
+[[file:images/Tutorial_1/2021-08-01_16-26-14_screenshot.png]]
+
+- Left is approach one and right is the second
+- Left provides easier to serialize but ugly JSON (not human readable)
+- Right provides slightly messier code but cleaner JSON
+
+** JAX-RS Integration: Server
+- Include =resteasy-jackson2-provider= as a dependency to enable Jackson and
+  integration with JAX-RS
+  - Explicitly adding the Jackson MessageBody Reader and MessageBodyWriteer
+    classes is neither required on the client nor the server
+  - Use @Produces / @Consumes annotations with the =application/json= MIME type
+
+#+DOWNLOADED: screenshot @ 2021-08-01 16:30:12
+[[file:images/Lecture_3/2021-08-01_16-30-12_screenshot.png]]
+
+** JAX-RS Integration: Client
+
+#+DOWNLOADED: screenshot @ 2021-08-01 16:31:47
+[[file:images/Lecture_3/2021-08-01_16-31-47_screenshot.png]]
+
+- Exactly then same as server, but use the same dependency version
+
+** Object Relational Mapping (ORM)
+- ORM is the automated persistence of objects in a OO application to the tables
+  in a SQL database
+
+#+DOWNLOADED: screenshot @ 2021-08-04 20:42:47
+[[file:images/Lecture_3/2021-08-04_20-42-47_screenshot.png]]
+
+- ORM technology is relatively mature, and is widely adopted by applications
+  that operate on domain models
+
+
+#+DOWNLOADED: screenshot @ 2021-08-04 20:43:28
+[[file:images/Lecture_3/2021-08-04_20-43-28_screenshot.png]]
+
+- We can take advantage of all the features of relational databases which makes
+  them excellent for data persistence and storage, while still being able to
+  maintain and OO domain model that fits well with the rest of our application
+
+** Java Persistence API (JPA)
+- JPA is an ORM specification that defines
+  - A facility for specifying the mapping of persistence classes to a database
+    schema
+  - An API for performing CRUD operations on persistent instances
+  - A language (JPQL) and API for specifying queries using classes and
+    properties of classes
+  - The behaviours of the persistence engine in performing dirty checking, lazy
+    association fetching, caching, etc
+
+#+DOWNLOADED: screenshot @ 2021-08-04 20:47:08
+[[file:images/Lecture_3/2021-08-04_20-47-08_screenshot.png]]
+
+- Similar annotation style to JAXRS
+- annotations are the relation between your models
+- Entity marks it an an entity in the table and the ID is the primary key
+- This is widely considered to be a cleaner approach than other previous frameworks
+- open specification
+- Hibernate is our JPA implementation
+
+** First JPA
+- =@GeneratedValue= is a generated value for the id
+  - If we do not supply a value for the ID then when we persist it then
+    Hibernate will automatically generate one for you
+- You don't have to mark everything, all fields will be automatically persisted
+- You have to mark your collections =@ElementCollection=
+  - Whenever the message is saved to the database
+    - The list of comments are tied completely to the Message, it cannot be shared
+    - A comment has the =Embedded= annotation so it must be tied to an entity
+      class
+- Persistent unit are a set of classes that can be persisted together in the
+  database. It's an XML file.
+- Only provide the top level class, not the embeddable
+
+** Transparency and automation
+- JPA aims to provide transparent and automated persistence
+  - *Transparency* provides for a separation of concerns between persistent
+    classes and the persistence mechanism
+  - *Automation* relieves developers of low level persistence details
+- Using JPA:
+  - Minimally, =@Entity= and =@Id= need to be used on a persistent class
+  - Persistent classes must provide a default constructor
+  - Collection attributes must be types to an interface, not an implementation
+  - Persistent object fields can be accessed directly or by accessor methods
+  - Where accessors are used, the persistent class must conform to Java bean
+    conventions
+  - Constructor needs to be package visible for JPA can access it
+  - If you don't want getter/setter methods to be used, but require them for
+    JPA, then you can make them protected
+
+** Benefits of using ORM and JPA
+- Productivity
+  - JPA allows developers to focus on business logic and be relieved of low
+    level data access concerns
+- Maintainability (modifiabiliity)
+  - Automated ORM reduces LOC, making a system easier to understand and easier
+    to change
+- Performance
+  - In general, JPA implementations apply performance optimisations; JPA
+    deployments can be configured where necessary to address performance issues
+- Vendor independence
+  - JPA is a specification that is implemented by many vendors
+  - Using an ORM promotes portability: it insulates application code from
+    particular RDBMS products
+
+* Lecture 4
+** Mapping Persistent classes
+
+#+DOWNLOADED: screenshot @ 2021-08-09 08:43:37
+[[file:images/Lecture_4/2021-08-09_08-43-37_screenshot.png]]
+
+- Go by colour mapping here above
+
+** Mapping Value Types
+*** Entity vs Value Types
+- Entity Types
+  - An entity has a *database identity*, allowing the entity to be queried
+  - An entity instance has its own lifecycles; entity instances can exist
+    independently (Address lives independently of users
+  - A reference to an entity object is persisted as a foreign key constrained
+    value
+
+#+DOWNLOADED: screenshot @ 2021-08-09 08:46:11
+[[file:images/Lecture_4/2021-08-09_08-46-11_screenshot.png]]
+
+- Value Types
+  - A value type instance forms part of some other object, composed by, cannot
+    by shared. Even though they might be the same state address is two different
+    instances
+  - The lifespan of a value-type instance is dictated by its owning object
+  - Value-type instances shouldn't be shared
+- Represent as a user and address table, and a user column with address id
+
+#+DOWNLOADED: screenshot @ 2021-08-09 08:48:58
+[[file:images/Lecture_4/2021-08-09_08-48-58_screenshot.png]]
+- User table, and all columns required to make up the address in the same table
+  (kinda merged)
+
+*** Mapping Entities and Value Types
+
+#+DOWNLOADED: screenshot @ 2021-08-09 08:54:10
+[[file:images/Lecture_4/2021-08-09_08-54-10_screenshot.png]]
+
+- Entity classes must be annotated with =@Entity=
+- Entity classes must have a database identity field, annotated with =@Id=. To
+  have the database generate and assign the value for this field, use =@GeneratedValue=
+- Because the =@Id= annotation is used on a field JPA accesses fields directly
+  (without needing to invoke accessor methods)
+- Property-based access can also be specified requiring use of a get/set pair
+  of methods for each property. JPA will then use these methods instead of
+  accessing fields directly
+- Specify a value-type using the =@Embeddable= annotation
+- We are using =Long= as a datatype because this is double the size (more range)
+
+** What Should be an Entity or Value type in your System?
+- Bid can't exist without an Item
+- An item class with a list of bids
+  - Each bid would have a bidder
+  - Item class would have a user field representing the seller
+- Database
+  - User table with its fields and the address fields
+  - Item table with its fields as well as a seller ID
+  - Each item needs a list of bids
+  - Each Bid would have an item ID and a bidder ID (as a user ID)
+- Object structure
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:05:29
+[[file:images/Lecture_4/2021-08-09_09-05-29_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:03:40
+[[file:images/Lecture_4/2021-08-09_09-03-40_screenshot.png]]
+
+** Alternative Design
+- Store a list of bids that a user has made in the User class
+- Bid needs to be referred to by both Item and User
+  - Thus bid becomes an entity type with its own ID field
+  - User can then add a bid field
+
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:05:37
+[[file:images/Lecture_4/2021-08-09_09-05-37_screenshot.png]]
+
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:05:47
+[[file:images/Lecture_4/2021-08-09_09-05-47_screenshot.png]]
+
+** Type Mapping
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:07:56
+[[file:images/Lecture_4/2021-08-09_09-07-56_screenshot.png]]
+
+- Fields mapped to Columns
+- Each embeddable field are mapped to columns in the Owner table (look inside
+  the embeddable type and copy out everything)
+- Transient fields are ignored and not mapped
+- Enumerated fields: The field is mapped to a column whose value is the
+  property's ordinal value (0, 1,2,3,4)
+- An enum type marked with the @Enumerated thing is then converted to the
+  string value of that type.
+  - Know the difference between the above two!
+- Java dates are temporal (pick one of that algebra). This still works fine but
+  now you don't need this!
+
+** Mapping Collections
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:14:29
+[[file:images/Lecture_4/2021-08-09_09-14-29_screenshot.png]]
+
+- We have not yet dealt with collections
+- What would be generated from the above would be this
+  - Remember that you can't store a set in a single cell, has to be a single
+    value
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:15:52
+[[file:images/Lecture_4/2021-08-09_09-15-52_screenshot.png]]
+
+- Note that if it has multiple images then it will have multiple key values (see
+  two 1 values above)
+- The key is a combination of the item id and image name, thus these have to be
+  different for every image name for the same item
+- Mapping a collection enables
+  - Execution of a SQL select statement to load the collection when it is
+    accessed
+  - Cascading persistence: When an Item is saved, its image names are
+    automatically saved
+  - Lifecycle dependencies: when an Item is deleted, so too are its image names
+
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:19:46
+[[file:images/Lecture_4/2021-08-09_09-19-46_screenshot.png]]
+
+** Mapping a Set
+- You need an annotation =@ElementCollection=
+  - Optionally you can change all the field names if you would like using
+    =@CollectionTable= which lets you define the name of the table, the join
+    columns (foreign key column) and the column name as well using =@Column=
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:22:00
+[[file:images/Lecture_4/2021-08-09_09-22-00_screenshot.png]]
+
+** Collection Interfaces
+- Collections should be typed to an interface
+- The interface determines the collection's mapping to a database
+- JPA expects a suitable implementation, and may wrap it with an implementation
+  to handle dirty checking and lazy loading
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:23:11
+[[file:images/Lecture_4/2021-08-09_09-23-11_screenshot.png]]
+
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:23:19
+[[file:images/Lecture_4/2021-08-09_09-23-19_screenshot.png]]
+
+- Use the interface, not the actually collection type, this is just so that JPA
+  knows what to do with the type, if it's a set it can see how to handle it for
+  example
+** Collections of Value Types
+- Remember when you are trying to make something a Set (ie: no duplicates), you
+  *NEED* to be implementing your =equals= and =hashCode= overrides because this
+  is what Set works off to ensure uniqueness
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:28:04
+[[file:images/Lecture_4/2021-08-09_09-28-04_screenshot.png]]
+
+** Entity Associations
+*** Fully dependent lifecycle
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:34:02
+[[file:images/Lecture_4/2021-08-09_09-34-02_screenshot.png]]
+
+- Part components (Images) are fully dependent on their own entities (Items)
+- Components are saved, updated and removed with their owning entities
+- Collections of components are appropriate for dependent lifecycles
+
+*** Independent lifecycle
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:36:58
+[[file:images/Lecture_4/2021-08-09_09-36-58_screenshot.png]]
+
+- Two entities are related, but they don't have a dependent lifecycle
+- One instance can be saved, updated or removed independently of the other
+- More fine-grained control is required to model entity associations
+
+*** Many-to-one Unidirectional Association
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:41:26
+[[file:images/Lecture_4/2021-08-09_09-41-26_screenshot.png]]
+
+*** Making the Association Bidirectional
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:43:01
+[[file:images/Lecture_4/2021-08-09_09-43-01_screenshot.png]]
+
+** Cascading State
+- If you do something (EG: save an item) should it then save all the bids it's
+  associated with?
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:48:58
+[[file:images/Lecture_4/2021-08-09_09-48-58_screenshot.png]]
+
+- If you don't have persist you would have to save those bids manually, but if
+  you make it persist then you add the items then you just would need to save
+  the item itself in order to save the bids (done in the commit im pretty sure)
+- This is called transitive persistence
+- Can care about domain model more than persistence issues
+
+*** Cascading Deletion
+- Makes no sense to delete and item and then have a bunch of bids lying around
+  with no item associated with it
+- Thus you should also delete the bids (cascade)
+
+  #+DOWNLOADED: screenshot @ 2021-08-09 09:51:58
+  [[file:images/Lecture_4/2021-08-09_09-51-58_screenshot.png]]
+- Top left would be what you would have to do before a cascade deletion
+- Then we cascade delete some stuff on the top right
+  - Right isn't any more efficient, it's just more terse. It's still loading all
+    the bids into memory and then deleting them
+
+*** Orphan removal
+- Stronger form of removal
+
+#+DOWNLOADED: screenshot @ 2021-08-09 09:54:36
+[[file:images/Lecture_4/2021-08-09_09-54-36_screenshot.png]]
+*** TODO Put the rest of the transitive problem here
+** Mapping Inheritance
+- Inheritance is such a visible structural mismatch between the OO and
+  relational worlds
+  - The OO model supports both /has-a/ and /is-a/ relationships
+  - The relational paradigm offers only /has-a/
+- There are several strategies for mapping an inheritance hierarchy to a
+  relational schema
+  - The best strategy to use is dependent on application characteristics; each
+    strategy has involves trade-offs
+  - The simplest strategy is /table per concrete class/
+
+** Table per Concrete Class
+- Construct the database schema
+- How well does the schema support polymorphic queries?
+  - =select db from BillingDetails bd=
+- How do yo model a polymorphic association?
+  - Class User has a many-to-one association with BillingDetails
+- What are the limitations of this strategy?
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:11:16
+[[file:images/Lecture_4/2021-08-09_12-11-16_screenshot.png]]
+- BillingDetails is abstract
+- The database would have a CreditCard table with all of its own fields and the
+  BillingDetails fields
+- Similar for BankAccount
+
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:12:45
+[[file:images/Lecture_4/2021-08-09_12-12-45_screenshot.png]]
+- By default, superclass properties are ignored, so =@MappedClass= is necessary
+  for the owner property to be mapped for subclasses
+- If you just put the foreground stuff then you're just going to get those
+  details and none of the superclass properties
+
+*** Better way of doing this: Table per Concrete class with Unions
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:15:48
+[[file:images/Lecture_4/2021-08-09_12-15-48_screenshot.png]]
+
+- Instead of using a mapped class your BillingDetails not how that id inside it
+  - Your now using the inheritance annotation using the table per class strategy
+  - Now this will work fine because of the above annotation
+
+** Table per Class Hierarchy
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:18:17
+[[file:images/Lecture_4/2021-08-09_12-18-17_screenshot.png]]
+
+- Single table to store all the instances from the entire type hierarchy, this
+  will have all the columns from CreditCard, BillingDetails and BankAccount
+- In order for JPA to determine what row links to what type we have an extra
+  annotation called =DiscriminatorColumn= which you put in the superclass, so
+  whatever =DiscriminatorValue= you give the the child classes then it
+  represents that type in the table
+  - If you have a CreditCard then all the bank account stuff is null and vice
+    versa
+- This is actually a pretty good strategy because of its simplicity and
+  performance
+  - One database table and easier to write SQL by hand
+  - More performant because there are no joins
+- Drawback is that it's not in 3NF because there is a dependency on a non
+  primary key (DTYPE is depended on)
+- You cannot enforce =nullable = false= because that defeats the point
+
+** Table per Class with Joins
+- With this strategy, the table of a concrete =@Entity= contains
+  - Columns for each *non-inherited* property, declared by the subclass itself
+  - A primary key that is also a foreign key linking to the superclass table
+  - Doesn't need the discriminator column/value stuff
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:24:35
+[[file:images/Lecture_4/2021-08-09_12-24-35_screenshot.png]]
+
+- See the =@Inheritance= tag strategy
+- Each of the children classes have a foreign key =ID= for the BillingDetails
+  primary key
+- This normalizes the database schema, so there's no need for any null values
+- Less performant because you need to join the tables so there's more work
+  required to do queries
+
+** Polymorphic Queries
+*** Strategy 1
+- Table per concrete class
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:29:18
+[[file:images/Lecture_4/2021-08-09_12-29-18_screenshot.png]]
+
+- Translates to two sql statements which then are smashed together
+
+*** Strategy 2
+- Table per concrete class with unions
+- the table is the same as in strategy 1 remember that
+- however the sql that we generate is nullable so it looks different
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:31:32
+[[file:images/Lecture_4/2021-08-09_12-31-32_screenshot.png]]
+
+- runs as one big SQL statement
+- generates CLAZZ which is used in the merged table
+- Likely to perform better than strategy run (one slightly larger query is
+  faster than multiple small ones that generate result sets)
+
+*** Strategy 3
+- Table per class hierarchy
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:32:49
+[[file:images/Lecture_4/2021-08-09_12-32-49_screenshot.png]]
+
+*** Strategy 4
+- Table per class with joins
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:33:26
+[[file:images/Lecture_4/2021-08-09_12-33-26_screenshot.png]]
+
+- Does an outerjoin (left)
+- The result of this is the same kind of table that we saw as an output in
+  strategy 3
+- If you don't need all the details from all the child classes then you don't
+  need to do a full outer join and can do an inner join instead
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:34:57
+[[file:images/Lecture_4/2021-08-09_12-34-57_screenshot.png]]
+
+- Only joins what it needs
+
+** Polymorphic Associations
+*** Strategy 1
+- Table per concrete class
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:36:41
+[[file:images/Lecture_4/2021-08-09_12-36-41_screenshot.png]]
+
+- EG: spouses share a bank account
+- you can't have BillingDetails_id as a key to two different values
+- Doesn't support polymorphic associations
+
+*** Strategy 2
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:37:37
+[[file:images/Lecture_4/2021-08-09_12-37-37_screenshot.png]]
+
+- BillingDetails_ID isn't set up as a proper foreign key
+- Primary key values within CreditCard and BankAccount must be globally unique
+  (for ID) otherwise a BillingDetails_ID could refer to both a row in creditcard
+  and a row in bankaccount which we wouldn't want
+
+*** Strategy 3 and 4
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:40:42
+[[file:images/Lecture_4/2021-08-09_12-40-42_screenshot.png]]
+
+- Strategy 3
+  - Easy for the user to have a primary key that refers to the billing details
+    table
+- Strategy 4
+  - User table has key and all subclasses have that as a foreign key
+
+** TODO Go over the example again in your own time, was a good exercise
+** Summary
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:48:50
+[[file:images/Lecture_4/2021-08-09_12-48-50_screenshot.png]]
+
+** Lazy Loading
+- We can setup classes to be loaded from disk lazily, which means instead of
+  being loaded all at once they are only loaded when they are required (on
+  demand)
+- You could set this up if you hardly access a users details for example
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:50:13
+[[file:images/Lecture_4/2021-08-09_12-50-13_screenshot.png]]
+
+- Laziness means that you don't know the type, because this would mean that you
+  would have to go to disk for this.
+  - We use a proxy type to represent to this
+- When we invoke the proxy (eg call pay), this is when JPA goes to the database,
+  loads the object, create the object and type it and perform the operation
+  - The proxy in this case would FORWARD the call to the actual type (CreditCard)
+- What if we have one of these proxies and want to call a subclass method? We
+  don't have the type information and thus we can't call the subclass method
+  that we would like
+  - We need to explicitly create a creditCard proxy 
+
+#+DOWNLOADED: screenshot @ 2021-08-09 12:54:02
+[[file:images/Lecture_4/2021-08-09_12-54-02_screenshot.png]]
+
+- Create the proxy manually using the CreditCard.class, meaning that you can
+  create the creditcard specific method. This is still lazy so it's all good!
+- This is an example where transparency can't be fully supported
+  
+* Lecture 5
+** Fetch plans
+- JPA supports two fundamental techniques for loading data
+  - Lazy loading
+    - A domain-model object graph is loaded in small parts, as the graph is
+      navigated
+    - Lazy loading can be bad because it can put heavy load on the database when
+      you need to fetch a bunch
+  - Eager fetching
+    - A domain-model object graph is loaded by minimising the number of database
+      requests
+    - Basically loads everything at once, needs a complex sql request
+
+#+DOWNLOADED: screenshot @ 2021-08-11 15:07:59
+[[file:images/Lecture_5/2021-08-11_15-07-59_screenshot.png]]
+
+** Loading Associations
+
+#+DOWNLOADED: screenshot @ 2021-08-11 15:09:08
+[[file:images/Lecture_5/2021-08-11_15-09-08_screenshot.png]]
+
+- Each item belongs to one user, a user can have many items
+- The default is the eager fetching
+- 1. The persistance context, it's an area in memory where objects loaded in the
+  database are stored
+- 2. run a tx to find an item from the database
+- 3. close the persistent context
+- 4 - 5. So these lines depend on whether or not you lazy/eager fetched. If you
+  eager fetched then the seller would be loaded with the item, but instead if
+  you lazy loaded you would have a proxy, the proxy object does have the id of
+  the object but it doesn't have the username which is in the database but it
+  hasn't been loaded. (you would get the lazyinitialisationexception)
+
+** Entity Proxies
+
+#+DOWNLOADED: screenshot @ 2021-08-11 15:09:23
+[[file:images/Lecture_5/2021-08-11_15-09-23_screenshot.png]]
+
+- Proxy is something that is generated at runtime and has the same interface as
+  the class that it's proxying but it only has the id (defined in the database)
+  loaded
+- Above in the circle is the proxy which forwards the calls to the actual object
+
+#+DOWNLOADED: screenshot @ 2021-08-11 15:09:32
+[[file:images/Lecture_5/2021-08-11_15-09-32_screenshot.png]]
+
+-entity manager get reference creates a proxy to those item and user, but it
+doesn't actually read it in when creating the bid to the database
+ 
+** Lazy Persistent Collections
+- Persistent collections that are mapped with =@ElementCollection=, =@OneToMany=
+  and =@ManyToOne= are, by default, lazily loaded
+
+#+DOWNLOADED: screenshot @ 2021-08-11 15:10:26
+[[file:images/Lecture_5/2021-08-11_15-10-26_screenshot.png]]
+
+- Many to one fetched eagerly, but all other cases are fetched lazily by
+  default.
+- Persistence util you can check if the stuff is loaded from a lazy collection
+- It's not a hashset when you load it, it's a proxy for a collection
+
+#+DOWNLOADED: screenshot @ 2021-08-11 15:10:35
+[[file:images/Lecture_5/2021-08-11_15-10-35_screenshot.png]]
+
+** Eager Fetching
+
+#+DOWNLOADED: screenshot @ 2021-08-11 15:10:48
+[[file:images/Lecture_5/2021-08-11_15-10-48_screenshot.png]]
+
+- you can set the fetch type to change to default or lazy, many to one is eager
+  by default
+- So you can do what you like with the data even after the persistance context
+  is closed
+
+** Eager Fetching & Lazy Loading
+
+#+DOWNLOADED: screenshot @ 2021-08-11 15:11:05
+[[file:images/Lecture_5/2021-08-11_15-11-05_screenshot.png]]
+
+- This is what happens for the above slide, the images are lazy loaded but the
+  rest of the structure is eager loaded. Because the persistance manager is
+  killed at 3 it means that if you try to do anything with the images collection
+  proxy object at step 4 that means that you're going to get an exception
+
+** Fetch Strategies
+- A fetch plan should generally use lazy loading for associations and
+  collections
+- The goal is to minimise the number of SQL requests and to simplify them
+
+#+DOWNLOADED: screenshot @ 2021-08-11 15:12:05
+[[file:images/Lecture_5/2021-08-11_15-12-05_screenshot.png]]
+
+- Loading too many small pieces of data will impact performance but doing too
+  many joins is also bad for memory. Eager fetching can cause results and that
+  means that you're going to run into memory problems
+
+*** The n+1 Selects Problem
+
+#+DOWNLOADED: screenshot @ 2021-08-11 15:14:26
+[[file:images/Lecture_5/2021-08-11_15-14-26_screenshot.png]]
+
+- All users are loaded lazily (assume)
+- When you do the assert loop then you're triggering the entity manager to load
+  from the database for the users
+  - One sql query to load all the items, and then one sql query EACH to load
+    each user THIS IS VERY INEFFICIENT which impacts performance, so one sql for
+    loading items, then 100 if there are 100 users for looping over, making a
+    total of 101 queries
+- Lazily loading data in this way is very inefficient and will negatively impact
+  performance
+- Where a use case dictates that, eg. for all Items their bids must be accessed,
+  eager fetching appears to be a better solution..., but this can lead to the
+  Cartesian product problem
+
+*** The Cartesian Product Problem
+
+#+DOWNLOADED: screenshot @ 2021-08-11 15:15:42
+[[file:images/Lecture_5/2021-08-11_15-15-42_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-08-24 11:38:28
+[[file:images/Lecture_5/2021-08-24_11-38-28_screenshot.png]]
+
+- So let's say that there are 3 bids for this item and the item has 3
+  images. This means that there are 9 rows in the resulting table. The
+  highlighted table is the only data that is needed/unique data. That means that
+  the rest of the rows are wasted. Liberal use of eager fetching can ruin the
+  performance of your application
+
+** Optimizations
+- The Hibernate JPA provider offers strategies for addressing the n+1 selects
+  and Cartesian product problems. This doesn't apply to JPA, just hibernate
+- n + 1 selects
+  - Collections can be pre-fetched using SQL sub-select statements. This allows
+    many collections to be loaded with a single round trip to the database
+  - So instead of doing the n loading sql statements, you can set up a statement
+    which says, "whenever one of those bids has these information loaded you
+    should load every other bids information" using a single query
+- Cartesian product
+  - Hibernate can eagerly load data using additional SQL select statements
+    instead of join operations which saves the need for Cartesian products
+
+*** Collection pre-fetching using sub-selects
+
+#+DOWNLOADED: screenshot @ 2021-08-24 11:48:28
+[[file:images/Lecture_5/2021-08-24_11-48-28_screenshot.png]]
+
+- It's remembered this query to get all the items, so it uses the subselect that
+  fetches all of the items in a single sql query. So you're only going to ever
+  need 2 queries
+
+*** Using additional selects instead of joins
+
+- We want to avoid the Cartesian product of the massive table that is only
+  fetched once, what we can do instead is that we can annotate the fields with a
+  fetchmode select which then says that these should be fetched using separate
+  subselect statements which saves us from having to join all those tables and
+  waste all of those rows
+
+#+DOWNLOADED: screenshot @ 2021-08-24 11:51:13
+[[file:images/Lecture_5/2021-08-24_11-51-13_screenshot.png]]
+
+- 3 queries, hibernate will combine these result sets as needed instead of just
+  creating one big table
+
+** Dynamic eager fetching
+
+#+DOWNLOADED: screenshot @ 2021-08-24 11:52:44
+[[file:images/Lecture_5/2021-08-24_11-52-44_screenshot.png]]
+
+- So by default it's just doing lazy loading and then if you want to do eager
+  then you can just manually form your own jpql statement to fetch it which is
+  eager
+
+** An overview of JPQL
+- A JPQL query is developed in 3 steps:
+  - Creation: A query is expressed in terms of selection [from], restriction
+    [where] and projection [select] elements
+  - Preparation: Query parameters are bound to values
+  - Execution: The query is executed against the database and retrieves data
+- In JPQL, queries are expressed in terms of entity classes and property (field)
+  names
+- JPQL queries are created by the Entity Manager
+
+#+DOWNLOADED: screenshot @ 2021-08-24 12:24:19
+[[file:images/Lecture_5/2021-08-24_12-24-18_screenshot.png]]
+
+- Select o from Object o
+  - Means that you can select all items in the database, it's a polymorphic
+    query
+- where i.id = :id
+  - Will be replaced by the set parameter
+
+*** Query Preparation and Execution
+
+#+DOWNLOADED: screenshot @ 2021-08-24 12:28:11
+[[file:images/Lecture_5/2021-08-24_12-28-11_screenshot.png]]
+
+- where b.item = :item
+  - b.item is short for saying "b.item.id" which always us to nicely supply the
+    whole item in the query instead of just the id
+    - You can also provide typed queries which assert the return type on your
+      queries which removes the need for the casting on the left
+
+*** Query restriction
+
+#+DOWNLOADED: screenshot @ 2021-08-24 12:32:53
+[[file:images/Lecture_5/2021-08-24_12-32-53_screenshot.png]]
+
+- Just some examples of query restriction, where they must follow the predicate
+  in order to be able to be a row in the resulting column
+- is not empty, if the item set is not empty then return it
+- member of if the item that you're parameterising is in the category then you
+  should return this category
+
+#+DOWNLOADED: screenshot @ 2021-08-24 12:36:08
+[[file:images/Lecture_5/2021-08-24_12-36-08_screenshot.png]]
+
+*** Query projection
+- Specifying what data to return in the result set
+- The query here results in the Cartesian product for item and bid (ie the
+  result set given back would be every possible item and bid)
+
+#+DOWNLOADED: screenshot @ 2021-08-24 12:38:07
+[[file:images/Lecture_5/2021-08-24_12-38-07_screenshot.png]]
+
+*** Implicit Association Joins
+- Three ways of expressing joins, this is one of them
+- =b.item.name= this is an implicit join, where the bid has been joined on the
+  item table, JPA will do this join behind the scenes in order to bet the item
+  names that the particular bid is bid on
+  - It will join on the ITEM_ID foreign key, this is an example of an implicit
+    inner join
+
+
+#+DOWNLOADED: screenshot @ 2021-08-24 12:45:37
+[[file:images/Lecture_5/2021-08-24_12-45-37_screenshot.png]]
+
+*** Explicit joins for restriction
+- We are going to use the same table structure but now an item has a reference
+  back to bids (item will have a set of bids)
+- We are explicitly saying that we are using a join in our query so that we are explicit
+
+#+DOWNLOADED: screenshot @ 2021-08-24 12:48:27
+[[file:images/Lecture_5/2021-08-24_12-48-27_screenshot.png]]
+
+*** Explicit joins for inclusion
+
+#+DOWNLOADED: screenshot @ 2021-08-24 12:54:58
+[[file:images/Lecture_5/2021-08-24_12-54-58_screenshot.png]]
+
+
+#+DOWNLOADED: screenshot @ 2021-08-24 12:56:36
+[[file:images/Lecture_5/2021-08-24_12-56-36_screenshot.png]]
+
+*** Explicit joins with eager fetching
+- Let's say that when we get an item that bids are lazy loaded, but now we want
+  bids to bit loaded with items
+
+#+DOWNLOADED: screenshot @ 2021-08-24 12:58:48
+[[file:images/Lecture_5/2021-08-24_12-58-48_screenshot.png]]
+
+- Note that JPA is keeping the duplicate row here
+
+** Transaction Essentials
+
+- Banking service, two operations
+  - Transfer from one account to another
+  - Or see the balance of an account
+- Transactions are used so that we can process across several threads incoming
+  client requests
+- Why transactions are important: image here. Client1 withdraws (in order to
+  transfer) then client 2 comes along and wants to get account balances. Lack of
+  isolation causes the second transaction to be affected (wrong result)
+
+#+DOWNLOADED: screenshot @ 2021-08-24 13:57:58
+[[file:images/Lecture_5/2021-08-24_13-57-58_screenshot.png]]
+
+** ACID attributes
+- Atomicity
+  - All operations in a transaction execute as an atomic unit (ie they either
+    all happen or non of them happen)
+- Consistency
+  - Concurrently executing transactions do not compromise the data they operate
+    on
+- Isolation
+  - The effects of concurrently executing incomplete transactions shouldn't be
+    visible
+- Durability
+  - Changes made by a transaction should be durable, even if the system fails
+    after the transaction has completed successfully
+
+** Programming transactions with JPA
+- We do all our edits on the database within a transaction
+- If we transaction will fail somewhere in the middle of the
+  transaction you can all =setRollbackOnly= which will rollback the current
+  transaction to the previous state
+
+** Database-level concurrency control
+- We want to isolate transactions from each other
+- If we don't want to serialize the transactions (because that's just slow)
+- We want transactions to be occurring at the same time in the name of speed
+  
+*** Lost update
+- Transaction A updates data D1; transaction B does likewise. Transaction A
+  commits and then transaction B aborts
+- B's abortion returns D1 to its state when B started, undoing A's update
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:06:14
+[[file:images/Lecture_5/2021-08-24_14-06-14_screenshot.png]]
+
+*** Dirty read
+- Transaction A updates data D1; transaction B reads the updated (and
+  uncommitted) value for D1. Transaction A aborts while B commits
+- B may have acted incorrectly based on the state of D1 that it read
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:09:52
+[[file:images/Lecture_5/2021-08-24_14-09-52_screenshot.png]]
+
+*** Unrepeatable read
+- Transaction A reads data item D1 and sees a different value each time. Between
+  the reads, transaction B has committed a write to D1
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:11:42
+[[file:images/Lecture_5/2021-08-24_14-11-42_screenshot.png]]
+
+*** Last commit wins
+- Transaction A and B each read data item D1 and then go on to write to D1
+- The last transaction (B) to commit its write wins, overwriting the earlier
+  transaction's write
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:13:07
+[[file:images/Lecture_5/2021-08-24_14-13-07_screenshot.png]]
+
+- A will now believe that their version of D1 is in the database but this isn't true!
+
+*** Phantom Read
+- A phantom read occurs where a transaction (A) executes a query twice, and the
+  second result includes data that wasn't visible in the first result
+- A concurrently executing transaction (B) inserts data between the other
+  transaction's queries
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:19:19
+[[file:images/Lecture_5/2021-08-24_14-19-19_screenshot.png]]
+
+** Isolation levels
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:19:58
+[[file:images/Lecture_5/2021-08-24_14-19-58_screenshot.png]]
+
+** The persistence context
+- JPA's persistence context manages persistent objects; the context:
+  - Servers as a cache that enforces repeatable read semantics
+  - Performs dirty checking of objects the syncs them with the database
+  - Provides a guaranteed scope of object identity
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:25:05
+[[file:images/Lecture_5/2021-08-24_14-25-05_screenshot.png]]
+
+- Also makes sure that a single objects is only every associated with a single
+  row
+
+** Optimistic concurrency control (OCC)
+- Optimistic concurrency control involves working on a local copy of data and
+  then updating the database
+- OCC uses version numbers for data
+  - Whenever an entity is updated, its version number is incremented
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:28:14
+[[file:images/Lecture_5/2021-08-24_14-28-14_screenshot.png]]
+
+- New annotation, adds a version number to the table
+
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:47:07
+[[file:images/Lecture_5/2021-08-24_14-47-07_screenshot.png]]
+
+- Transaction only successful if the database it hasn't been modified by other
+transaction during the runtime of the commit
+- So here the VERSION number must be the same in order of this to commit
+  successfully
+
+** Last Commit Wins -> First Commit Wins
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:48:12
+[[file:images/Lecture_5/2021-08-24_14-48-12_screenshot.png]]
+
+- Version number on that item has already changed and thus it cannot succeed for
+  Tx B, and thus Tx B is aborted
+- A knows its transaction worked, and B knows that its transaction didn't work,
+  they can book different seats
+  
+** A repeatable read problem
+- Assume a many-to-one relationship between Item and Category
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:50:05
+[[file:images/Lecture_5/2021-08-24_14-50-05_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:50:40
+[[file:images/Lecture_5/2021-08-24_14-50-40_screenshot.png]]
+
+- Item 2 was moved during the transaction by another transaction and thus was
+  counted twice in the sum total
+- Calculating the sum of all items across several categories requires that the
+  "get items in each category" is a repeatable read
+
+*** Forced version checking
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:54:32
+[[file:images/Lecture_5/2021-08-24_14-54-32_screenshot.png]]
+
+- Persistence context now knows that at commit time, have any updates been made
+  to all of the item objects in that query. Because the item has a reference to
+  the category and that changes then the item version changes
+
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:56:38
+[[file:images/Lecture_5/2021-08-24_14-56-38_screenshot.png]]
+
+** An "invisible conflict" problem
+- Assumptions
+  - Two transactions are bidding on a common Item
+  - The Item currently has 1 bid of $12
+  - Item and Bid are entities related by a many-to-one unidirectional
+    relationship
+  - A Bid has a timestamp; the most recent bid should be the winning bid
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:57:59
+[[file:images/Lecture_5/2021-08-24_14-57-59_screenshot.png]]
+
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:58:57
+[[file:images/Lecture_5/2021-08-24_14-58-57_screenshot.png]]
+
+- Both A and B sees that it's OK to go ahead with that transaction at the time,
+  both of those rows have been added to the database, but A has a lower bid than
+  B but A has a higher timestamp
+- Nothing in the Item is ever modified so the versioning numbers don't help here
+
+#+DOWNLOADED: screenshot @ 2021-08-24 14:59:18
+[[file:images/Lecture_5/2021-08-24_14-59-18_screenshot.png]]
+
+*** Forced version increment
+
+#+DOWNLOADED: screenshot @ 2021-08-24 15:01:04
+[[file:images/Lecture_5/2021-08-24_15-01-04_screenshot.png]]
+
+- So when it commits it FORCES a version number increment so that the previous
+  problem is no longer a problem
+- With this new tech on the previous example
+
+
+#+DOWNLOADED: screenshot @ 2021-08-24 15:02:49
+[[file:images/Lecture_5/2021-08-24_15-02-49_screenshot.png]]
+
+- Tx B forced a version increment on it's bid
+
+* Lecture 6
+** Communication Patterns
+*** Synchronous communication
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:02:51
+[[file:images/Lecture_6/2021-08-26_10-02-51_screenshot.png]]
+
+- Client communicate synchronously with the server over a request reply protocol
+- Clients block while waiting for a reply
+
+*** Publish/ Subscribe Communication
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:03:25
+[[file:images/Lecture_6/2021-08-26_10-03-25_screenshot.png]]
+
+- Clients  communicate with servers asynchronously using message based protocols
+- Having sent a message, senders do not block
+- Once subscribed, a client receives updates (publish messages) from the server
+
+** Pub/Sub communication
+- Common example of this is the push notification services
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:06:26
+[[file:images/Lecture_6/2021-08-26_10-06-26_screenshot.png]]
+
+** Uses cases for async communication
+- Chat service, when any chat client pushes a message then the server publishes
+  that message
+- Server side push services
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:07:32
+[[file:images/Lecture_6/2021-08-26_10-07-32_screenshot.png]]
+
+- Services with long running tasks or priority scheduling, in the mean time the
+  client may want to do something in the mean time while the request is ongoing
+
+** Server side push
+- HTTP requests tend to have short processing durations
+- HTTP servers generally implement a thread-per-request model
+  - An incoming request is serviced by a thread taken from the server's
+    threadpool, afterwards, the thread is returned to the pool
+  - Each incoming request is small thus is fast processing
+  - A few hundred threads can service a few thousand clients (good scalability)
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:09:08
+[[file:images/Lecture_6/2021-08-26_10-09-08_screenshot.png]]
+
+- Server side push can be implemented over HTTP by the client making a "long
+  poll" request
+  - The client blocks until something happens on the server (eg a state change)
+    that allows the server to return a response
+  - The server maintains the connection with the client for the duration of the
+    request
+  - A single request is all that's required, but this doesn't scale because on
+    the server it takes a thread and HAS TO maintain a socket connection, this
+    isn't scalable 
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:10:25
+[[file:images/Lecture_6/2021-08-26_10-10-25_screenshot.png]]
+
+** Servlet 3 specification
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:14:48
+[[file:images/Lecture_6/2021-08-26_10-14-48_screenshot.png]]
+
+- Thread per request handles the request
+- While the clients conditions isn't satisfied it puts the request into the
+  blocked clients queue
+- When the server state changes then the blocked client is moved to the ready
+  clients queue
+- After this there are responser threads that takes items from the ready clients
+  buffer and return responses to the clients. These are dedicated threads that
+  are not associated with the TPR pool 
+
+** JAX-RS: AsyncResponse
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:23:29
+[[file:images/Lecture_6/2021-08-26_10-23-29_screenshot.png]]
+
+- So the doCalculation suspends itself afterwards and then the resume will be
+  handled by a responder thread
+
+** JAX-RS: AsyncInvoker & Invocation Callback
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:26:19
+[[file:images/Lecture_6/2021-08-26_10-26-19_screenshot.png]]
+
+- So because the HTTP protocol is blocking we need a way to do futures/promises
+- The client makes a post request using an ASyncInvoker, the callback is called
+  when it's done, when the response comes back then the completed/failed stuff
+  is called on a seperate thread
+
+** Alternative: User of Future<>
+- Rather than use InvocationCallback, we can instead obtain a Future object from
+  the asynchronous request
+- At some point in the future, we call the future's get() method to receive the
+  response (or exception)
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:29:59
+[[file:images/Lecture_6/2021-08-26_10-29-59_screenshot.png]]
+- Second param is a timeout, then the method throws a timeoutexception, while if
+  the exception of the request is thrown it will be different, otherwise the
+  correct thing will be returned
+
+** Websockets
+- Allows TCP-based full-duplex communication over HTTP ports
+- Provides a standardized way in which clients and servers can agree to
+  "upgrade" a particular HTTP connection to a full-duplex connection
+  - Clients send a HTTP GET request with special headers, indicating they wish
+    to switch to WebSocket communication
+  - If the server supports this and agrees, the server will send back an HTTP
+    response informing the client
+  - Then, the TCP connection will remain open for full-duplex communication
+    until one side chooses to close the connection
+
+** Establishing a WebSocket connection
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:47:48
+[[file:images/Lecture_6/2021-08-26_10-47-48_screenshot.png]]
+
+- Call them peers when the have entered websockets
+- 101 is the switching protocols response type
+
+** Sec-WebSocket-Key and Sec-WebSocket-Accept
+- Despite the "Sec" in the names, this does not provide any security
+- Intended as a "sanity check", to make sure we're connecting to actual server
+  which actually supports WebSockets
+  - *Sec-WebSocket-Key*: Random bytes, b64 encoded
+  - *Sec-WebSocket-Accept*:
+    - Concatenates the given key with a magic
+    - then sha1 of that
+    - Returns the result of that b64 encoded
+- Client can perform the same calculation to check that the given server
+  response wasn't cached or incorrect
+- Why would a client want to impersonate support for websockets? Maybe they can
+  impersonate another client using that key that has been intercepted
+
+
+#+DOWNLOADED: screenshot @ 2021-08-26 10:53:13
+[[file:images/Lecture_6/2021-08-26_10-53-13_screenshot.png]]
+
+** Exchanging Data
+- Once established, communication over a WebSocket connection is full-duplex -
+  Either party can send data at any time
+- Data is sent as frames. Frames can be either message frames or control frames
+  - Message frames: Contain the data exchanged by a particular application,e g:
+    Chat messages
+  - Control frames: dictate other operations, eg:
+    - Closing the connection
+    - Sending a ping (or replying w/ a pong)
+- Large messages can be split across multiple frames if required
+
+** Structure of a frame 
+
+#+DOWNLOADED: screenshot @ 2021-08-26 11:22:43
+[[file:images/Lecture_6/2021-08-26_11-22-43_screenshot.png]]
+
+** Ping/Pong
+- While a connection is ongoing, either peer may send a "ping" opcode (Ox9) to
+  the other
+  - The receiver must send a "pong" (Opcode 0xA) back in a timely fashion
+- The "ping" can contain any payload up to 125 bytes in length
+  - The pong should response with the same payload
+- This mechanism allows either peer to confirm that a connection is still
+  "alive" at any stage
+
+** Comparison with raw TCP sockets
+- TCP
+  - Deals with raw bytes
+  - Little to no overhead
+  - Requires seperate listeners server side
+  - Does not leverage HTTP traffic optimization
+  - Not supported by webbrowsers
+- Websockets
+  - Deals with messages
+  - Frames introduce protocol overhead
+  - Can establish through existing HTTP servers
+  - Leverage HTTP traffic optimization
+  - Natively supported in all modern browsers
+
+** Trade-offs with Asynchronous Web Services
+- Websockets
+  - Maintains an active connection at all times: can consume more resources
+  - No need to constantly re-establish connection
+  - Usually preferred in cases where data needs to be exchanged frequently and
+    bi-directionally between client and server
+- Async web services
+  - Conserve CPU by sleeping handler threads until response data is available
+  - Conserve network by only maintaining connections when data is expected
+  - Clients must re-establish connection every time new data is expected
+  - Usually preferred in cases where data exchange can be more sporadic;
+    real-time communication is not a priority
+
+** WebSockets in Java
+- Java includes an API for WebSocket client and server development JSR356
+- Like other APIs we have seen in this course (JAX-RS, JPA), JSR 356 is /not an
+  implementation/
+  - All modern servlet containers such as Jetty and Tomcat provide
+    implementations of the standard
+  - For client development, Tyrus (the reference implementation) is a good
+    choice
+
+#+DOWNLOADED: screenshot @ 2021-08-26 11:47:45
+[[file:images/Lecture_6/2021-08-26_11-47-45_screenshot.png]]
+
+- API dependency
+  - Don't need to import dependencies for the server-side implementation
+  - The servlet container will already have the implementation bundled with them
+- Client dependency
+  - Full implementation, for clients not being run on servlet containers
+
+** WebSocket Server
+
+- Server class
+#+DOWNLOADED: screenshot @ 2021-08-26 11:54:15
+[[file:images/Lecture_6/2021-08-26_11-54-15_screenshot.png]]
+
+- Client class
+
+#+DOWNLOADED: screenshot @ 2021-08-26 11:55:39
+[[file:images/Lecture_6/2021-08-26_11-55-39_screenshot.png]]
+
+** Creating a connection
+
+#+DOWNLOADED: screenshot @ 2021-08-26 11:56:08
+[[file:images/Lecture_6/2021-08-26_11-56-08_screenshot.png]]
+
+- Actually implementation means whatever is hosting your servlet
+- Session auto closed because it's defined in the try block
+
+** Sending and Receiving Data
+- Data sent between peers over WebSockets can be either binary or text data
+  - We can have our endpoints accept both kinds of data if we like, by having
+    two @OnMessage methods (one for each type of data)
+- JSR 356 provides support for marshalling/unmarhsalling between POJOs and
+  text/binary data, through the use of Encoders and Decoders
+  - To create an encoder class, we implement one of these four interfaces:
+
+#+DOWNLOADED: screenshot @ 2021-08-26 11:59:53
+[[file:images/Lecture_6/2021-08-26_11-59-53_screenshot.png]]
+
+- Similar interfaces to implement decoders
+
+** Encoder and Decoder examples
+
+#+DOWNLOADED: screenshot @ 2021-08-26 20:21:37
+[[file:images/Lecture_6/2021-08-26_20-21-37_screenshot.png]]
+
+- Jackson object mapper to write value as a string
+- EncodeException is the only sort of exception that we can throw in this method
+
+
+#+DOWNLOADED: screenshot @ 2021-08-26 20:23:24
+[[file:images/Lecture_6/2021-08-26_20-23-24_screenshot.png]]
+
+** Receiving data
+- Recieving data: @OnMessage- annotated methods in our endpoint implementations
+  - We can have *at most one* method to receive text, and at most one for binary
+    data
+
+#+DOWNLOADED: screenshot @ 2021-08-26 20:25:59
+[[file:images/Lecture_6/2021-08-26_20-25-59_screenshot.png]]
+
+** Sending data
+- To send data to the other peer, we need a reference to the Session instance
+  corresponding to that connection (obtained in the @OnOpen method). Then:
+
+
+#+DOWNLOADED: screenshot @ 2021-08-26 20:28:26
+[[file:images/Lecture_6/2021-08-26_20-28-26_screenshot.png]]
+
+** WebSocket client: Javascript
+
+#+DOWNLOADED: screenshot @ 2021-08-26 20:28:49
+[[file:images/Lecture_6/2021-08-26_20-28-49_screenshot.png]]
+
+- WS supported in all major browsers
+* Tutorial 1
+** Question 1: Given these characteristics, what are three possible outcomes when trying to send a message from one host to another?
+- While the two computers have set up a session the link fails
+  - Either the connection times out
+  - Or the links in between the clients reroute the traffic after detecting that
+    the route it broken
+- Data can be corrupted during transmission, either due to packet loss or
+  flipped bits
+  - The client can either reconstruct the message if a redundancy scheme is used
+    like CRC
+  - Or can ask the client to resend the message (or part of the message)
+- A host can fail
+  - In that case the connection is killed/timed out
+- The packet arrives fine
+- Could arrive out of order
+- Packets could be dropped
+** Question 2: Consider the following ideas where appropriate: Logs, times, Acknowledgements packets, Sequence numbers, Checksums, Buffers
+- Logs: Logging when you have sent a message
+- Timers: When a client sends a message the client starts a timer to see if the
+  packet has been dropped on the network, it it times out then you would resend
+  the message
+- Acknowledgement packet: Client receives a message and sends an ACK to let the
+  sender know that they have received it
+- Sequence numbers: Packet ordering
+- Checksums: Packet integrity
+- Buffers
+- When the network is buff you buffer a message to be sent. The rate that you're
+  receiving messages is typically higher than the rate that you're sending them
+  so you need buffer space
+** Question 3: Java Serialization
+*** What are the three Java classes/interfaces required to support serialization and how are they used?
+- =Serializable= (marker interface)
+- =ObjectOutputStream=
+- =ObjectInputStream=
+*** What is one advantage and one disadvantage of using Java serializatoin as a data interchange format? 
+- Difficult to tell what type of data you have, you must do a cast
+- Easy to implement, just have to implement a single interface without even
+  having to manually write any code
+- Version of the class matters (client and server needs the same)
+- Both ends of the channel need to be java based. It's not an interchange
+  format-
+** Question 4
+*** What role does a servlet container play in a java-based distributed system using HTTP as a communication protocol?
+- It receives HTTP requests and parses the path and input, creates the servlet
+  and runs the required things and returns the output. It's doing all of the
+  heavy lifting that the client doesn't have to do. Acts as a server
+- Manages the servlet lifecycle, lets you host your servlet
+- A servlet is a server that's able to recieve and send HTTP requests and
+  responses, while the servlet manager routes the requests and responses
+*** When entering a URL into a web browser, what kind of HTTP request will be sent to the server?
+- GET request
+** Question 5
+*** a) What is the role of WSDL in a SOAP based web service?
+ - Describes what a SOAP service does, the types that it accepts and the types
+   that it needs and how to convert types
+ - It is a XMl based language 
+*** b) In REST, which four HTTP methods correspond to the RUD operations Create, REtrieve, Update & Delete
+- Create: POST
+- Retrieve: GET
+- Update: PUT
+- Delete: DELETE
+*** c)  What are the five REST principles? Describe each one briefly 
+  - Addressable resources; Any resources in a REST based system can be addressed
+    by a URI
+  - Uniform constraint interface: REST relies on the HTTP interface itself, it
+    uses them as intended by the HTTP protocol
+  - Representation orientation: Client and service can AGREE on a (or several
+    types of 
+  - HATEOS: Might include links to other content
+*** d) Compare sockets vs SOAP vs REST for creating distributed application. For each one, give one example where that technology might be preferred over the alternatives
+- using only TCP/UDP is lightweight, speed. If CPU is at a premium like most
+  integrated systems ore
+- SOAP has a nice interface for discovering and consuming unknown services
+- REST: Uses HTTP as it's meant to be used, so it's able to get all the benefits
+  of the optimisations of HTTP
+* Tutorial 2
+
+- 1ai:
+  - It's a cyclic dependency so it's going to throw an exception (run out of
+    stack space, stackoverflowerror)
+  - The types of CreditCard is lost when serializing, so it's going to serialize
+    to the base type. If the base type is abstract class it would try
+    instantiate it which it obviously can't do
+- 1ai:
+  - You're going to have to look at the recording for this one
+- 1b:
+  - @JsonIdentityInfo(property="id")
+    - generator=ObjectIdGenerators.PropertyGenerator.class)
+  - put this above line 1
+- or
+- JsonTypeIgnore(use = JsonTypeInfo.Id>CLASS, property = "type")
+  - put this above line 14
+  - this is bad because ignoring a property doesn't help because it creates the
+    instance from json which will miss a field. Incomplete type
+- 2:
+  -POST
+  - authenticate: /user/{id}?="{password}"
+    - would return session key {key}
+  - create
+    - /users
+    - requiredpayload: new user name and password
+    - responsepayload: 201, Location header (points to new resource that you
+      ahve just created)
+  - GET
+    - getBooks /books?="key = {key}, "id = {id}, "
+      - returns a application/xml of list of books
+  - /user/{id}/onloan?="key={key}"
+
+- andrew' solution
+  - create users
+    - /users
+      - requiredpayload: new user name and password
+      - responsepayload: 201, Location header (points to new resource that you
+	ahve just created)
+      - if this username is taken send back 409 (conflict)
+  - login
+    - /users
+      - requiredpayload: new user name and password
+      - responses with cookie if valid otherwise error
+  - Query books
+    - GET /books
+      - request payload: Start index size (optional)
+      - Response payload 200, OK, list of books (each with id, title, author, onLoan
+  - Query on Loan
+    - GET /users/books
+      - request: Auth cookie
+      - Response: if authenticated: 200 OK, list of books on load, same
+        strucuture, previous and next url links as well
+	as /books above
+	- otherwise if not logged in then 401 forbidden
+  - Borrow books
+    - PUT/books/{id}/borrow
+      - request: book id as path, authentication cookie
+      - reponse: if not authenticated then 401 response
+	- elseif book not found: 404 response
+	- elseif book is already on load: 400? 409?
+	- else 201: no content
+* Tutorial 3?
+all done online
+* Tutorial 4
+** A
+- Long reply time for the query so that it doesn't have to wait
+- Or if you want pub/sub type thing
+- Server doesn't want to have to wait either, waste of resources. Just wants to
+  be able to suspend and them come back
+** C
+- Don't do a chat message service, as the client would have to do
+  resubscriptions to recieve each message
+

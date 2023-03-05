@@ -1,0 +1,134 @@
+#+TITLE: 752
+
+* Formal Specification and Design
+** Lecture 1
+*** Introduction
+- The Z specification lang (Z)
+- The B-Method: Abstract State Machines (B)
+- UML Object constraint Language (OCL)
+- Communicating Sequential Processes (CSP)
+- Two Assignments (w6 12)
+- Mid term (w7)
+- Exam (55%)
+*** Software Development
+- Problem description and requirement collection
+  - Eg: Functional, data requirements, etc
+- Product design
+  - Eg: architectural, Functional, database designs, etc
+- Construction (Implementation)
+  - Eg: Writing code, testing, debugging, maintenance, upgrade, etc
+
+#+DOWNLOADED: screenshot @ 2022-07-20 14:37:45
+[[file:images/Formal_Specification_and_Design/2022-07-20_14-37-45_screenshot.png]]
+
++ The process of development is not very automated. It's not an engineering process, it's a crafting process. If you can automatically generate a piece of code
++ If you look at any process of development (XP, Waterfall, etc) it's going to follow the image above. These processes collect the functional requirements which then are then interatively developed on.
++ If we are looking at the end product there could be errors introduced during that process; tests could help which are based off the design model. What if your design model is incorrect?
++ Formal methods: Ensuring the correctness of the design model
+*** Problems
+- Key issues in software development
+  - Complexity and correctness
+  - Resource and cost management
+  - Productivity and delays
+  - Maintenance and evolutions
+- Warrant and insurance on software products?
+- Research questions in software engineering
+  - How to increase the quality and reliability of software products?
+  - How to increase the efficiency in software development?
+  - How to decrease the cost of software development?
+*** Solutions
+- Better tools
+  - Better notation to describe the design
+  - Better programming languages to implement the design
+  - Better environment to develop the software
+- Better process
+  - Separation of concerns: Ie: Product design and manufacturing
+  - Design model captures the functional and logics of the system
+  - Final product consists of both functional and implementational details
+  - Enchance the correctness at the design stage
+- Can software products be automatically generated from their verified design solutions?
+*** Methodologies
+- Traditional Methods
+  - NLP based descriptions
+  - User interpretation dependent and ambiguous
+  - Can not perform rigorous verifiaction
+- Semi-formal methods
+  - Some syntax and semantics definitions: eg: UML
+  - Better descriptions, tools based validation and checking
+- Formal methods
+  - Notations based on mathematical definitions
+  - Precise semantics and no ambiguity in description
+  - Tool supported formal verification and analysis
+- Translation from traditional software engineering to a more rigorous, systematic and automated practice
+*** Formal Modelling
+- Formal methods (FM)
+  - Mathematically based techniques for the specification, development and verification of software and hardware systems;
+  - Used in high integrity systems, where safety or security properties are important
+  - Ensures that errors are not introduced into the development process
+  - Are particularly effective in the early development stages such as requirement and specification levels
+  - *Formal methods is analogy to engineering mathematics*
+*** Engineering mathematics
+- Engineers in traditional disciplines build mathematical models of their designs
+- Verify by calculation to establish that the design satisfies the requirement in the context of the modeled environment
+- act as a certification to ensure that model faithfully represents the design, design is implemented correctly, and calculations are performed without error;
+*** Formal Methods
+- uses the same idea, but applied to computational systems,
+- the applied mathematics of Computer Science is formal logics, eg: FOL, set theory
+- The models are formal descriptions in some logical system, eg: a program reinterpreted as a mathematical formula rather than instructions to a machine
+- Calculation is mechanised by automated deduction: theorem proving, model checking ,static analysis, etc
+- Provides verification for an accurate model and debugging for an approximate model
+*** Formal verification
+- Formal Specification
+  - Apply precise description to software development
+  - Use rigorous definitions and semantics to describe design
+- Reasoning and Analysis
+  - Formally verify, validate and simulate the design models
+  - Consistency: eg: no conflicting relationships or incompleteness
+  - Reachability: eg: no deadlock or unreachable states
+  - Correctness: eg: incorrect states, defects, fault tolerance
+- Refinement
+  - Semantic preserving derivations from abstract design models (eg: coding)
+  - A series of refinement steps finally achieve the executable model (ie: program)
+*** Example
+
+#+DOWNLOADED: screenshot @ 2022-07-20 15:16:38
+[[file:images/Formal_Specification_and_Design/2022-07-20_15-16-38_screenshot.png]]
+
+*** Verification Techniques
+- Model checking
+  - Model checking is a technique that relies on building a finite model of a system and check that a desired property holds in that model
+- Theorem Proving
+  - Theorem providing is a technique where both the system and its desired properties are expressed as formulas in some mathematical logic
+  - This logic is given by a formal system, which defines a set of inference rules
+  - Theorem proving is a process of finding a proof of a property from the axioms of the system
+*** Model checking example
+- Bank box with key, locked and unlocked. All states and transitions modelled.
+#+DOWNLOADED: screenshot @ 2022-07-20 15:39:29
+[[file:images/Formal_Specification_and_Design/2022-07-20_15-39-29_screenshot.png]]
+
+#+DOWNLOADED: screenshot @ 2022-07-20 15:39:40
+[[file:images/Formal_Specification_and_Design/2022-07-20_15-39-40_screenshot.png]]
+
+*** Theorem providing
+- You provide a model and ask if a theorem can be derived from your model
+ #+DOWNLOADED: screenshot @ 2022-07-20 15:47:28
+ [[file:images/Formal_Specification_and_Design/2022-07-20_15-47-28_screenshot.png]]
+- This is a FIFO policy
+- Model checking is very good at picking up incorrect states
+- Reducing the domain is a very large cut. Domain is very limited, model checking can't guarantee 100% correctnes.
+- Theorem proving is good because you can do this for any number of instances. The challenge is writing the proof
+*** Software testing
+- Testing considers the actual implementation of the system, to debug for possible errors in the implementation;
+- Differs from formal methods in that they examine only some of the possible behaviours
+- In most applications, testing is used for debugging rather than verification, which relies on choosing the right test cases to increase the coverage measures
+- Good coverage is almost impossible when environment can introduce huge number of different behaviours
+- Formal methods can explore all behaviours of the modelled system which could be more effective in detecting bugs than exploring some behaviours of an actual implementation
+*** FM and Software Engineering
+- Formal methods
+  - Is not a replacement, but rather an enhancement of existing methodologies
+  - Can only be effective if integrated within an overall methodology for software engineering
+  - Implications of using formal specification
+    - Training in the use of notation
+    - Integration with informal methodologies
+    - Translation for client consumption
+    - Emphasis upon abstraction

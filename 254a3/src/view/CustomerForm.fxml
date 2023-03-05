@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="427.0" prefWidth="633.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerFormController">
+   <children>
+      <Separator orientation="VERTICAL" prefHeight="2.0" prefWidth="0.0" />
+      <HBox prefHeight="419.0" prefWidth="665.0">
+         <children>
+            <Separator prefHeight="6.0" prefWidth="40.0" />
+            <VBox prefHeight="191.0" prefWidth="633.0">
+               <children>
+                  <Label prefWidth="105.0" text="Name">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textFieldName" promptText="Enter customer name" />
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="2.0" visible="false" />
+                  <Label text="Email">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textFieldEmail" promptText="Enter customer email" />
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="2.0" visible="false" />
+                  <Label text="Address">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textFieldAddress" promptText="Enter customer address" />
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="2.0" visible="false" />
+                  <Label text="Contact Number">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textFieldNumber" promptText="Enter customer mobile number" />
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="2.0" visible="false" />
+                  <Label text="Credit Card Number">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textFieldCreditCard" promptText="Enter customer credit card number" />
+                  <HBox prefHeight="17.0" prefWidth="606.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="16.0" prefWidth="610.0">
+                           <children>
+                              <Label fx:id="labelError" prefHeight="54.0" prefWidth="362.0" text="error" textAlignment="CENTER" textFill="RED" visible="false" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <ButtonBar prefHeight="79.0" prefWidth="606.0">
+                     <buttons>
+                        <Button fx:id="buttonCancel" mnemonicParsing="false" onMouseClicked="#onClickButtonCancel" text="Cancel" />
+                      <Button mnemonicParsing="false" onMouseClicked="#onClickButtonOk" text="Ok" />
+                     </buttons>
+                  </ButtonBar>
+               </children>
+            </VBox>
+            <Separator prefHeight="6.0" prefWidth="40.0" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
