@@ -1,0 +1,171 @@
+
+* DONE Decide which lab that I should go to                     :351:ARCHIVE:
+  CLOSED: [2021-03-01 Mon 09:27]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-01 Mon 19:45
+  :ARCHIVE_FILE: ~/Desktop/notes/todo.org
+  :ARCHIVE_OLPATH: University
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* TODO Get organised with all classes zoom, piazza, what books to read
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-01 Mon 19:51
+  :ARCHIVE_FILE: ~/Desktop/notes/todo.org
+  :ARCHIVE_OLPATH: University
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* DONE Thign!!!
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-15 Mon 10:17
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: Todos/<2021-03-15 Mon>
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* DONE Thign!!!
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-15 Mon 10:17
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: Todos/<2021-03-15 Mon>
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* DONE Lab 1
+  DEADLINE: <2021-03-14 Sun>
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-15 Mon 11:10
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: University/351
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: 351
+  :END:
+
+* DONE Get car parts (lower and door activator)
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-17 Wed 10:31
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: Personal
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* DONE Continue reading practical haskell chapter 3
+  CLOSED: [2021-03-06 Sat 14:38] DEADLINE: <2021-03-07 Sun>
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-17 Wed 10:31
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: Personal
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* TODO Physio booking
+  DEADLINE: <2021-03-21 Sun>
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-17 Wed 10:31
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: Personal
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* DONE Lab 2
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-19 Fri 10:30
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: University/351
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: 351
+  :END:
+
+* DONE Write notes for this class
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-19 Fri 10:30
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: University/351
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: 351
+  :END:
+
+* DONE Do the latest lecture
+  DEADLINE: <2021-03-15 Mon>
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-19 Fri 10:31
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: University/760
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: 760
+  :END:
+
+* DONE Touch up your notes (catch up)
+  DEADLINE: <2021-03-15 Mon>
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-23 Tue 10:06
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: University/370
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: 370
+  :END:
+
+* DONE Touch up your notes (catch up)
+  DEADLINE: <2021-03-15 Mon>
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-23 Tue 10:06
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: University/370
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: 370
+  :END:
+
+* DONE Assignment 1
+  DEADLINE: <2021-03-26 Fri>
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-23 Tue 10:06
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: University/351
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: 351
+  :END:
+
+* DONE Write notes for this class
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-23 Tue 10:06
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: University/351
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: 351
+  :END:
+
+* DONE Lab 2
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-23 Tue 10:06
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: University/351
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: 351
+  :END:
+
+* DONE Lab 3
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-03-23 Tue 10:06
+  :ARCHIVE_FILE: ~/org/todo.org
+  :ARCHIVE_OLPATH: University/351
+  :ARCHIVE_CATEGORY: todo
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: 351
+  :END:

@@ -1,0 +1,85 @@
+#+TITLE: 351 Assignment 1
+#+AUTHOR: Andreas Knapp
+#+OPTIONS: \n:t
+#+OPTIONS: toc:nil
+#+OPTIONS: ^:nil
+
+* Question 1
+** List the strong (non-weak) entity types in the ER diagram
+- BANK
+- LOAN
+- CUSTOMER
+- ACCOUNT
+
+** Is there a weak entity type? If so, give its name, partial key, and identifying relationship
+There is a weak entity named BANK_BRANCH. The partial key for BANK_BRANCH is the
+attribute Branch_no or the entity BANK_BRANCH and the identifying entity type is
+BANK via the identifying relationship BRANCHES
+
+** What constraints do the partial key and the identifying relationship of the weak entity type specify in this diagram?
+*** TODO What is the constraint of the partial key not sure if this is correct?
+- The constraints that the partial key pose is that /locally/ (within every bank
+  branch) the Branch_no attribute must be unique, but /globally/ (the set of all
+  Branch-no(s) in all BANK_BRANCHes there are allowed to be duplicates
+- The constraints on the identifying relationship (BRANCHES) states that *every*
+  bank must participate in the BRANCHES relationship and that a BANK can have N
+  number of BANK_BRANCHes. On the other side *every* BANK_BRANCH must
+  participate in the BRANCHES relationship and every BANK_BRANCH must be a
+  branch of *exactly one* BANK
+
+** List the names of all relationship types, and specify the (min, max) constraint on each participation of an entity type in a relationship type.
+*** TODO I don't know how to write these properly as text. Find out a way
+- BRANCHES
+BANK --- (1,N) --- BRANCHES --- (1,1) --- BANK_BRANCH
+- LOANS
+BANK_BRANCH --- (0, N) --- LOANS --- (1,1) --- LOAN
+- L_C
+LOAN --- (1,N) --- L_C --- (0,M) --- CUSTOMER
+- A_C
+CUSTOMER --- (0,M) --- A_C --- (1,N) --- ACCOUNT
+- ACCTS
+ACCOUNT --- (1,1) --- ACCTS --- (0,N) --- BANK_BRANCH
+
+** List concisely the data requirements that led to this ER design. State appropriate assumptions to make the specification complete.
+*** TODO Am I supposed to reverse engineer the ER diagram to somehow find what was required for this database or am I meant to just list off random best practices?
+- The designer must know about the /mini-world/ of the database. The mini-world
+  will specify what is required to be stored in the database which aids in the
+  development of the ER diagram
+
+** Suppose that every customer must have at least one account but is restricted to at most two loans at a time, and that a bank branch cannot have more than 5,000 loans. How does the above reflect upon the (min, max) constraints of the ER design?
+CUSTOMER --- (1,M) --- A_C --- (1,N) --- ACCOUNT
+CUSTOMER --- (0,2) --- L_C --- (1,N) --- LOAN
+BANK_BRANCH --- (0,5000) --- LOANS --- (1,1) --- LOAN
+
+
+* Question 2
+** Assumptions
+- A customer of the shop does not require any orders
+- This database is only for a single shop, and doesn't require multiple shops to
+  be in actio
+* Question 3
+** Assumptions
+- Although not in the original specification. A library branch should have a
+  name so that you can *uniquely* identify branches of a particular
+  library. (Should be a key attribute)
+- A location for a library branch is not good enough of an identifier as there
+  may be *multiple* library branches in the same location (or close enough
+  together to be considered as the same location)
+- A branch belongs to exactly one library and a library requires atleast one
+  branch to operate
+- A branch doesn't need any books to be considered a branch (could be a
+  help/support branch that doesn't contain any books)
+- A book can belong to different branch (different copies of book in multiple
+  different branches)
+- A book must have *exactly* one publisher, a publisher can publish any number
+  of books (including not have even published a book)
+- A publisher eventually is going to be wanted to be uniquely identified by
+  library branches (for example it is fully expected that a member may ask a
+  library branch for a list of all books published by a certain publisher). I
+  consider that the composite key of {name, address, phone_number} is unique
+  enough to uniquely identify all publishers
+- A publisher will have multiple different phone numbers (for different
+  countries). Although this might be redundant because all library branches
+  could be considered to be localized to a country.
+- A library may have any number of members. A member belongs to exactly one
+  library

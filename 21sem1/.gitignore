@@ -1,0 +1,5 @@
+*
+!*.org
+!images/
+!images/**/*
+!.gitignore

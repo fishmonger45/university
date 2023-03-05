@@ -1,0 +1,148 @@
+#+Title: Todo
+* University
+** 370 :370:
+*** DONE Assignment 1
+    DEADLINE: <2021-03-26 Fri>
+*** DONE Assignment 2
+    DEADLINE: <2021-05-07 Fri>
+*** DONE Assignment 3 (not yet released)
+*** DONE Mid-semester Quiz (Test)
+    SCHEDULED: <2021-03-31 Wed>
+** 351 :351:
+*** DONE Lab 4
+    DEADLINE: <2021-04-04 Sun 17:00>
+*** DONE Assignment 2
+    DEADLINE: <2021-04-30 Fri 17:00>
+*** DONE Assignment 3
+    DEADLINE: <2021-05-21 Fri 17:00>
+*** TODO Assignment 4
+    DEADLINE: <2021-06-04 Fri 17:00>
+*** DONE Mid semester test
+    DEADLINE: <2021-04-19 Mon 17:00>
+*** TODO Final exam
+** 760 :760:
+*** DONE Heuristics Assignment
+    DEADLINE: <2021-04-19 Mon>
+*** DONE Decision Making Assignment
+    DEADLINE: <2021-05-17 Mon>
+*** DONE Test 
+    DEADLINE: <2021-05-21 Fri>
+*** TODO Dynamic Programming Assignment
+    DEADLINE: <2021-06-03 Thu>
+*** TODO Exam
+* Personal
+** DONE Get some audiobooks for the bus
+** DONE Pub with joey and thaiboy
+  DEADLINE: <2021-03-19 Fri>
+** DONE Pay invoice for seedbox
+   DEADLINE: <2021-03-15 Mon>
+** DONE Get your accounts irl moved to keepass!
+** DONE Check you asb and delte stuff you don't need anymore
+* Dailies
+** DONE <2021-03-11 Thu>
+*** DONE Complete the two lectures for today
+*** DONE Finally finish off the lab for 351
+*** DONE Complete all the notes for 351
+*** DONE Start on the 351 assignment after doing notes
+** DONE <2021-03-12 Fri>
+*** DONE Learn how relationships are made for q2 of assignment 1        :351:
+*** DONE Complete the notes for 351                                     :351:
+*** DONE Lectures
+*** DONE Attend the zoom                                                :760:
+*** DONE Do work on one of the assignments
+*** DONE Make some time for personal project work
+** DONE <2021-03-15 Mon>
+*** DONE Do the lab for 351                                             :351:
+*** DONE Start the 351 assignment and get clarification on the relationships stuff :351
+*** DONE Consider the fact that in the 370 assignment for steps 7 & 8 that you have to put THE WHOLE array to be sorted into the shared memory
+** DONE <2021-03-16 Tue>
+*** DONE Today is the day that I will work on the 351 assignment
+*** DONE Complete lab2
+** DONE <2021-03-17 Wed>
+*** DONE Finish off the 351 assignment and finally submit the 351 lab
+*** DONE Over the course of this weekend or this week you can finish the 370 assignment. Aim to get it done on Friday? Maybe not possible with drinks happening?
+*** TODO Start to create some good notes for 760. I think there's still stuff that you can brush up on
+*** Two things for this assignment left to do
+**** Shared memory stuff for 7 &8. You should be using a single block of memory
+**** Increase the size of the data that you are ending over the pipes in other steps for threading
+**** DO THE THREAD POOLS!
+** DONE <2021-03-19 Fri>
+This is just a recap of where I'm at
+*** 370
+This course is generally going well. I think that I understand all of the
+concepts. The only thing that I have to do is kinda keep up with the notes on
+the course. In terms of the assignment I have completed all the steps except for
+number 4. And even with #4 I'm pretty far through it and should be able to get
+it done. Another thing that I have to do for the assignment is the writeup. The
+writeup might to a little longer than what I expect.
+*** 351
+I have completed lab2 for this week. I have completed questions 1,2,3 of the
+assignment and just have to do question 4 (which I expect to take the longest)
+but it shouldn't take more than like 3 hours or whatever so it's not too too
+bad.
+*** 760
+You have a lot of work to do for this course holy shit. There is assignment 1
+which has just been released and it looks pretty hard. But the course content
+isn't too bad there's just a lot of it (mainly because it's pretty simple).  You
+should start this assignment on monday or something
+
+OVERALL:
+**** DONE 370 a1
+     DEADLINE: <2021-03-21 Sun>
+You should do this assignment first
+**** DONE 351 a1
+     DEADLINE: <2021-03-21 Sun>
+Second!
+Then just work on 760 as you please. Just keep an active look over on the notes
+
+** DONE <2021-03-23 Tue>
+*** DONE Do some study for 760, brush up on concepts before going into the lectures
+*** DONE Finish the 370 assignment 1
+=======
+** DONE <2021-04-01 Thu>
+*** DONE Lectures for yesterday and today
+*** DONE Think some more about 760 assingment 1
+*** DONE Finish off the lab for 351
+*** DONE Look at assignment 2 for 370
+** DONE <2021-04-21 Wed>
+*** DONE Look at assignment 2 for                                       :351:
+*** DONE revise some 760 and try to get your head around things         :760:
+*** redo q13 assignment 2                                               :351:
+** DONE <2021-04-28 Wed>
+- This afternoon what I want to achieve is going through all my notes for the
+  past two weeks or so and then understanding them. You also have to watch
+  todays lectures and firdays lecture for 351. Fuck that's a lot of
+  work. Alright let's get on with this
+** DONE <2021-04-29 Thu>
+Things that I have to do today (on order of importance)
+- Catch up on 370 lecture, before that you need to catch up mentally to the
+  class
+- Catch up on 760 lecture where you completely understand the previous lecture
+- Start the assignment for 760
+- Touch up assignment 2 for 351
+Goals:
+- Before this weekend I want to be completely up to date with all of my classes,
+  where I have finished all of the assignments (except for 760) so that I am up
+  to date and can attend future lectures. Don't be a loser where you have to
+  watch lectures online. That's a slippery slope for you.
+
+** TODO <2021-05-11 Tue>
+- Finish 760 assignment 2
+- Study for 760 test
+- Finish 351 assignment 2
+- 370 lecture today watch again and make notes
+** TODO <2021-05-12 Wed>
+- Finish 760 assignment 2 most of the way there
+- Study for 760 test not really any of the way there
+- Finished 351 assignment 3 most of the way there
+- 370 lecture today watch again and make notes not really any of the way there
+** TODO <2021-05-17 Mon>
+- 351 lab
+- 370 assignment 3
+- Test study
+** TODO <2021-05-26 Wed>
+- 351 lab
+- 351 assignment
+- 760 assignment
+- Understand wtf is going on for 760, you probably have to rewatch a couple of
+  lectures

@@ -1,0 +1,42 @@
+#+TITLE: 760
+#+AUTHOR: Andreas
+
+* Prelude
+
+Most of these notes will be random tidbits that I have found and need to note
+down, they may not hold any particular order
+
+* Notes
+
+It is called an optimisation problem because there are a /range/ of possible
+solutions and we are looking for the best solution out of those. We have to find
+an optimal algorithm to find that solution
+
+A heuristic is an approach to problem solving that employs a practical method
+that is not guaranteed to be optimal. Thus we should make sure that we try other
+solutions first before looking at heuristics. You need to note if your heuristic
+approach does or /can/ include the best possible solution. Generally heuristics
+are not clever but they can be really fast, this is why it's important for a
+neighbourhood search to be able to *quickly* calculate the change in cost of
+moving to a neighbour
+
+In Local Search the creator has to define what they mean by what a /small
+change/ is. ie. they must define the size and type of the iteration. In local
+search you repeatedly make small changes to some current solution (eg swap two
+values) and keeping those changes if they optimise your solution. These small
+changes are in the neighbourhood of the original solution. When you are thinking
+about neighbourhood rules, don't only think about rules that will improve the
+outcome of the objective function, coming up with neighbourhood rules doesn't
+optimise the objective function, it can worsen f(x) but still come up with a
+more optimal solution once run.
+
+We have a number of ways to define our neighbourhood *N(x)* we can either:
+1. Write out the full neighbourhood (not feasible for larger problems)
+2. write a formula. eg: /y(x, i) - (x1, x2, ..., xi-1, xi+1, xi, xi+2, xi+3,
+   ..., x5)/
+3. Write out the rules
+
+
+* Part 2 (Stochastic & Probabilistic Modelling)
+Mutually exclusive events are those that cannot happen simultaneously, whereas
+independent events are those who probabilities do not affect one another
